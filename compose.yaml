@@ -1,0 +1,20 @@
+services:
+  devbox:
+    container_name: devbox
+    hostname: devbox
+    build:
+      dockerfile: "./docker/devbox.Dockerfile"
+      context: "."
+    environment:
+      NODE_ENV: development
+    stdin_open: true
+    tty: true
+    user: "${UID}:${GID}"
+    volumes:
+      - "./:/app"
+      - "cache-volume:/cache-volume"
+      - "~/.ssh:/home/node/.ssh:ro"
+
+volumes:
+  cache-volume:
+

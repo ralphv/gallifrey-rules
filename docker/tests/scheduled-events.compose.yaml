@@ -1,0 +1,108 @@
+services:
+  kafka:
+    container_name: kafka
+    image: confluentinc/confluent-local:7.5.5
+    hostname: kafka
+    environment:
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:29092,OUTSIDE://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_NODE_ID: 1
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "kafka:29092", "--list"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    expose:
+      - 8082 #rest
+      - 9092 #kafka
+      - 9093 #controller
+    ports:
+      - "9092:9092"
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+    user: postgres
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      POSTGRES_PASSWORD: '1q2w3e4r5t6y'
+      POSTGRES_DB: postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_HOST: postgres
+
+  connect:
+    container_name: connect
+    build:
+      context: .
+    depends_on:
+      - kafka
+      - postgres
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: kafka:29092
+      CONNECT_REST_PORT: 8083
+      CONNECT_GROUP_ID: "connect-group-id"
+      CONNECT_CONFIG_STORAGE_TOPIC: "connect-configs"
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_STORAGE_TOPIC: "connect-offsets"
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_STATUS_STORAGE_TOPIC: "connect-status"
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_REST_ADVERTISED_HOST_NAME: "connect"
+      CONNECT_LOG4J_LOGGERS: "org.reflections=ERROR"
+    healthcheck:
+      test: ["CMD", "curl -f http://localhost:8083/connectors || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    ports:
+      - "8083:8083"
+
+  sqlpad:
+    container_name: sqlpad
+    image: sqlpad/sqlpad:latest
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+    environment:
+      SQLPAD_AUTH_DISABLED: true
+      # postgres
+      SQLPAD_CONNECTIONS__postgres__name: postgres
+      SQLPAD_CONNECTIONS__postgres__driver: postgres
+      SQLPAD_CONNECTIONS__postgres__host: postgres
+      SQLPAD_CONNECTIONS__postgres__database: postgres
+      SQLPAD_CONNECTIONS__postgres__username: postgres
+      SQLPAD_CONNECTIONS__postgres__password: 1q2w3e4r5t6y
+
+  kafka-ui:
+    container_name: kafka-ui
+    image: 'provectuslabs/kafka-ui:latest'
+    ports:
+      - "8086:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=kafka:29092
+      - KAFKA_CLUSTERS_0_NAME=gallifrey-rules
+    depends_on:
+      - kafka

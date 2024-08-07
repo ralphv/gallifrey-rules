@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/draft-07/schema#",
+  "$id": "payload-schema",
+  "description": "testing schema",
+  "type": "object",
+  "properties":{
+    "id": {
+      "type": "string"
+    }
+  },
+  "required": ["id"]
+}

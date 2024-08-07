@@ -1,0 +1,6 @@
+{
+  "$namespace": "sample-namespace",
+  "$modulesPaths": [
+    "$"
+  ]
+}

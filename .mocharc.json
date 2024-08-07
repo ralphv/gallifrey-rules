@@ -1,0 +1,10 @@
+{
+  "extension": [
+    "ts"
+  ],
+  "spec": "tests/**/*.test.ts",
+  "require": [
+    "tsx"
+  ],
+  "recursive": true
+}

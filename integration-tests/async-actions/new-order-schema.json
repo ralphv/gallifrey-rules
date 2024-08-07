@@ -1,0 +1,21 @@
+{
+  "$id": "new-order-schema.json",
+  "description": "topic payload schema",
+  "type": "object",
+  "properties": {
+    "user": {
+      "type": "string",
+      "minLength": 3
+    },
+    "emailAddress": {
+      "type": "string",
+      "format": "email"
+    },
+    "orderId": {
+      "type": "string",
+      "minLength": 5
+    }
+  },
+  "required": ["user", "emailAddress", "orderId"],
+  "additionalProperties": false
+}

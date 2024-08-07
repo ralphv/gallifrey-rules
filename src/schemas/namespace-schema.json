@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/draft-07/schema#",
+  "$id": "gallifrey-rules/namespace-schema.json",
+  "description": "namespace schema",
+  "type": "object",
+  "properties":{
+    "$namespace": {
+      "type": "string"
+    }
+  },
+  "required": ["$namespace"]
+}

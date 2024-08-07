@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+
+    "target": "es6",
+    "module": "commonjs",
+    "rootDir": ".",
+    "resolveJsonModule": true,
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "declarationDir": "./dist",
+    "removeComments": false,
+    "sourceMap": false
+  },
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "integration-tests/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules", "dist",
+  ]
+}
