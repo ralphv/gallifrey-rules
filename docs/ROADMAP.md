@@ -1,14 +1,11 @@
 # design requirements
 
 before publish:
-put integration tests under tests properly
 publish to npm
 allow Config() to take in the event level config
 create sample app
 publish dinosaurus and polish it
 -- release 0.5.0 beta.
-
-
 
 
 avro topics

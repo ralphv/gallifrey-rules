@@ -1,5 +1,9 @@
+x-common-env: &common-env
+  restart: always
+
 services:
   kafka:
+    <<: *common-env
     container_name: kafka
     image: confluentinc/confluent-local:7.5.5
     hostname: kafka
@@ -30,9 +34,9 @@ services:
       - "9092:9092"
 
   postgres:
+    <<: *common-env
     container_name: postgres
     image: postgres
-    restart: always
     user: postgres
     ports:
       - "5432:5432"
@@ -48,12 +52,15 @@ services:
       POSTGRES_HOST: postgres
 
   connect:
+    <<: *common-env
     container_name: connect
     build:
       context: .
     depends_on:
-      - kafka
-      - postgres
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     environment:
       CONNECT_BOOTSTRAP_SERVERS: kafka:29092
       CONNECT_REST_PORT: 8083
@@ -71,19 +78,21 @@ services:
       CONNECT_REST_ADVERTISED_HOST_NAME: "connect"
       CONNECT_LOG4J_LOGGERS: "org.reflections=ERROR"
     healthcheck:
-      test: ["CMD", "curl -f http://localhost:8083/connectors || exit 1"]
+      test: ["CMD", "curl", "-f", "http://localhost:8083/connectors"]
       interval: 10s
       timeout: 10s
-      retries: 5
-      start_period: 60s
+      retries: 10
+      start_period: 20s
     ports:
       - "8083:8083"
 
   sqlpad:
+    <<: *common-env
     container_name: sqlpad
     image: sqlpad/sqlpad:latest
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
       - "3000:3000"
     environment:
@@ -97,6 +106,7 @@ services:
       SQLPAD_CONNECTIONS__postgres__password: 1q2w3e4r5t6y
 
   kafka-ui:
+    <<: *common-env
     container_name: kafka-ui
     image: 'provectuslabs/kafka-ui:latest'
     ports:
@@ -105,4 +115,12 @@ services:
       - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=kafka:29092
       - KAFKA_CLUSTERS_0_NAME=gallifrey-rules
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
+
+  wait-for-all:
+    image: busybox
+    depends_on:
+      connect:
+        condition: service_healthy
+    entrypoint: ["sh", "-c", "echo 'All services are up, healthy and responsive'; sleep 5"]

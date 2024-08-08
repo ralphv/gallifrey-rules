@@ -18,7 +18,6 @@
   "include": [
     "src/**/*.ts",
     "tests/**/*.ts",
-    "integration-tests/**/*.ts"
   ],
   "exclude": [
     "node_modules", "dist",
