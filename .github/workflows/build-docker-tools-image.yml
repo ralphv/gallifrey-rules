@@ -12,10 +12,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    
+    - name: Generate timestamp
+      id: generate_timestamp
+      run: echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
+
     - name: Build the Docker image
-      run: docker build . --file docker/tools.Dockerfile --tag gallifrey-rules-tools:$(date +%s)
+      run: docker build . --file docker/tools.Dockerfile --tag gallifrey-rules-tools:${{ env.TIMESTAMP }}
 
     - name: Log in to GitHub Packages Docker registry
       if: github.ref == 'refs/heads/main'
@@ -24,10 +30,12 @@ jobs:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Tag Docker image
       if: github.ref == 'refs/heads/main'
       run: |
-        docker tag gallifrey-rules-tools:$(date +%s) ghcr.io/${{ github.repository_owner }}/gallifrey-rules-tools:latest
+        docker tag gallifrey-rules-tools:${{ env.TIMESTAMP }} ghcr.io/${{ github.repository_owner }}/gallifrey-rules-tools:latest
+
     - name: Push Docker image to GitHub Packages
       if: github.ref == 'refs/heads/main'
       run: |
