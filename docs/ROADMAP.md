@@ -1,8 +1,18 @@
 # design requirements
 
+before publish:
+put integration tests under tests properly
+publish to npm
+allow Config() to take in the event level config
+create sample app
+publish dinosaurus and polish it
+-- release 0.5.0 beta.
+
+
+
+
 avro topics
 distributed locks controlled by event level data
-allow Config() to take in the event level config
 to allow easy modifications of configurations needed per event level. This means
 config needs to assess the data on the spot and not pull that and cache that. 
 (think of how to do that)
