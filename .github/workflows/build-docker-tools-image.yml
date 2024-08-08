@@ -12,7 +12,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
+    
     - name: Generate timestamp
       id: generate_timestamp
       run: echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
