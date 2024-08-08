@@ -1,10 +1,6 @@
-name: On release build
+name: On release published => docker push
 
 on:
-  #push:
-  #  branches: [ "main" ]
-  #pull_request:
-  #  branches: [ "main" ]
   release:
     types: [published]
 

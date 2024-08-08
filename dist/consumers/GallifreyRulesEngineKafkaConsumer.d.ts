@@ -1,8 +1,0 @@
-import { GallifreyRulesEngineConsumerInterface } from './GallifreyRulesEngineConsumerInterface';
-import AfterHandleEventDelegate from '../delegates-interfaces/AfterHandleEventDelegate';
-import { KafkaConsumer } from '../KafkaConsumer';
-export default class GallifreyRulesEngineKafkaConsumer implements GallifreyRulesEngineConsumerInterface {
-    private kafkaConsumer;
-    constructor(kafkaConsumer: KafkaConsumer);
-    setAfterHandleEventDelegate(ref: AfterHandleEventDelegate<any> | undefined): void;
-}

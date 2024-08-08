@@ -26,7 +26,7 @@
     "create-postgres-scheduled-events": "node /app/scripts/create-postgres-scheduled-events.js",
     "create-kafka-connector-scheduled-events": "node /app/scripts/create-kafka-connector-scheduled-events.js",
     "_publish-npm": "npm publish",
-    "release-npm": "npm version patch && git push --follow-tags && npm run _publish-npm",
+    "_release-npm": "npm version patch && git push --follow-tags && npm run _publish-npm",
     "prepublishOnly": "npm run build"
   },
   "keywords": [],
