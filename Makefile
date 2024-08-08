@@ -14,8 +14,8 @@ test:
 trivy:
 	docker run --rm -v .:/app/ aquasec/trivy fs /app/ --scanners vuln
 
-liquibase-init:
-	mkdir -p liquibase && docker run -u "$$(id -u):$$(id -g)" --rm -it  -v ./liquibase:/app -w /app liquibase:alpine init project
+#liquibase-init:
+#	mkdir -p liquibase && docker run -u "$$(id -u):$$(id -g)" --rm -it  -v ./liquibase:/app -w /app liquibase:alpine init project
 
 .PHONY: docker-compose-integration
 docker-compose-integration:

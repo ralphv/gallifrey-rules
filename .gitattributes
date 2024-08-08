@@ -1,0 +1,4 @@
+* text=auto
+*.js text eol=crlf
+*.ts text eol=crlf
+*.json text eol=crlf

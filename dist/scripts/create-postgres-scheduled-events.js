@@ -25,6 +25,7 @@ void (() => __awaiter(void 0, void 0, void 0, function* () {
         const database = new Database_1.default();
         yield database.initialize();
         console.log(`Done!`);
+        yield Database_1.default.closePool();
     }
     catch (e) {
         console.trace(`Error: ${String(e)}`);
