@@ -5,7 +5,11 @@ name: build CI
 
 on:
   push:
+    branches:
+      - '*'  # Trigger build for all branches
   pull_request:
+    branches:
+      - main  # Trigger build for PRs targeting the main branch
 
 jobs:
   build:
