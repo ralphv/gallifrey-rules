@@ -35,7 +35,6 @@ export const namespaceSchema: NamespaceSchema = {
                 fromBeginning: false,
                 brokers: ['localhost:9092'],
             },
-            eventDispatcher: 'orders-topic-dispatcher',
         },
     ],
     $modulesPaths: ['$', path.join(__dirname, 'modules')],
