@@ -2,11 +2,12 @@
 
 before publish:
 publish to npm
-allow Config() to take in the event level config
 create sample app
 publish docusaurus and polish it
+publish images + npm from github through release
 -- release 0.5.0 beta.
 
+allow Config() to take in the event level config
 
 avro topics
 distributed locks controlled by event level data
