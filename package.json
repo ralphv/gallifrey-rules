@@ -2,9 +2,15 @@
   "name": "gallifrey-rules",
   "shortName": "GR",
   "version": "0.1.2",
-  "description": "A nodejs engine for consuming realtime events",
+  "description": "A modern robust framework for handling real-time events",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist/",
+    "package.json",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "start": "node --env-file=.env dist/app.js",
     "build": "tsc -p build.tsconfig.json && npm run lint && npm run test",
@@ -18,11 +24,14 @@
     "build-docker": "docker build -t gallifrey-rules-tools . -f docker/tools.Dockerfile",
     "tooling-cli": "node /app/scripts/main.js",
     "create-postgres-scheduled-events": "node /app/scripts/create-postgres-scheduled-events.js",
-    "create-kafka-connector-scheduled-events": "node /app/scripts/create-kafka-connector-scheduled-events.js"
+    "create-kafka-connector-scheduled-events": "node /app/scripts/create-kafka-connector-scheduled-events.js",
+    "_publish-npm": "npm publish",
+    "release-npm": "npm version patch && git push --follow-tags && npm run _publish-npm",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Ralph Varjabedian",
+  "license": "AGPL-3.0",
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.8.0",
