@@ -18,6 +18,6 @@
     "src/**/*.ts"
   ],
   "exclude": [
-    "node_modules", "dist", "tests", "integration-test"
+    "node_modules", "dist", "tests"
   ]
 }
