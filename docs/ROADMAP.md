@@ -4,7 +4,7 @@ before publish:
 publish to npm
 allow Config() to take in the event level config
 create sample app
-publish dinosaurus and polish it
+publish docusaurus and polish it
 -- release 0.5.0 beta.
 
 
@@ -52,7 +52,6 @@ from schema "X as Y";
 
 // 6. push into AS that this id was processed with a TTL of x days perhaps. (idempotent filter/rule)
 // */ support tagging `processed`, support adding extra services like tagging not part of core engine. But how? with some signature?
-
 
 Shall we allow a rule to tag itself that it has to be first to run or last to run to enforce
 extra logic?
