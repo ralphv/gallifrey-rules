@@ -8,7 +8,7 @@
   * LoggerInterface
   * JournalLoggerInterface
   * MetricsInterface
-  * EventHandlerInterface -> take in raw event and push it into GR format
+  * EventDispatcherInterface
   * FilterInterface, attaches to events or rules to decide whether or not they can run
   * Rules,RuleInterface
   * Actions,ActionInterface (BatchAsync support)

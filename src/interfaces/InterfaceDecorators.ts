@@ -6,8 +6,6 @@ const GallifreyPluginTagsSymbol = Symbol();
 
 export enum PluginType {
     Action = 'Action',
-    //AsyncAction = 'AsyncAction',
-    //BatchAsyncAction = 'BatchAsyncAction',
     DataObject = 'DataObject',
     Filter = 'Filter',
     Rule = 'Rule',

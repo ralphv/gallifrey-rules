@@ -1,44 +1,33 @@
 # design requirements
 
-before publish:
-publish to npm
-create sample app
-publish docusaurus and polish it
-publish images + npm from github through release
--- release 0.5.0 beta.
+#### planned for 0.2.x release:
+* publish docusaurus and polish it
 
-allow Config() to take in the event level config
+#### planned for 0.3.x release:
+* provide json schema for namespace to hook IDEs
+* allow Config() to take in the event level config
+* distributed locks controlled by event level config, 
+  * use $atomicEntity = true/false in config (Lock on EntityName, EntityID)
+  * use $atomicEvent = true/false in config and default on top level (Lock on EntityName, EventName, EntityID)
 
-avro topics
-distributed locks controlled by event level data
-to allow easy modifications of configurations needed per event level. This means
-config needs to assess the data on the spot and not pull that and cache that. 
-(think of how to do that)
+#### planned for future releases:
 
-* Provide an easy way to test an action, dataObject, filter...
- 
-* Next Cleanup
+* add actions such as SlackAction
+* support avro topics
+* provide an easy way to test an action, dataObject, filter?
 * Check todo
- 
-* Config from schema itself or env variables.
-* Documentation framework to use
 * init tool for a new project? (check proper tools)
-* Enforce to have list of plugins and not just dynamically load
-* Add license
-* Actions can be marked as async, in this case a Queue plugin providers functionality to run them async (ActionQueuer)
-* Async actions, batch actions,   
+* enforce to have list of plugins loaded by file directly
+* provide a way to override plugins by other plugins
+* Async Batch actions,   
 * Jobs control?
-* Easily reschedule a failed range?
-
-* Provide idempotent within engine? (currently a rule/filter cover this easily)
-* Provide time metrics warnings for rescheduler,logger,journal logger,locks and idempotent times (anything the engine is doing) 
-  * Should we expose those time warnings through a metric?
-* 
-* Provide up/down reports
+* easily reschedule a failed range?
+* provide rate limiting threshold on unhandled errors before stopping
+* provide an interface that reacts to stopping/starting consumers
+* provide idempotent within engine? (currently a rule/filter cover this easily)
+* Provide up/down reports?
 * Provide simulation or mocks mode for easy testing of plugins
-* 
 * Provide stress testing mechanism
-* GROUPID concept?
 * guardrails:
   * warning/max rule processing time.
   * warning/max action processing time.
@@ -46,13 +35,6 @@ config needs to assess the data on the spot and not pull that and cache that.
   * warning/max dataObject processing time.
   * max event size
 
-create async action consumer
-
-When porting other plugins, if you get name conflict, provide an easy way to redefine the name
-from schema "X as Y";
-
-// 6. push into AS that this id was processed with a TTL of x days perhaps. (idempotent filter/rule)
-// */ support tagging `processed`, support adding extra services like tagging not part of core engine. But how? with some signature?
-
-Shall we allow a rule to tag itself that it has to be first to run or last to run to enforce
-extra logic?
+#### Early research
+* support tagging `processed`, support adding extra services like tagging not part of core engine. But how? with some signature?
+* shall we allow a rule to tag itself that it has to be first to run or last to run to enforce extra logic?

@@ -13,3 +13,4 @@ export { default as WarningError } from './errors/WarningError';
 export { default as PauseConsumer } from './errors/PauseConsumer';
 export { KafkaConsumerConfig, IsTypeKafkaConsumerConfig } from './KafkaConsumer';
 export * from './ModuleNames';
+export { TimeAndWarn, DontThrowJustLog } from './lib/Decorators';
