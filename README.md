@@ -11,6 +11,8 @@
         <br />
         <br />
         <a href="https://gallifre-rules.dev" target="_blank">Read the Docs</a>
+        .
+        <a href="https://github.com/ralphv/gallifrey-rules-sample" target="_blank">Sample Application</a>
     </p>
 </p>
 
