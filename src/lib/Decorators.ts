@@ -8,8 +8,6 @@ import EngineCriticalError from '../errors/EngineCriticalError';
 import { Metrics } from './Metrics';
 import InfluxDBMetricsProvider from '../modules/InfluxDBMetricsProvider';
 
-//const AsyncFunction = (async () => {}).constructor;
-
 export function DontThrowJustLog(originalMethod: any, context: ClassMethodDecoratorContext) {
     const methodName = String(context.name);
     if (context.kind !== 'method') {
@@ -123,9 +121,9 @@ process.on('beforeExit', async () => {
         return;
     }
     beforeExitCalled = true;
-    console.log('Process beforeExit, starting cleanup.');
+    logger.debug('Process beforeExit, starting cleanup.');
     await Promise.allSettled(cleanupFunctions.map((a) => a()));
-    console.log('Cleanup done. Exiting now.');
+    logger.debug('Cleanup done. Exiting now.');
 });
 
 export function TimeIt(originalMethod: any, context: ClassMethodDecoratorContext) {

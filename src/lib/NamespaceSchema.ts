@@ -18,7 +18,7 @@ export type NamespaceSchema = {
         distributedLocks?: string;
         reactToFailure?: string;
     };
-    $consumers?: NamespaceSchemaConsumer[];
+    $consumers?: NamespaceSchemaConsumer<any>[];
     $schemaFile?: string;
     $asyncActions?: AsyncActionConfigType[]; // async actions must be explicitly activated
     // modules override
@@ -43,14 +43,14 @@ export type NamespaceSchemaEvent = {
         | any;
 };
 
-export type NamespaceSchemaConsumer = {
+export type NamespaceSchemaConsumer<ConfigType> = {
     name: string;
     type: string;
-    config: any;
+    config: ConfigType;
     eventDispatcher?: string;
 };
 
-export function IsTypeNamespaceSchemaConsumer(value: any): value is NamespaceSchemaConsumer {
+export function IsTypeNamespaceSchemaConsumer(value: any): value is NamespaceSchemaConsumer<any> {
     return (
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         IsString(value.name) &&

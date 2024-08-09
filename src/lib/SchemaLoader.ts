@@ -110,7 +110,7 @@ export default class SchemaLoader {
     }
 
     @AssertSchemaLoaded
-    getConsumers(): NamespaceSchemaConsumer[] {
+    getConsumers(): NamespaceSchemaConsumer<any>[] {
         return this.schema?.$consumers ?? [];
     }
 

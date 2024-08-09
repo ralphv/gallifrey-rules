@@ -965,7 +965,7 @@ export class GallifreyRulesEngine {
             throw new EngineCriticalError(`Consumers already started`);
         }
         const consumers = this.schemaLoader.getConsumers();
-        logger.info(`Found ${consumers.length} consumers`);
+        logger.log(consumers.length === 0 ? 'warn' : 'info', `Found ${consumers.length} consumers`);
         return await Promise.all(consumers.map((consumer) => this.startConsumer(consumer)));
     }
 
@@ -1010,7 +1010,9 @@ export class GallifreyRulesEngine {
         return Promise.resolve(undefined);
     }
 
-    private async startConsumer(consumer: NamespaceSchemaConsumer): Promise<GallifreyRulesEngineConsumerInterface> {
+    private async startConsumer(
+        consumer: NamespaceSchemaConsumer<any>,
+    ): Promise<GallifreyRulesEngineConsumerInterface> {
         logger.info(`Preparing consumer: ${consumer.name} of type: ${consumer.type}`);
         AssertTypeGuard(IsTypeNamespaceSchemaConsumer, consumer);
 
