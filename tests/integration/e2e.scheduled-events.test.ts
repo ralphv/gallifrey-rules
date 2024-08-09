@@ -62,9 +62,9 @@ describe('e2e.scheduled events', () => {
                                 topics: [`gallifrey-rules-scheduled-events`],
                                 fromBeginning: false,
                                 brokers,
-                            } as KafkaConsumerConfig,
-                        } as NamespaceSchemaConsumer,
-                    ] as NamespaceSchemaConsumer[],
+                            },
+                        } as NamespaceSchemaConsumer<KafkaConsumerConfig>,
+                    ] as NamespaceSchemaConsumer<any>[],
                 });
                 const consumers = await engine.startConsumers();
                 consumers[0].setAfterHandleEventDelegate(

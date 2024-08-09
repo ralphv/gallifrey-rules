@@ -8,7 +8,7 @@ export default class BaseConfigBySchema extends BaseConfig {
         this.validate(this.schema);
     }
 
-    protected getEnvVariableByName(name: string): any {
+    public getEnvVariableByName(name: string): any {
         if (!(name in this.schema)) {
             throw new EngineCriticalError(`No env variable defined in the schema with the name: ${name}`);
         }

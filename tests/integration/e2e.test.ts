@@ -136,10 +136,10 @@ describe('e2e', () => {
                                     topics: [`topic`],
                                     fromBeginning: true,
                                     brokers,
-                                } as KafkaConsumerConfig,
+                                },
                                 eventDispatcher: 'sample-event-dispatcher',
-                            } as NamespaceSchemaConsumer,
-                        ] as NamespaceSchemaConsumer[],
+                            } as NamespaceSchemaConsumer<KafkaConsumerConfig>,
+                        ] as NamespaceSchemaConsumer<any>[],
                     });
                     const consumers = await engine.startConsumers();
                     consumers[0].setAfterHandleEventDelegate(
@@ -194,8 +194,8 @@ describe('e2e', () => {
                                     brokers,
                                 } as KafkaConsumerConfig,
                                 eventDispatcher: 'sample-event-dispatcher',
-                            } as NamespaceSchemaConsumer,
-                        ] as NamespaceSchemaConsumer[],
+                            } as NamespaceSchemaConsumer<KafkaConsumerConfig>,
+                        ] as NamespaceSchemaConsumer<any>[],
                     });
                     await engine.startConsumers();
                 } catch (e) {
