@@ -19,13 +19,13 @@ export default class Containers {
 
     async cleanup() {
         console.log(`cleaning up containers`);
-        delete process.env.GF_DB_USERNAME;
-        delete process.env.GF_DB_HOSTNAME;
-        delete process.env.GF_DB_NAME;
-        delete process.env.GF_DB_PASSWORD;
-        delete process.env.GF_DB_PORT;
+        delete process.env.GR_DB_USERNAME;
+        delete process.env.GR_DB_HOSTNAME;
+        delete process.env.GR_DB_NAME;
+        delete process.env.GR_DB_PASSWORD;
+        delete process.env.GR_DB_PORT;
         delete process.env.CONFIG_KAFKA_CLIENT_BROKER;
-        delete process.env.GF_KAFKA_BROKERS;
+        delete process.env.GR_KAFKA_BROKERS;
         await Promise.allSettled(this.startedContainers.map((container: StartedTestContainer) => container.stop()));
         this.startedContainers = [];
         if (this.network) {
@@ -84,11 +84,11 @@ export default class Containers {
         const postgresContainer = await container.start();
         console.log(`Started postgres container`);
 
-        process.env.GF_DB_USERNAME = postgresContainer.getUsername();
-        process.env.GF_DB_HOSTNAME = postgresContainer.getHost();
-        process.env.GF_DB_NAME = postgresContainer.getDatabase();
-        process.env.GF_DB_PASSWORD = postgresContainer.getPassword();
-        process.env.GF_DB_PORT = String(postgresContainer.getPort());
+        process.env.GR_DB_USERNAME = postgresContainer.getUsername();
+        process.env.GR_DB_HOSTNAME = postgresContainer.getHost();
+        process.env.GR_DB_NAME = postgresContainer.getDatabase();
+        process.env.GR_DB_PASSWORD = postgresContainer.getPassword();
+        process.env.GR_DB_PORT = String(postgresContainer.getPort());
 
         // initialize database
         const database = new Database();
@@ -139,7 +139,7 @@ export default class Containers {
             .start();
         console.log(`Started kafka container`);
         process.env.CONFIG_KAFKA_CLIENT_BROKER = `localhost:9092`;
-        process.env.GF_KAFKA_BROKERS = process.env.CONFIG_KAFKA_CLIENT_BROKER;
+        process.env.GR_KAFKA_BROKERS = process.env.CONFIG_KAFKA_CLIENT_BROKER;
         this.startedContainers.push(kafkaContainer);
         console.log(
             `kafka: ${kafkaContainer.getHost()}:${kafkaContainer.getName()}:${kafkaContainer.getFirstMappedPort()}`,

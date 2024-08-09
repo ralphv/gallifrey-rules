@@ -25,19 +25,19 @@ describe('e2e.scheduled events', () => {
     beforeEach(() => {
         warnSpy = sinon.spy(logger, 'warn');
         infoSpy = sinon.spy(logger, 'info');
-        process.env.GF_IS_DISTRIBUTED_LOCKS_ENABLED = 'TRUE';
+        process.env.GR_IS_DISTRIBUTED_LOCKS_ENABLED = 'TRUE';
     });
     afterEach(async () => {
         warnSpy.restore();
         infoSpy.restore();
-        delete process.env.GF_IS_DISTRIBUTED_LOCKS_ENABLED;
+        delete process.env.GR_IS_DISTRIBUTED_LOCKS_ENABLED;
     });
     it('test scheduled events', async () => {
         // docker compose -f scheduled-events.compose.yaml up -d
-        process.env.GF_DB_USERNAME = 'postgres';
-        process.env.GF_DB_HOSTNAME = 'localhost';
-        process.env.GF_DB_NAME = 'postgres';
-        process.env.GF_DB_PASSWORD = '1q2w3e4r5t6y';
+        process.env.GR_DB_USERNAME = 'postgres';
+        process.env.GR_DB_HOSTNAME = 'localhost';
+        process.env.GR_DB_NAME = 'postgres';
+        process.env.GR_DB_PASSWORD = '1q2w3e4r5t6y';
         const database = new Database();
         await database.initialize();
         const random = String(Math.ceil(Math.random() * 1000000));

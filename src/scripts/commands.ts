@@ -5,54 +5,54 @@ const imageName = 'gallifrey-rules-tools';
 export const commands: { [key: string]: CommandEnvVariableType[] } = {
     'create-postgres-scheduled-events': [
         {
-            environmentVariables: ['GF_DB_USERNAME', 'POSTGRES_USERNAME'],
+            environmentVariables: ['GR_DB_USERNAME', 'POSTGRES_USERNAME'],
             description: 'postgres username',
             optional: false,
         },
         {
-            environmentVariables: ['GF_DB_HOSTNAME', 'POSTGRES_HOST'],
+            environmentVariables: ['GR_DB_HOSTNAME', 'POSTGRES_HOST'],
             description: 'postgres hostname',
             optional: false,
         },
         {
-            environmentVariables: ['GF_DB_PASSWORD', 'POSTGRES_PASSWORD'],
+            environmentVariables: ['GR_DB_PASSWORD', 'POSTGRES_PASSWORD'],
             description: 'postgres password',
             optional: false,
         },
         {
-            environmentVariables: ['GF_DB_NAME', 'POSTGRES_DB'],
+            environmentVariables: ['GR_DB_NAME', 'POSTGRES_DB'],
             description: 'postgres db name',
             optional: false,
         },
         {
-            environmentVariables: ['GF_DB_PORT', 'POSTGRES_PORT'],
+            environmentVariables: ['GR_DB_PORT', 'POSTGRES_PORT'],
             description: 'postgres port',
             optional: true,
         },
     ],
     'create-kafka-connector-scheduled-events': [
         {
-            environmentVariables: ['GF_DB_USERNAME', 'POSTGRES_USERNAME'],
+            environmentVariables: ['GR_DB_USERNAME', 'POSTGRES_USERNAME'],
             description: 'postgres username',
             optional: false,
         },
         {
-            environmentVariables: ['GF_DB_HOSTNAME', 'POSTGRES_HOST'],
+            environmentVariables: ['GR_DB_HOSTNAME', 'POSTGRES_HOST'],
             description: 'postgres hostname',
             optional: false,
         },
         {
-            environmentVariables: ['GF_DB_PASSWORD', 'POSTGRES_PASSWORD'],
+            environmentVariables: ['GR_DB_PASSWORD', 'POSTGRES_PASSWORD'],
             description: 'postgres password',
             optional: false,
         },
         {
-            environmentVariables: ['GF_DB_NAME', 'POSTGRES_DB'],
+            environmentVariables: ['GR_DB_NAME', 'POSTGRES_DB'],
             description: 'postgres db name',
             optional: false,
         },
         {
-            environmentVariables: ['GF_DB_PORT', 'POSTGRES_PORT'],
+            environmentVariables: ['GR_DB_PORT', 'POSTGRES_PORT'],
             description: 'postgres port',
             optional: true,
         },

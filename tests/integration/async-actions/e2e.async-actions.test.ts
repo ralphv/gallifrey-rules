@@ -15,10 +15,10 @@ describe('e2e.async-actions', () => {
     let infoSpy: sinon.SinonSpy;
     let warnSpy: sinon.SinonSpy;
     beforeEach(() => {
-        process.env.GF_DB_USERNAME = 'postgres';
-        process.env.GF_DB_HOSTNAME = 'localhost';
-        process.env.GF_DB_NAME = 'postgres';
-        process.env.GF_DB_PASSWORD = '1q2w3e4r5t6y';
+        process.env.GR_DB_USERNAME = 'postgres';
+        process.env.GR_DB_HOSTNAME = 'localhost';
+        process.env.GR_DB_NAME = 'postgres';
+        process.env.GR_DB_PASSWORD = '1q2w3e4r5t6y';
         warnSpy = sinon.spy(logger, 'warn');
         infoSpy = sinon.spy(logger, 'info');
     });

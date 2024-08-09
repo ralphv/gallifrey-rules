@@ -44,7 +44,7 @@ export default class RescheduleEventReactToFailureProvider implements ReactToFai
 
     async reactToRuleFailure(): Promise<void> {
         throw new CriticalError(
-            `RescheduleEventReactToFailureProvider doesn't work with individual react to rule failures. You need to set GF_FAIL_EVENT_ON_SINGLE_RULE_FAIL to false`,
+            `RescheduleEventReactToFailureProvider doesn't work with individual react to rule failures. You need to set GR_FAIL_EVENT_ON_SINGLE_RULE_FAIL to false`,
         );
     }
 }

@@ -93,7 +93,7 @@ describe('gallifrey engine', () => {
     });
     it('throw PauseConsumer', async () => {
         const engine = new GallifreyRulesEngine();
-        process.env.GF_MODULES_PATHS = '$';
+        process.env.GR_MODULES_PATHS = '$';
         await engine.initialize({
             $namespace: 'sample-namespace',
             $entities: {
@@ -103,7 +103,7 @@ describe('gallifrey engine', () => {
             },
             $modulesPaths: [path.resolve(__dirname, './sample-namespace/modules-throw-pause-consumer')],
         } as NamespaceSchema);
-        delete process.env.GF_MODULES_PATHS;
+        delete process.env.GR_MODULES_PATHS;
 
         let pauseCalled = false;
         let resumeCalled = false;
@@ -538,7 +538,7 @@ describe('gallifrey engine', () => {
         } as NamespaceSchema);
 
         try {
-            process.env.GF_THROW_ON_EVENT_UNHANDLED_EXCEPTION = 'FALSE';
+            process.env.GR_THROW_ON_EVENT_UNHANDLED_EXCEPTION = 'FALSE';
             await engine.handleEvent<IncomingMessagePayloadType>(
                 {
                     eventId: '1000',
@@ -553,7 +553,7 @@ describe('gallifrey engine', () => {
         } catch (e) {
             expect.fail(`this should not throw ${String(e)}`);
         } finally {
-            delete process.env.GF_THROW_ON_EVENT_UNHANDLED_EXCEPTION;
+            delete process.env.GR_THROW_ON_EVENT_UNHANDLED_EXCEPTION;
         }
     });
     it('throwCriticalError but continue', async () => {
@@ -569,7 +569,7 @@ describe('gallifrey engine', () => {
         } as NamespaceSchema);
 
         try {
-            process.env.GF_THROW_ON_CRITICAL_ERROR = 'FALSE';
+            process.env.GR_THROW_ON_CRITICAL_ERROR = 'FALSE';
             await engine.handleEvent<IncomingMessagePayloadType>(
                 {
                     eventId: '1000',
@@ -584,7 +584,7 @@ describe('gallifrey engine', () => {
         } catch (e) {
             expect.fail(`this should not throw ${String(e)}`);
         } finally {
-            delete process.env.GF_THROW_ON_CRITICAL_ERROR;
+            delete process.env.GR_THROW_ON_CRITICAL_ERROR;
         }
     });
     it('KafkaConsumer pass not initialized engine', async () => {

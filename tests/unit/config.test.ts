@@ -9,7 +9,7 @@ import EngineCriticalError from '../../src/errors/EngineCriticalError';
 
 class TestBasicConfig extends BaseConfig {
     constructor() {
-        super(`TEST_GF_`);
+        super(`TEST_GR_`);
     }
 
     getBooleanDefaultFalseDontThrow() {
@@ -38,30 +38,30 @@ describe('config and base config, bool', () => {
         try {
             const config = new TestBasicConfig();
             expect(config.getBooleanDefaultFalseDontThrow()).false;
-            process.env['TEST_GF_BOOLEAN'] = 'true';
+            process.env['TEST_GR_BOOLEAN'] = 'true';
             expect(config.getBooleanDefaultFalseDontThrow()).true;
-            delete process.env['TEST_GF_BOOLEAN'];
+            delete process.env['TEST_GR_BOOLEAN'];
             expect(config.getBooleanDefaultFalseDontThrow()).false;
-            process.env['TEST_GF_BOOLEAN'] = 'TRUE';
+            process.env['TEST_GR_BOOLEAN'] = 'TRUE';
             expect(config.getBooleanDefaultFalseDontThrow()).true;
-            delete process.env['TEST_GF_BOOLEAN'];
+            delete process.env['TEST_GR_BOOLEAN'];
             expect(config.getBooleanDefaultFalseDontThrow()).false;
         } finally {
-            delete process.env['TEST_GF_BOOLEAN'];
+            delete process.env['TEST_GR_BOOLEAN'];
         }
     });
     it('get boolean throw but default supplied', async () => {
         try {
             const config = new TestBasicConfig();
-            process.env['TEST_GF_BOOLEAN_THROW'] = 'true';
+            process.env['TEST_GR_BOOLEAN_THROW'] = 'true';
             expect(config.isBooleanThrow()).true;
-            process.env['TEST_GF_SECRET'] = 'this is not so secret';
+            process.env['TEST_GR_SECRET'] = 'this is not so secret';
             config.describe();
-            process.env['TEST_GF_BOOLEAN_THROW'] = 'false';
+            process.env['TEST_GR_BOOLEAN_THROW'] = 'false';
             expect(config.isBooleanThrow()).false;
         } finally {
-            delete process.env['TEST_GF_BOOLEAN_THROW'];
-            delete process.env['TEST_GF_SECRET'];
+            delete process.env['TEST_GR_BOOLEAN_THROW'];
+            delete process.env['TEST_GR_SECRET'];
         }
     });
     it('get boolean throw but default not supplied', async () => {
@@ -82,18 +82,18 @@ describe('config and base config, numeric', () => {
         try {
             const config = new TestBasicConfig();
             expect(config.getNumericDefault10DontThrow()).to.be.equal(10);
-            process.env['TEST_GF_NUMERIC'] = '10';
+            process.env['TEST_GR_NUMERIC'] = '10';
             expect(config.getNumericDefault10DontThrow()).to.be.equal(10);
-            process.env['TEST_GF_NUMERIC'] = '11';
+            process.env['TEST_GR_NUMERIC'] = '11';
             expect(config.getNumericDefault10DontThrow()).to.be.equal(11);
         } finally {
-            delete process.env['TEST_GF_NUMERIC'];
+            delete process.env['TEST_GR_NUMERIC'];
         }
     });
     it('get numeric default 10 dont throw, value not number', async () => {
         try {
             const config = new TestBasicConfig();
-            process.env['TEST_GF_NUMERIC'] = 'not-numeric';
+            process.env['TEST_GR_NUMERIC'] = 'not-numeric';
             config.getNumericDefault10DontThrow();
             expect.fail(`should throw`);
         } catch (e) {
@@ -101,17 +101,17 @@ describe('config and base config, numeric', () => {
             expect(e instanceof EngineCriticalError).to.be.true;
             expect(String(e)).to.contain('is marked as numeric but does not seem so');
         } finally {
-            delete process.env['TEST_GF_NUMERIC'];
+            delete process.env['TEST_GR_NUMERIC'];
         }
     });
     it('get numeric default 10 dont throw, load from file', async () => {
         try {
             const config = new TestBasicConfig();
             expect(config.getNumericDefault10DontThrow()).to.be.equal(10);
-            process.env['TEST_GF_NUMERIC_FILE'] = path.resolve(__dirname, 'other/test_gf_numeric_file.txt');
+            process.env['TEST_GR_NUMERIC_FILE'] = path.resolve(__dirname, 'other/test_gf_numeric_file.txt');
             expect(config.getNumericDefault10DontThrow()).to.be.equal(132);
         } finally {
-            delete process.env['TEST_GF_NUMERIC_FILE'];
+            delete process.env['TEST_GR_NUMERIC_FILE'];
         }
     });
 });
@@ -119,22 +119,22 @@ describe('config and base config, secret', () => {
     it('get secret from file', async () => {
         try {
             const config = new TestBasicConfig();
-            process.env['TEST_GF_SECRET_FILE'] = path.resolve(__dirname, 'other/secret.txt');
+            process.env['TEST_GR_SECRET_FILE'] = path.resolve(__dirname, 'other/secret.txt');
             expect(config.getSecretMustExist().getSecretValue()).to.be.equal('this is a secret');
         } finally {
-            delete process.env['TEST_GF_SECRET_FILE'];
+            delete process.env['TEST_GR_SECRET_FILE'];
         }
     });
     it('get not so secret from environment', async () => {
         try {
             const config = new TestBasicConfig();
-            process.env['TEST_GF_SECRET'] = 'this is not so secret';
+            process.env['TEST_GR_SECRET'] = 'this is not so secret';
             expect(String(config.getSecretMustExist())).to.be.equal('****************');
             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             expect(`${config.getSecretMustExist()}`).to.be.equal('****************');
             expect(config.getSecretMustExist().getSecretValue()).to.be.equal('this is not so secret');
         } finally {
-            delete process.env['TEST_GF_SECRET'];
+            delete process.env['TEST_GR_SECRET'];
         }
     });
 });
@@ -147,21 +147,21 @@ describe('config and base config, array', () => {
     it('get array from json array', async () => {
         try {
             const config = new TestBasicConfig();
-            process.env['TEST_GF_ARRAY'] = '["one","two"]';
+            process.env['TEST_GR_ARRAY'] = '["one","two"]';
             expect(config.getArrayValue()).to.be.length(2);
             expect(config.getArrayValue()).to.be.deep.equal(['one', 'two']);
         } finally {
-            delete process.env['TEST_GF_ARRAY'];
+            delete process.env['TEST_GR_ARRAY'];
         }
     });
     it('get array from json array', async () => {
         try {
             const config = new TestBasicConfig();
-            process.env['TEST_GF_ARRAY'] = 'one,two';
+            process.env['TEST_GR_ARRAY'] = 'one,two';
             expect(config.getArrayValue()).to.be.length(2);
             expect(config.getArrayValue()).to.be.deep.equal(['one', 'two']);
         } finally {
-            delete process.env['TEST_GF_ARRAY'];
+            delete process.env['TEST_GR_ARRAY'];
         }
     });
     it('get plugin name pattern and clear cache', async () => {
@@ -169,14 +169,14 @@ describe('config and base config, array', () => {
             const config = new Config();
             expect(config.getModuleNamePattern()).to.not.be.empty;
             expect(ModulesLoader.isValidModuleName('Invalid')).to.be.false;
-            process.env['GF_MODULE_NAME_PATTERN'] = '';
+            process.env['GR_MODULE_NAME_PATTERN'] = '';
             expect(config.getModuleNamePattern()).to.not.be.empty;
             ClearCache();
             expect(config.getModuleNamePattern()).to.be.empty;
             expect(ModulesLoader.isValidModuleName('Invalid')).to.be.true;
             ClearCache();
         } finally {
-            delete process.env['GF_MODULE_NAME_PATTERN'];
+            delete process.env['GR_MODULE_NAME_PATTERN'];
         }
     });
     it('provide safe already tests coverage', async () => {
