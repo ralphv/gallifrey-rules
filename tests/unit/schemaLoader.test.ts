@@ -62,7 +62,12 @@ describe('schema loader', () => {
     });
     it('loading basic schema object with aliases', async () => {
         const schemaLoader = new SchemaLoader();
-        await schemaLoader.loadSchema({ $namespace: 'main', $namespaceAliases: ['alt'] });
+        await schemaLoader.loadSchema({
+            $namespace: 'main',
+            $namespaceAliases: ['alt'],
+            $modulesPaths: [],
+            $entities: {},
+        });
         expect(schemaLoader.getNamespace()).equal('main');
         expect(schemaLoader.getCompatibleNamespaces()).deep.equal(['main', 'alt']);
     });
@@ -75,10 +80,12 @@ describe('schema loader', () => {
                 $config: { entityLevel: 2 },
                 entity: {
                     event: {
+                        $rules: [],
                         $config: { eventLevel: 3 },
                     },
                 },
             },
+            $modulesPaths: [],
         });
         expect(schemaLoader.getEventLevelConfig('entity', 'event')).deep.equal({
             namespaceLevel: 1,
@@ -95,10 +102,12 @@ describe('schema loader', () => {
                 $config: { entityLevel: 2 },
                 entity: {
                     event: {
+                        $rules: [],
                         $config: { eventLevel: 3, entityLevel: 3 },
                     },
                 },
             },
+            $modulesPaths: [],
         });
         expect(schemaLoader.getEventLevelConfig('entity', 'event')).deep.equal({
             namespaceLevel: 1,
@@ -115,10 +124,12 @@ describe('schema loader', () => {
                 $config: { entityLevel: 2 },
                 entity: {
                     event: {
+                        $rules: [],
                         $config: { eventLevel: 3, entityLevel: 3, namespaceLevel: 3 },
                     },
                 },
             },
+            $modulesPaths: [],
         });
         expect(schemaLoader.getEventLevelConfig('entity', 'event')).deep.equal({
             namespaceLevel: 3,
@@ -135,10 +146,12 @@ describe('schema loader', () => {
                 $config: { entityLevel: 2, namespaceLevel: 2 },
                 entity: {
                     event: {
+                        $rules: [],
                         $config: { eventLevel: 3 },
                     },
                 },
             },
+            $modulesPaths: [],
         });
         expect(schemaLoader.getEventLevelConfig('entity', 'event')).deep.equal({
             namespaceLevel: 2,
@@ -155,10 +168,12 @@ describe('schema loader', () => {
                 $config: { entityLevel: 2, namespaceLevel: 2 },
                 entity: {
                     event: {
+                        $rules: [],
                         $config: { eventLevel: 3, namespaceLevel: 3 },
                     },
                 },
             },
+            $modulesPaths: [],
         });
         expect(schemaLoader.getEventLevelConfig('entity', 'event')).deep.equal({
             namespaceLevel: 3,
@@ -176,9 +191,11 @@ describe('schema loader', () => {
                 entity: {
                     event: {
                         $schemaFile: '3',
+                        $rules: [],
                     },
                 },
             },
+            $modulesPaths: [],
         });
         expect(schemaLoader.getEventLevelSchemaFile('entity', 'event')).equal('3');
     });
@@ -190,9 +207,12 @@ describe('schema loader', () => {
             $entities: {
                 $schemaFile: '2',
                 entity: {
-                    event: {},
+                    event: {
+                        $rules: [],
+                    },
                 },
             },
+            $modulesPaths: [],
         });
         expect(schemaLoader.getEventLevelSchemaFile('entity', 'event')).equal('2');
     });
@@ -202,9 +222,12 @@ describe('schema loader', () => {
             $namespace: 'main',
             $entities: {
                 entity: {
-                    event: {},
+                    event: {
+                        $rules: [],
+                    },
                 },
             },
+            $modulesPaths: [],
         });
         expect(schemaLoader.getEventLevelSchemaFile('entity', 'event')).equal(undefined);
     });

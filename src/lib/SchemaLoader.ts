@@ -119,7 +119,7 @@ export default class SchemaLoader {
     }
 
     getEventLevelSchemaFile(entityName: string, eventName: string): string | undefined {
-        return this.getEventLevelKeyValue(entityName, eventName, '$schemaFile');
+        return this.getEventLevelKeyValue<string>(entityName, eventName, '$schemaFile');
     }
 
     private getEventLevelKeyObject(entityName: string, eventName: string, key: string) {
@@ -141,7 +141,11 @@ export default class SchemaLoader {
             );
     }
 
-    private getEventLevelKeyValue(entityName: string, eventName: string, key: string) {
+    private getEventLevelKeyValue<ValueType>(
+        entityName: string,
+        eventName: string,
+        key: string,
+    ): ValueType | undefined {
         const values = []; // lowest level/highest priority first.
 
         values.push((this.schema as any)?.$entities?.[entityName]?.[eventName]?.[key]);
@@ -155,6 +159,14 @@ export default class SchemaLoader {
 
     getAsyncActions() {
         return this.schema?.$asyncActions ?? [];
+    }
+
+    getEventLevelAtomicEvent(entityName: string, eventName: string) {
+        return this.getEventLevelKeyValue<boolean>(entityName, eventName, '$atomicEvent');
+    }
+
+    getEventLevelAtomicEntity(entityName: string, eventName: string) {
+        return this.getEventLevelKeyValue<boolean>(entityName, eventName, '$atomicEntity');
     }
 }
 

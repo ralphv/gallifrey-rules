@@ -36,6 +36,7 @@ describe('gallifrey engine', () => {
         const engine = new GallifreyRulesEngine();
         await engine.initialize({
             $namespace: 'sample-namespace',
+            $entities: {},
             $modulesPaths: ['$', path.resolve(__dirname, './sample-namespace/modules')],
         } as NamespaceSchema);
         expect(engine.getNamespace()).to.equal('sample-namespace');
@@ -193,6 +194,7 @@ describe('gallifrey engine', () => {
         const engine = new GallifreyRulesEngine();
         await engine.initialize({
             $namespace: 'sample-namespace',
+            $entities: {},
             $modulesPaths: ['$', path.resolve(__dirname, './sample-namespace/modules')],
         } as NamespaceSchema);
         try {
@@ -219,6 +221,7 @@ describe('gallifrey engine', () => {
         try {
             await engine.initialize({
                 $namespace: 'sample-namespace',
+                $entities: {},
                 $modulesPaths: [path.resolve(__dirname, './sample-namespace/modulesna')],
             } as NamespaceSchema);
             expect.fail(`this should throw`);
@@ -749,6 +752,7 @@ describe('gallifrey engine', () => {
             await engine.initialize({
                 $namespace: 'sample-namespace',
                 $modulesPaths: ['$', path.resolve(__dirname, './sample-namespace/async-actions-modules')],
+                $entities: {},
                 $providers: {
                     actionQueuer: 'sample-action-queuer',
                 },
@@ -794,6 +798,7 @@ describe('gallifrey engine', () => {
             await engine.initialize({
                 $namespace: 'sample-namespace',
                 $modulesPaths: ['$', path.resolve(__dirname, './sample-namespace/async-actions-modules1')],
+                $entities: {},
                 $providers: {
                     actionQueuer: 'sample-action-queuer',
                 },

@@ -4,9 +4,11 @@ import { ConfigType } from '../interfaces/Providers/ConfigurationInterface';
 export type NamespaceSchema = {
     $namespace: string;
     $namespaceAliases?: string[];
-    $modulesPaths?: string[];
+    $modulesPaths: string[];
     $entities: NamespaceSchemaEntity;
     $config?: ConfigType;
+    $atomicEntity?: boolean;
+    $atomicEvent?: boolean;
     $providers?: {
         actionQueuer?: string;
         activeEventsReferenceCounter?: string;
@@ -26,17 +28,23 @@ export type NamespaceSchema = {
 
 export type NamespaceSchemaEntity = {
     $config?: ConfigType;
+    $atomicEntity?: boolean;
+    $atomicEvent?: boolean;
     $schemaFile?: string;
-    [entity: string]: ConfigType | NamespaceSchemaEvent | string | undefined;
+    [entity: string]: ConfigType | NamespaceSchemaEvent | string | undefined | boolean;
 };
 
 export type NamespaceSchemaEvent = {
     $config?: any;
+    $atomicEntity?: boolean;
+    $atomicEvent?: boolean;
     $schemaFile: string;
     [event: string]:
         | {
-              $schemaFile?: string;
               $config?: ConfigType;
+              $atomicEntity?: boolean;
+              $atomicEvent?: boolean;
+              $schemaFile?: string;
               $filters?: string[];
               $rules: string[];
           }

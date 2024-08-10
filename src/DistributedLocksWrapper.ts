@@ -17,8 +17,12 @@ export default class DistributedLocksWrapper {
         this.waitTimeInMs = config.getDistributedLocksMaxWaitTimeInSeconds() * 1000;
     }
 
-    async acquireLock(event: GallifreyEventTypeInternal<any>): Promise<ReleaseLock> {
-        if (!this.enabledLocks) {
+    async acquireLock(
+        event: GallifreyEventTypeInternal<any>,
+        atomicEvent: boolean,
+        atomicEntity: boolean,
+    ): Promise<ReleaseLock> {
+        if (!this.enabledLocks || (!atomicEvent && !atomicEntity)) {
             // return dummy lock
             return {
                 acquired: true,
@@ -26,7 +30,10 @@ export default class DistributedLocksWrapper {
             };
         }
         // lock on namespace/entity/entityID
-        const lockId = `${event.namespace}-${event.entityName}-${event.eventId}`;
+        const lockId = atomicEvent
+            ? `${event.namespace}-${event.entityName}-${event.eventName}-${event.eventId}` // atomic event
+            : `${event.namespace}-${event.entityName}-${event.eventId}`; // atomic entity
+
         const timer = new PerformanceTimer().resume();
         try {
             logger.info(`Starting acquireLock: ${lockId}`);

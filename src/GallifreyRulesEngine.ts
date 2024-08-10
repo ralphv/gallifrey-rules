@@ -319,7 +319,10 @@ export class GallifreyRulesEngine {
 
         const { release, acquired } = await AssertNotNull(this.providersContext.distributedLocks).acquireLock(
             internalEvent,
+            this.schemaLoader.getEventLevelAtomicEvent(entityName, eventName) ?? false,
+            this.schemaLoader.getEventLevelAtomicEntity(entityName, eventName) ?? false,
         );
+
         if (!acquired) {
             const config = new Config();
             if (config.isContinueOnFailedAcquireLock()) {
