@@ -28,6 +28,7 @@ export default class SchemaLoader {
         }
         this.schema = schema as NamespaceSchema;
         logger.info(`Schema is loaded for namespace ${this.schema.$namespace}`);
+        logger.debug(`Schema: ${JSON.stringify(this.schema, null, 2)}`);
     }
 
     public unload() {
