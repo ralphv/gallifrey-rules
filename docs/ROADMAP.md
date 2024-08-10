@@ -4,11 +4,7 @@
 * publish docusaurus and polish it
 
 #### planned for 0.3.x release:
-* provide json schema for namespace to hook IDEs
 * allow Config() to take in the event level config
-* distributed locks controlled by event level config, 
-  * use $atomicEntity = true/false in config (Lock on EntityName, EntityID)
-  * use $atomicEvent = true/false in config and default on top level (Lock on EntityName, EventName, EntityID)
 
 #### planned for future releases:
 

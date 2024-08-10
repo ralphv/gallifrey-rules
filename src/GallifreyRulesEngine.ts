@@ -43,6 +43,7 @@ import { textSync } from 'figlet';
 import { EOL } from 'os';
 import colors from 'colors';
 import { ascii } from './ascii';
+import { loadAll } from 'js-yaml';
 
 export class GallifreyRulesEngine {
     private readonly schemaLoader: SchemaLoader;
@@ -82,6 +83,14 @@ export class GallifreyRulesEngine {
             this.schemaLoader.unload();
             throw e;
         }
+    }
+
+    async initializeFromYaml(namespaceYaml: string): Promise<void> {
+        const documents: unknown[] = loadAll(namespaceYaml);
+        if (documents.length !== 1) {
+            throw new EngineCriticalError(`Loading YAML namespace file should have exactly one document`);
+        }
+        return this.initialize(documents[0]);
     }
 
     async initialize(namespaceSchema: any): Promise<void> {
@@ -319,7 +328,10 @@ export class GallifreyRulesEngine {
 
         const { release, acquired } = await AssertNotNull(this.providersContext.distributedLocks).acquireLock(
             internalEvent,
+            this.schemaLoader.getEventLevelAtomicEvent(entityName, eventName) ?? false,
+            this.schemaLoader.getEventLevelAtomicEntity(entityName, eventName) ?? false,
         );
+
         if (!acquired) {
             const config = new Config();
             if (config.isContinueOnFailedAcquireLock()) {

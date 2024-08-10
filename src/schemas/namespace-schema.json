@@ -1,12 +1,212 @@
 {
   "$schema": "https://json-schema.org/draft/draft-07/schema#",
-  "$id": "gallifrey-rules/namespace-schema.json",
-  "description": "namespace schema",
+  "$id": "gallifrey-rules/namespace-schema.01.json",
+  "description": "namespace schema version 01",
   "type": "object",
   "properties":{
     "$namespace": {
       "type": "string"
+    },
+    "$namespaceAliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "$modulesPaths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "$entities": {
+      "type": "object",
+      "$ref": "#/definitions/entities"
+    },
+    "$config": {
+      "type": "object"
+    },
+    "$atomicEntity": {
+      "type": "boolean"
+    },
+    "$atomicEvent": {
+      "type": "boolean"
+    },
+    "$providers": {
+      "type": "object",
+      "$ref": "#/definitions/providers"
+    },
+    "$consumers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/consumer"
+      }
+    },
+    "$schemaFile": {
+      "type": "string"
+    },
+    "$asyncActions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/asyncAction"
+      }
     }
   },
-  "required": ["$namespace"]
+  "required": ["$namespace", "$modulesPaths", "$entities"],
+  "additionalProperties": false,
+  "definitions": {
+    "entities": {
+      "type": "object",
+      "properties": {
+        "$config": {
+          "type": "object"
+        },
+        "$atomicEntity": {
+          "type": "boolean"
+        },
+        "$atomicEvent": {
+          "type": "boolean"
+        },
+        "$schemaFile": {
+          "type": "string"
+        }
+      },
+      "patternProperties": {
+        "^(?!\\$config|\\$atomicEntity|\\$atomicEvent|\\$schemaFile)[\\w\\d_-]+$": {
+          "$ref": "#/definitions/namespaceSchemaEvent"
+        }
+      },
+      "additionalProperties": false
+    },
+    "providers": {
+      "type": "object",
+      "properties": {
+        "actionQueuer": {
+          "type": "string"
+        },
+        "activeEventsReferenceCounter": {
+          "type": "string"
+        },
+        "configuration": {
+          "type": "string"
+        },
+        "journalLogger": {
+          "type": "string"
+        },
+        "logger": {
+          "type": "string"
+        },
+        "metrics": {
+          "type": "string"
+        },
+        "scheduledEvents": {
+          "type": "string"
+        },
+        "distributedLocks": {
+          "type": "string"
+        },
+        "reactToFailure": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "consumer": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["kafka", "kafka:scheduled-events", "kafka:async-actions"]
+        },
+        "config": {
+          "type": "object"
+        },
+        "eventDispatcher": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "type", "config"],
+      "if": {
+        "properties": {
+          "type": {
+            "const": "kafka"
+          }
+        }
+      },
+      "then": {
+        "required": ["eventDispatcher"]
+      },
+      "additionalProperties": false
+    },
+    "asyncAction": {
+      "type": "object",
+      "properties": {
+        "actionPluginName": {
+          "type": "string"
+        },
+        "queuerConfig": {
+          "type": "object"
+        }
+      },
+      "required": ["actionPluginName", "queuerConfig"],
+      "additionalProperties": false
+    },
+    "namespaceSchemaEvent": {
+      "type": "object",
+      "properties": {
+        "$config": {
+          "type": "object"
+        },
+        "$atomicEntity": {
+          "type": "boolean"
+        },
+        "$atomicEvent": {
+          "type": "boolean"
+        },
+        "$schemaFile": {
+          "type": "string"
+        }
+      },
+      "patternProperties": {
+        "^(?!\\$config|\\$atomicEntity|\\$atomicEvent|\\$schemaFile)[\\w\\d_-]+$": {
+          "$ref": "#/definitions/namespaceSchemaEventValue"
+        }
+      },
+      "additionalProperties": false
+    },
+    "namespaceSchemaEventValue": {
+      "type": "object",
+      "properties": {
+        "$config": {
+          "type": "object"
+        },
+        "$atomicEntity": {
+          "type": "boolean"
+        },
+        "$atomicEvent": {
+          "type": "boolean"
+        },
+        "$schemaFile": {
+          "type": "string"
+        },
+        "$filters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "$rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["$rules"],
+      "additionalProperties": false
+    }
+  }
 }
