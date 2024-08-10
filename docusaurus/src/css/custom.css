@@ -172,7 +172,7 @@ table tr:nth-child(2n) {
 
 :root {
   --ifm-color-secondary: #C2C3C6;
-  --ifm-color-primary: #F44949;
+  --ifm-color-primary: #F79050;
   --ifm-color-primary-dark: #AD2020;
   --ifm-color-primary-darker: #A31F1F;
   --ifm-color-primary-darkest: #871B1B;
@@ -188,7 +188,7 @@ table tr:nth-child(2n) {
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
   --ifm-color-secondary: #C2C3C6;
-  --ifm-color-primary: #F44949;
+  --ifm-color-primary: #F79050;
   --ifm-color-primary-dark: #AD2020;
   --ifm-color-primary-darker: #A31F1F;
   --ifm-color-primary-darkest: #871B1B;

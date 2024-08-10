@@ -10,22 +10,22 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
     {
-        title: 'Transform Blackboxed Consumers into Highly visible components',
-        Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+        title: 'Structured Event-Driven Architecture',
+        Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
         description: (
             <>
-                Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-                ahead and move your docs into the <code>docs</code> directory.
+                Enforces a disciplined approach to event-driven development, ensuring consistency and best practices across your projects.
             </>
         ),
     },
     {
-        title: 'Structured Event-Driven Architecture (EDA)',
-        Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+        title: 'Transform Blackboxed Consumers into Highly Visible Components',
+        Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
         description: (
             <>
-                Docusaurus was designed from the ground up to be easily installed and
-                used to get your website up and running quickly.
+                Modular design with <code>Filters</code>, <code>Rules</code>, <code>DataObjects</code>,
+                and <code>Actions</code> as customizable plugins,
+                enabling seamless extension and flexibility.
             </>
         ),
     },
@@ -34,8 +34,7 @@ const FeatureList: FeatureItem[] = [
         Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
         description: (
             <>
-                Extend or customize your website layout by reusing React. Docusaurus can
-                be extended while reusing the same header and footer.
+                All modules, including plugins and providers, are dynamically loaded and easily extensible.
             </>
         ),
     },
