@@ -64,7 +64,7 @@ const config: Config = {
         {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
-          href: 'docs/advanced/scheduled-events',
+          href: '/docs/advanced/scheduled-events',
           position: 'left',
           label: 'Advanced',
         },
@@ -91,7 +91,7 @@ const config: Config = {
             },
             {
               label: 'Advanced',
-              to: '/docs/advanced/',
+              to: '/docs/advanced/scheduled-events',
             },
             {
               label: 'Sample Application',
