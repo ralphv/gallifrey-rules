@@ -31,11 +31,20 @@ Gallifrey-Rules enforces disciplined event handling practices in two primary way
 
 ### Key Benefits for Developers
 
-1. **Reusability**: Plugins naturally promote reusability. They are passed an engine interface, providing essential methods to leverage the engine's services.
-2. **High Visibility**: Offers comprehensive logging and metrics for event handling out-of-the-box.
-3. **Maintainability**: Enhances code maintainability through modular design.
-4. **Configuration Management**: Simplifies configuration management.
-5. **Error Management**: Facilitates straightforward error handling.
+* **Structured Event-Driven Architecture (EDA)**: Enforces a disciplined approach to event-driven development, ensuring consistency and best practices across your projects.
+* Transform **Consumer Blackbox** => Modular design with Filters, Rules, DataObjects, and Actions as customizable plugins, enabling seamless extension and flexibility.
+* **Dynamic Plugin Management**: All modules, including plugins and providers, are dynamically loaded and referenced by name,
+* **Namespace-Oriented Projects**: Projects are organized into **Namespaces**, each consisting of a **Namespace Schema** and a list of modules, promoting modularity and reusability.
+* **Abstracted Configuration Management**: Configurations are managed through an abstracted provider, allowing them to be sourced from any backend, ensuring flexibility in various environments.
+* **Logging and Metrics**: Logging and metrics are abstracted behind providers, offering a consistent and extensible approach to monitoring and diagnostics. Out of the box support for [InfluxDB](https://www.influxdata.com/)/[Grafana](https://grafana.com/).
+* **Journal Logging**: Capturing/grouping high level logs that happen during a single event.
+* **Scheduled Events Support**: Native support for scheduling events in the future, with rules that can seamlessly trigger new events based on business logic.
+* **Distributed Locks**: Out-of-the-box support for distributed locks, enabling atomic event processing and ensuring data integrity across distributed systems.
+* **Asynchronous Actions**: Actions can be easily converted into Async Actions with dedicated consumer topics, allowing for efficient time management and workload distribution.
+* **Comprehensive Metrics Tracking**: Tracks counts and durations for each plugin type, enabling quick identification of performance bottlenecks, such as slow data pullers or actions.
+* **Enforced Naming Conventions**: Consistent naming conventions across the library, enhancing the developer experience and reducing the likelihood of errors.
+* **Resilient Error Handling**: The ReactToFailure mechanism is abstracted behind a provider, giving developers control over how to handle unexpected errors in a customizable and consistent manner.
+* Fully supports [TypeScript](https://www.typescriptlang.org/).
 
 ### Core Gallifrey-Rules Plugins
 
@@ -62,4 +71,4 @@ Gallifrey-Rules redefines event handling in Node.js, providing a robust framewor
 
 ## Getting Started
 
-Head on to the [Getting started documentation.](tutorial-basics/getting-started.md), "No time for dilly-dallying!"
+Head on to the [Getting started documentation.](getting-started/getting-started.md), "No time for dilly-dallying!"
