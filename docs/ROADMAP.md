@@ -5,6 +5,8 @@
 * throw on single rule failure should only
  be applied for unhandled exceptions. CritcalError or EngineCriticalError should still be respected based on the other variables.
  * Try to optimize DB locks?
+ * Add pull config example to the sample
+ * Add comments to EngineInterfaces methods
 
 #### planned for 0.3.x release:
 * allow Config() to take in the event level config

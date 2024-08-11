@@ -431,7 +431,7 @@ Array/String
 ``
 
 **Mandatory:**  
-`no. YES when using Postgres Distrubuted Locks Provider`
+`no. YES when using Postgres Distrubuted Locks Provider or Scheduled Events feature`
 
 **Notes:**
 - This can also be specified using `POSTGRES_USERNAME`
@@ -450,7 +450,7 @@ Array/String
 ``
 
 **Mandatory:**  
-`no. YES when using Postgres Distrubuted Locks Provider`
+`no. YES when using Postgres Distrubuted Locks Provider or Scheduled Events feature`
 
 **Notes:**
 - This can also be specified using `POSTGRES_HOST`
@@ -469,7 +469,7 @@ Array/String
 ``
 
 **Mandatory:**  
-`no. YES when using Postgres Distrubuted Locks Provider`
+`no. YES when using Postgres Distrubuted Locks Provider or Scheduled Events feature`
 
 **Notes:**
 - This can also be specified using `POSTGRES_DB`
@@ -488,7 +488,7 @@ Array/String
 ``
 
 **Mandatory:**  
-`no. YES when using Postgres Distrubuted Locks Provider`
+`no. YES when using Postgres Distrubuted Locks Provider or Scheduled Events feature`
 
 **Notes:**
 - This can also be specified using `POSTGRES_PASSWORD`

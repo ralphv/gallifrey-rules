@@ -56,7 +56,7 @@ export default class PushToTopicReactToFailureProvider implements ReactToFailure
 
 async function produce(brokers: string[], topic: string, key: string | undefined, payload: any) {
     const kafka = new Kafka({
-        clientId: 'e2e-test',
+        clientId: 'gallifrey-rules',
         brokers,
     });
 
