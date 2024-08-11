@@ -307,10 +307,28 @@ const EMITTER_STOP = 'stop';
 const EMITTER_AFTER_HANDLE_EVENT = 'afterHandleEvent';
 
 export interface KafkaConsumerConfig {
+    /**
+     * The group ID of the consumer
+     */
     groupId: string;
+    /**
+     * The topic of list of topics to listen to
+     */
     topics: string | string[];
+    /**
+     * Whether to start consuming from the beginning of the topic or not. Note that this only applies when
+     * Kafka sees a new groupID, once the consumer group is established, Kafka tracks it's offsets.
+     */
     fromBeginning: boolean;
+    /**
+     * Optional brokers for this consumer. if not given, they would be expected to be provided
+     * in the environment variable `GR_KAFKA_BROKERS`
+     */
     brokers?: string[];
+    /**
+     * Optional client ID, if not provided, it would be expected to be provided
+     * in the environment variable `GR_KAFKA_CLIENT_ID`
+     */
     clientId?: string;
 }
 

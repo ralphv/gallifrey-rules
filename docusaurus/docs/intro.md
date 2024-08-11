@@ -46,27 +46,6 @@ Gallifrey-Rules enforces disciplined event handling practices in two primary way
 * **Resilient Error Handling**: The ReactToFailure mechanism is abstracted behind a provider, giving developers control over how to handle unexpected errors in a customizable and consistent manner.
 * Fully supports [TypeScript](https://www.typescriptlang.org/).
 
-### Core Gallifrey-Rules Plugins
-
-1. **Rules**: Encapsulate business logic. Rules interact with external data via DataObject plugins and perform state mutations through Action plugins.
-2. **Actions**: Handle state mutations.
-3. **DataObjects**: Manage external data retrieval.
-4. **Filters**: Preprocess events to determine rule execution eligibility.
-
-### Advantages of the Gallifrey-Rules Engine
-
-By modularizing consumer code into plugins, Gallifrey-Rules provides several out-of-the-box benefits:
-
-1. **Journal Logs**: Tracks event processing, including rule execution, data retrieval, and state mutations all in a single logical logging unit called a journal log.
-2. **Metrics**: Aggregates execution times and frequencies of plugins, identifying performance bottlenecks.
-3. **Event Scheduling**: Supports scheduling and rescheduling events for future execution.
-4. **Asynchronous Actions**: Easily transforms synchronous actions into asynchronous ones, enhancing efficiency, with minimal code changes.
-5. **Distributed Locks**: Manages atomic operations on events, ensuring consistency.
-6. **Advanced Error Management**: Offers various error-handling strategies, including stopping, continuing, rescheduling, or ignoring errors.
-7. **Plugin-Based Architecture**: Provides flexibility and extensibility in engine behavior.
-8. **Configuration Abstraction**: Centralizes configuration management using the engine's setup.
-9. **Namespace Schema**: Governs the behavior of the real-time platform with a JSON schema.
-
 Gallifrey-Rules redefines event handling in Node.js, providing a robust framework that enhances reusability, maintainability, and visibility, making it an essential tool for developers dealing with complex real-time systems.
 
 ## Getting Started

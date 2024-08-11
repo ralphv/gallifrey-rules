@@ -12,7 +12,7 @@ function HomepageHeader() {
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">
-            <img src="img/gallifrey-rules-20.png" alt="Logo" style={{ marginTop: '-4rem' }} />
+            <img src="img/gallifrey-rules-20.png" alt="Logo" style={{  marginTop: '-4rem' }} />
             <Heading as="h1" className="hero__title" style={{ marginTop: '-2rem' }}>
                 {siteConfig.title}
             </Heading>
