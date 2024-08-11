@@ -27,10 +27,16 @@
       "type": "object"
     },
     "$atomicEntity": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "Lock will be based on the entity name and event ID"
     },
     "$atomicEvent": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "Lock will be based on the entity name, event name and event ID"
+    },
+    "$schemaFile": {
+      "type": "string",
+      "description": "points to a JSON schema file to enforce on the event payload"
     },
     "$providers": {
       "type": "object",
@@ -41,9 +47,6 @@
       "items": {
         "$ref": "#/definitions/consumer"
       }
-    },
-    "$schemaFile": {
-      "type": "string"
     },
     "$asyncActions": {
       "type": "array",
@@ -62,13 +65,16 @@
           "type": "object"
         },
         "$atomicEntity": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Lock will be based on the entity name and event ID"
         },
         "$atomicEvent": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Lock will be based on the entity name, event name and event ID"
         },
         "$schemaFile": {
-          "type": "string"
+          "type": "string",
+          "description": "points to a JSON schema file to enforce on the event payload"
         }
       },
       "patternProperties": {
@@ -122,7 +128,24 @@
           "enum": ["kafka", "kafka:scheduled-events", "kafka:async-actions"]
         },
         "config": {
-          "type": "object"
+          "oneOf": [
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "anyOf": [
+                      { "const": "kafka" },
+                      { "const": "kafka:scheduled-events" },
+                      { "const": "kafka:async-actions" }
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "$ref": "#/definitions/kafkaConsumerConfig"
+              }
+            }
+          ]
         },
         "eventDispatcher": {
           "type": "string"
@@ -161,13 +184,16 @@
           "type": "object"
         },
         "$atomicEntity": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Lock will be based on the entity name and event ID"
         },
         "$atomicEvent": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Lock will be based on the entity name, event name and event ID"
         },
         "$schemaFile": {
-          "type": "string"
+          "type": "string",
+          "description": "points to a JSON schema file to enforce on the event payload"
         }
       },
       "patternProperties": {
@@ -184,13 +210,16 @@
           "type": "object"
         },
         "$atomicEntity": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Lock will be based on the entity name and event ID"
         },
         "$atomicEvent": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Lock will be based on the entity name, event name and event ID"
         },
         "$schemaFile": {
-          "type": "string"
+          "type": "string",
+          "description": "points to a JSON schema file to enforce on the event payload"
         },
         "$filters": {
           "type": "array",
@@ -207,6 +236,41 @@
       },
       "required": ["$rules"],
       "additionalProperties": false
+    },
+    "kafkaConsumerConfig": {
+      "type": "object",
+      "properties": {
+        "properties": {
+          "groupId": {
+            "type": "string",
+            "description": "The group ID of the consumer"
+          },
+          "topics": {
+            "anyOf": [
+              { "type": "string" },
+              {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            ],
+            "description": "The topic or list of topics to listen to"
+          },
+          "fromBeginning": {
+            "type": "boolean",
+            "description": "Whether to start consuming from the beginning of the topic"
+          },
+          "brokers": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Optional brokers for this consumer. If not given, they would be expected to be provided in the environment variable `GR_KAFKA_BROKERS`"
+          },
+          "clientId": {
+            "type": "string",
+            "description": "Optional client ID. If not provided, it would be expected to be provided in the environment variable `GR_KAFKA_CLIENT_ID`"
+          }
+        },
+        "required": ["groupId", "topics", "fromBeginning"]
+      }
     }
   }
 }
