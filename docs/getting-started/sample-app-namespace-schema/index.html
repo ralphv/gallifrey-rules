@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.5.1">
 <title data-rh="true">Sample App Namespace Schema | Gallifrey Rules</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://gallifrey-rules.dev/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://gallifrey-rules.dev/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://gallifrey-rules.dev/docs/getting-started/sample-app-namespace-schema"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Sample App Namespace Schema | Gallifrey Rules"><meta data-rh="true" name="description" content="Let&#x27;s start by checking the namespace schema of the sample application."><meta data-rh="true" property="og:description" content="Let&#x27;s start by checking the namespace schema of the sample application."><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://gallifrey-rules.dev/docs/getting-started/sample-app-namespace-schema"><link data-rh="true" rel="alternate" href="https://gallifrey-rules.dev/docs/getting-started/sample-app-namespace-schema" hreflang="en"><link data-rh="true" rel="alternate" href="https://gallifrey-rules.dev/docs/getting-started/sample-app-namespace-schema" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.fc79977a.css">
-<script src="/assets/js/runtime~main.24409ed6.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.8d51e71c.js" defer="defer"></script>
 <script src="/assets/js/main.0caa17e0.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -19,7 +19,7 @@
 <li><code>$namespace</code>: is your namespace, this uniquely identifies the instance of your engine. Usually you have one namespace per project.</li>
 <li><code>$modulesPaths</code>: is a list of directories that the engine loads all modules from. The <code>&#x27;$&#x27;</code> path is a special path that will get the
 engine to load modules that come with the library itself. In the application example you can see that all of it&#x27;s modules live under <code>modules</code> folder.</li>
-<li><code>$entities</code>: is your list of entities. <a href="/docs/glossary#entity-or-entity-name">Check definition here</a>.
+<li><code>$entities</code>: is your list of entities. <a href="/docs/glossary#entity-or-entity-name">Learn more</a>.
 Under each entity, is the list of event names. and under each event name is your rules.
 In this example we have a single entity <code>orders</code>. For orders, we have a single event called <code>new-order</code>. And
 When we get the event <code>new-order</code> of entity <code>orders</code>, we run the single rule <code>notify-customer-new-order-rule</code></li>
