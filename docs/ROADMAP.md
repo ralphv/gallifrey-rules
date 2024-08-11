@@ -2,6 +2,9 @@
 
 #### planned for 0.2.x release:
 * publish docusaurus and polish it
+* throw on single rule failure should only
+ be applied for unhandled exceptions. CritcalError or EngineCriticalError should still be respected based on the other variables.
+ * Try to optimize DB locks?
 
 #### planned for 0.3.x release:
 * allow Config() to take in the event level config

@@ -32,11 +32,11 @@ export default class Config extends BaseConfig {
     }
 
     getInfluxDBOrg() {
-        return this.getEnvVariable('GR_INFLUXDB_ORG', 'sample_organization', false);
+        return this.getEnvVariable('GR_INFLUXDB_ORG', 'gallifrey-rules', false);
     }
 
     getInfluxDBBucket() {
-        return this.getEnvVariable('GR_INFLUXDB_BUCKET', 'sample_bucket', false);
+        return this.getEnvVariable('GR_INFLUXDB_BUCKET', 'gallifrey-rules-bucket', false);
     }
 
     getInfluxURL() {

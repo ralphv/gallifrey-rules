@@ -1,5 +1,590 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 ---
 # Environment Variables
 
+This document outlines the environment variables used by **Gallifrey Rules**. These variables can be set in your environment to configure various aspects of the library's behavior. Most environment variables are prefixed with `GR_`. 
+
+Please note that you can easilly append `_FILE` to the end of the environment name to make it load from a file, this is especially useful for secrets.
+
+## Table of Contents
+- [Environment Variables](#environment-variables)
+  - [GR_LOG_LEVEL](#GR_LOG_LEVEL)
+  - [GR_THROW_ON_NOT_MODULE](#GR_THROW_ON_NOT_MODULE)
+  - [GR_EXTENSIONS_OF_MODULES](#GR_EXTENSIONS_OF_MODULES)
+  - [GR_SKIP_EXTENSIONS_OF_MODULES](#GR_SKIP_EXTENSIONS_OF_MODULES)
+  - [GR_MODULES_PATHS](#GR_MODULES_PATHS)
+  - [GR_MODULE_NAME_PATTERN](#GR_MODULE_NAME_PATTERN)
+  - [GR_INFLUXDB_TOKEN](#GR_INFLUXDB_TOKEN)
+  - [GR_INFLUXDB_ORG](#GR_INFLUXDB_ORG)
+  - [GR_INFLUXDB_BUCKET](#GR_INFLUXDB_BUCKET)
+  - [GR_INFLUXDB_URL](#GR_INFLUXDB_URL)
+  - [GR_THROW_ON_EVENT_UNHANDLED_EXCEPTION](#GR_THROW_ON_EVENT_UNHANDLED_EXCEPTION)
+  - [GR_THROW_ON_CRITICAL_ERROR](#GR_THROW_ON_CRITICAL_ERROR)
+  - [GR_ENABLE_CONSUMER_METRICS](#GR_ENABLE_CONSUMER_METRICS)
+  - [GR_AUTO_COMMIT_THRESHOLD](#GR_AUTO_COMMIT_THRESHOLD)
+  - [GR_AUTO_COMMIT_INTERVAL](#GR_AUTO_COMMIT_INTERVAL)
+  - [GR_ADD_EXTRA_TO_CONSOLE_JOURNAL_LOGS](#GR_ADD_EXTRA_TO_CONSOLE_JOURNAL_LOGS)
+  - [GR_FAIL_EVENT_ON_SINGLE_RULE_FAIL](#GR_FAIL_EVENT_ON_SINGLE_RULE_FAIL)
+  - [GR_PLUGIN_CLASS_NAMES_FORCE_POSTFIX](#GR_PLUGIN_CLASS_NAMES_FORCE_POSTFIX)
+  - [GR_PLUGIN_MODULE_NAMES_FORCE_POSTFIX](#GR_PLUGIN_MODULE_NAMES_FORCE_POSTFIX)
+  - [GR_KAFKA_CLIENT_ID](#GR_KAFKA_CLIENT_ID)
+  - [GR_KAFKA_BROKERS](#GR_KAFKA_BROKERS)
+  - [GR_DB_USERNAME](#[GR_DB_USERNAME)
+  - [GR_DB_HOSTNAME](#[GR_DB_HOSTNAME)
+  - [GR_DB_NAME](#GR_DB_NAME)
+  - [GR_DB_PASSWORD](#GR_DB_PASSWORD)
+  - [GR_DB_PORT](#[GR_DB_PORT)
+  - [GR_IS_DISTRIBUTED_LOCKS_ENABLED](#GR_IS_DISTRIBUTED_LOCKS_ENABLED)
+  - [GR_DISTRIBUTED_LOCKS_MAX_WAIT_TIME_SECONDS](#[GR_DISTRIBUTED_LOCKS_MAX_WAIT_TIME_SECONDS)
+  - [GR_IS_CONTINUE_ON_FAILED_ACQUIRE_LOCK](#GR_IS_CONTINUE_ON_FAILED_ACQUIRE_LOCK)
+  - [GR_IS_SCHEMA_FILE_MANDATORY](#GR_IS_SCHEMA_FILE_MANDATORY)
+
+## Environment Variables
+
+### `GR_THROW_ON_NOT_MODULE`
+**Description:**  
+Controls whether to throw an exception or ignore, if a module is missing the decorators to designate them as plugins or providers.
+
+**Type:**  
+Boolean.
+
+**Default:**  
+`FALSE`
+
+**Mandatory:**  
+`no`
+
+--- 
+
+### `GR_EXTENSIONS_OF_MODULES`
+**Description:**  
+Specifies the extensions of files to consider as modules and attempt to load.
+
+**Type:**  
+Array of Path/String
+
+**Default:**  
+`.ts,.js`
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- By default the engine will attempt to load all modules under the given folders. An alternative is to use `.module.js,.module.ts` to limit the files to those extensions.
+
+---
+
+### `GR_SKIP_EXTENSIONS_OF_MODULES`
+**Description:**  
+Specifies the extensions of files to ignore as modules.
+
+**Type:**  
+Array of Path/String
+
+**Default:**  
+`.d.ts`
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- It is important to ignore the .d.ts files otherwise the engine will get confused an attempt to load the same modules twice which will throw errors in the process
+
+---
+
+### `GR_MODULES_PATHS`
+
+**Description:**  
+Specifies the default paths of modules to load.
+
+**Type:**  
+Array of Path/String
+
+**Default:**  
+`[]`
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- Usually you use the `$modulesPaths` in the schema to load the modules. But you can use this as an alternative for a cleaner namespace schema.
+
+---
+
+### `GR_MODULE_NAME_PATTERN`
+
+**Description:**  
+Controls the naming pattern of the module names. i.e. `getModuleName()`
+
+**Type:**  
+Regex String
+
+**Default:**  
+`^[a-z]+(-[a-z0-9]+)*$`
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- The default is to follow [kebab-case](https://www.pluralsight.com/blog/software-development/programming-naming-conventions-explained#kebab-case) But you can change this or completely disable it.
+
+---
+
+### `GR_INFLUXDB_TOKEN`
+
+**Description:**  
+The InfluxDB token
+
+**Type:**  
+Secret String
+
+**Default:**  
+``
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- Required only if you specify `GR_INFLUXDB_URL`
+
+---
+
+### `GR_INFLUXDB_ORG`
+
+**Description:**  
+The InfluxDB organization
+
+**Type:**  
+String
+
+**Default:**  
+`gallifrey-rules`
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- Required only if you specify `GR_INFLUXDB_URL`
+
+---
+
+### `GR_INFLUXDB_BUCKET`
+
+**Description:**  
+The InfluxDB bucket
+
+**Type:**  
+String
+
+**Default:**  
+`gallifrey-rules-bucket`
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- Required only if you specify `GR_INFLUXDB_URL`
+
+---
+
+### `GR_INFLUXDB_URL`
+
+**Description:**  
+The InfluxDB server url (with http/https and port number if needed)
+
+**Type:**  
+String
+
+**Default:**  
+``
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- If you don't specify this, metrics will be disabled.
+- If you do specify this, you need to specify the other InfluxDB needed parameters.
+
+---
+
+### `GR_THROW_ON_EVENT_UNHANDLED_EXCEPTION`
+
+**Description:**  
+Controls whether or not to bubble up unhandled exceptions from consumers.
+
+**Type:**  
+Boolean
+
+**Default:**  
+`TRUE`
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- Usually in production environments you want this to be false, which means it will log/deal with errors but continue consuming subsequent messages.
+- If this is true, the consumers will stop and the engine will stop.
+- Since this is a critical element of the engine's behavior, it is defaults to true and expected to be manually specified in production environments. 
+
+---
+
+### `GR_THROW_ON_CRITICAL_ERROR`
+
+**Description:**  
+Critical Errors are thrown when you use the exception `CriticalError` in your plugins code. You can decide on the behavior whether or not this means your consumer should stop or ignore and continue consuming subsequent messages. Please check the list of exception types that you can throw in your code to understand the different behaviors. [placeholder]
+
+**Type:**  
+Boolean
+
+**Default:**  
+`TRUE`
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- Usually you want this to be true, because throwing this type of exception in the plugin code means that there is some critical error and we need to hard stop. 
+
+---
+
+### `GR_ENABLE_CONSUMER_METRICS`
+
+**Description:**  
+Controls whether the engine should enable metrics at a kafka consumer level.
+
+**Type:**  
+Boolean
+
+**Default:**  
+`TRUE`
+
+**Mandatory:**  
+`no`
+
+---
+
+### `GR_AUTO_COMMIT_THRESHOLD`
+
+**Description:**  
+Controls the count of messages to do an auto commit. 
+
+**Type:**  
+Number
+
+**Default:**  
+`1`
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- Usually in production environment you want to increase this number to get a better throughput. It's a balance between throughput and error resilience. If your consumers are not [idempotent](https://en.wikipedia.org/wiki/Idempotence) in nature, you might want to keep this low.
+- Ideally your system design should have idempotent consumers which means idepotent events/rules. 
+
+---
+
+### `GR_AUTO_COMMIT_INTERVAL`
+
+**Description:**  
+Controls the internal to auto commit in milliseconds. 
+
+**Type:**  
+Number
+
+**Default:**  
+`5000`
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- Usually in production environment you want to increase this number to get a better throughput. It's a balance between throughput and error resilience. If your consumers are not [idempotent](https://en.wikipedia.org/wiki/Idempotence) in nature, you might want to keep this low.
+- Ideally your system design should have idempotent consumers which means idepotent events/rules. 
+
+---
+
+### `GR_ADD_EXTRA_TO_CONSOLE_JOURNAL_LOGS`
+
+**Description:**  
+Controls whether journal logs should print out the extra payloads. 
+
+**Type:**  
+Boolean
+
+**Default:**  
+`FALSE`
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- Usually this is left off to increase readability of journal logs. However in troubleshooting situations, it makes sense to turn it on. 
+
+---
+
+### `GR_FAIL_EVENT_ON_SINGLE_RULE_FAIL`
+
+**Description:**  
+When an event has multiple rules to process, this control whether when a single rule gets an  exception to bubble up or ignore. Ignoring means subsequent rules will still run.
+
+**Type:**  
+Boolean
+
+**Default:**  
+`TRUE`
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- Setting this to false means unhandled errors in rules will now not bubble up no matter what, this means they will just get logged and go through `ReactToRuleFailureProvider`.
+- Ideally you want this to always be TRUE.  
+
+---
+
+### `GR_PLUGIN_CLASS_NAMES_FORCE_POSTFIX`
+
+**Description:**  
+Controls whether or not class names of plugins should be postfixed with their plugin type. For Example, send email action should have the class named `SendEmailAction`
+
+**Type:**  
+Boolean
+
+**Default:**  
+`TRUE`
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- Keeping this to true will help organize your classes and make them easily distinguishable. Highly recommended to be on.  
+
+---
+
+### `GR_PLUGIN_MODULE_NAMES_FORCE_POSTFIX`
+
+**Description:**  
+Controls whether or not module names of plugins should be postfixed with their plugin type. For Example, send email action should have the module name `send-email-action`
+
+**Type:**  
+Boolean
+
+**Default:**  
+`TRUE`
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- Keeping this to true will help organize your module names and make them easily distinguishable. Highly recommended to be on.  
+
+---
+
+### `GR_KAFKA_CLIENT_ID`
+
+**Description:**  
+The client ID to be provided to Kafka server
+
+**Type:**  
+String
+
+**Default:**  
+`gallifrey-rules`
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- You can override this value when you pass it in the config of the consumer in the Namespace schema [placeholder]  
+
+---
+
+### `GR_KAFKA_BROKERS`
+
+**Description:**  
+The list of brokers of your Kafka setup
+
+**Type:**  
+Array/String
+
+**Default:**  
+``
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- This must be filled in, otherwise you will have to manually specify it in the config of the consumer in the Namespace schema.
+
+---
+
+### `GR_DB_USERNAME`
+
+**Description:**  
+The postgres DB username
+
+**Type:**  
+Array/String
+
+**Default:**  
+``
+
+**Mandatory:**  
+`no. YES when using Postgres Distrubuted Locks Provider`
+
+**Notes:**
+- This can also be specified using `POSTGRES_USERNAME`
+
+---
+
+### `GR_DB_HOSTNAME`
+
+**Description:**  
+The postgres DB server hostname
+
+**Type:**  
+Array/String
+
+**Default:**  
+``
+
+**Mandatory:**  
+`no. YES when using Postgres Distrubuted Locks Provider`
+
+**Notes:**
+- This can also be specified using `POSTGRES_HOST`
+
+---
+
+### `GR_DB_NAME`
+
+**Description:**  
+The postgres database name
+
+**Type:**  
+Array/String
+
+**Default:**  
+``
+
+**Mandatory:**  
+`no. YES when using Postgres Distrubuted Locks Provider`
+
+**Notes:**
+- This can also be specified using `POSTGRES_DB`
+
+---
+
+### `GR_DB_PASSWORD`
+
+**Description:**  
+The postgres DB password
+
+**Type:**  
+Array/String
+
+**Default:**  
+``
+
+**Mandatory:**  
+`no. YES when using Postgres Distrubuted Locks Provider`
+
+**Notes:**
+- This can also be specified using `POSTGRES_PASSWORD`
+
+---
+
+### `GR_DB_PORT`
+
+**Description:**  
+The postgres DB server port
+
+**Type:**  
+Array/String
+
+**Default:**  
+`5432`
+
+**Mandatory:**  
+`no`
+
+**Notes:**
+- This can also be specified using `POSTGRES_PORT`
+
+---
+
+### `GR_IS_DISTRIBUTED_LOCKS_ENABLED`
+
+**Description:**  
+Whether or not you want to use Postgres Distributed Locks Provider 
+
+**Type:**  
+Boolean
+
+**Default:**  
+`FALSE`
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- When set to true, the Postgres DB parameters should also be specified. 
+- To fully activate locks, you need to use `$atomicEvent` and/or `$atomicEntity` in your schema. [placeholder] 
+- To function correctly, all instances of the engine should be connected to the same Postgres DB parameters.
+
+---
+
+### `GR_DISTRIBUTED_LOCKS_MAX_WAIT_TIME_SECONDS`
+
+**Description:**  
+When distributed locks are used, what is the maximum wait time to attempt to aquire the lock.
+
+**Type:**  
+Number/Seconds
+
+**Default:**  
+`60`
+
+**Mandatory:**  
+`no`
+
+---
+
+### `GR_IS_CONTINUE_ON_FAILED_ACQUIRE_LOCK`
+
+**Description:**  
+When distributed locks are used, and a lock has failed to be aquired, this controls the behavior of whether to throw an exception or ignore the lock and continue without it. 
+
+**Type:**  
+Boolean
+
+**Default:**  
+`FALSE`
+
+**Mandatory:**  
+`no`
+
+**Notes:**  
+- Ideally you don't want to continue if you fail to aquire the lock.
+
+---
+
+### `GR_IS_SCHEMA_FILE_MANDATORY`
+
+**Description:**  
+Controls whether or not `$schemaFile` is mandatory in the Namespace. When mandatory, it should point to a JSON schema file to validate against the event payload. 
+
+**Type:**  
+Path/String
+
+**Default:**  
+``
+
+**Mandatory:**  
+`no, YES in production unless explicitly specified and turned off`
+
+**Notes:**  
+- It's a good idea to have an extra layer of validation of the message payloads.
+
+---

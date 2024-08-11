@@ -1,5 +1,5 @@
 ---
 sidebar_position: 6
 ---
-# Default Providers
+# Default Built in Modules
 
