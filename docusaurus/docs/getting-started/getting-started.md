@@ -22,12 +22,13 @@ that gallifrey understands. It's a simple function that takes in the message and
 [type EventDispatcherInterface](https://github.com/ralphv/gallifrey-rules/blob/main/src/interfaces/Providers/EventDispatcherInterface.ts#L9)
 
 <strong>A</strong> namespace is the name of the application that Gallifrey Rules is running. A namespace is defined
-by a governing JSON/YAML object that follows the following schema [NamespaceSchema](https://github.com/ralphv/gallifrey-rules/blob/main/src/lib/NamespaceSchema.ts#L4)
+by a governing JSON/YAML object that follows the following schema [NamespaceSchema](https://github.com/ralphv/gallifrey-rules/blob/main/src/lib/NamespaceSchema.ts#L4). This is [the JSON schema](https://raw.githubusercontent.com/ralphv/gallifrey-rules/main/src/schemas/namespace-schema.json) associated with the type.
 
 The schema, at the very least, will need to define your entities, events and the rules that will run for each event. 
 It will also define at least one consumer with one event dispatcher to feed events into the engine.
 
-Rules, Actions, DataObjects, Filters and every other kind of modules in Gallifrey Rules is referenced by their defined name which is provided through `getModuleName()`.     
+Rules, Actions, DataObjects, Filters and every other kind of modules in Gallifrey Rules are referenced by their defined name which is provided through [getModuleName()](https://github.com/ralphv/gallifrey-rules/blob/main/src/base-interfaces/ModuleInterface.ts#L10). 
+Learn more about how to [create modules](/docs/getting-started/the-modules#to-create-a-module).
 
 ### Let's get started
 

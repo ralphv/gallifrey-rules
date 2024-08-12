@@ -8,6 +8,10 @@ import { GallifreyEventType } from '../../GallifreyEventType';
 
 export default interface EventDispatcherInterface<MessageType, EventPayloadType extends BaseEventPayload>
     extends ModuleInterface {
+    /**
+     * Take a Kafka Message from the topic and return it as a Gallifrey Event Type
+     * @param message Kafka message
+     */
     getEvent(message: MessageType): GallifreyEventType<EventPayloadType>;
 }
 

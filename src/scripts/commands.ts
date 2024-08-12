@@ -1,6 +1,6 @@
 import { EOL } from 'node:os';
 
-const imageName = 'gallifrey-rules-tools';
+const imageName = 'ghcr.io/ralphv/gallifrey-rules-tools';
 
 export const commands: { [key: string]: CommandEnvVariableType[] } = {
     'create-postgres-scheduled-events': [

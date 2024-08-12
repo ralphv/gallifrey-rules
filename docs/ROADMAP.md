@@ -2,9 +2,7 @@
 
 #### planned for 0.2.x release:
 * publish docusaurus and polish it
-
-#### planned for 0.3.x release:
-* allow Config() to take in the event level config
+* Add comments to all EngineInterfaces methods
 
 #### planned for future releases:
 

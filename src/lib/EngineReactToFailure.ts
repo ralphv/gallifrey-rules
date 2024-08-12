@@ -1,5 +1,4 @@
 import ConfigurationAccessorInterface from '../interfaces/Providers/ConfigurationAccessorInterface';
-import EngineEventContextInterface from '../engine-interfaces/EngineEventContextInterface';
 import EngineBase from './EngineBase';
 import JournalLoggerInterface from '../interfaces/Providers/JournalLoggerInterface';
 import GetMetricsPointDelegate from '../delegates-interfaces/GetMetricsPointDelegate';
@@ -9,11 +8,12 @@ import GetScheduledEventContextDelegate from '../delegates-interfaces/GetSchedul
 import InsertScheduledEventDelegate from '../delegates-interfaces/InsertScheduledEventDelegate';
 import IsScheduledEventDelegate from '../delegates-interfaces/IsScheduledEventDelegate';
 import EngineReactToFailureInterface from '../engine-interfaces/EngineReactToFailureInterface';
+import { EngineEventContext } from './EngineEventContext';
 
 export default class EngineReactToFailure extends EngineBase implements EngineReactToFailureInterface {
     constructor(
         configurationAccessor: ConfigurationAccessorInterface,
-        engineEventContext: EngineEventContextInterface,
+        engineEventContext: EngineEventContext,
         loggerName: string,
         journalLogger: JournalLoggerInterface,
         getMetricsPointDelegate: GetMetricsPointDelegate,

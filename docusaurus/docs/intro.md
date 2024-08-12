@@ -4,11 +4,11 @@ sidebar_position: 1
 
 # What is Gallifrey Rules?
 
-# Gallifrey-Rules: A Comprehensive Event Handling Framework for Node.js
+# Gallifrey Rules: A Comprehensive Event Handling Framework for Node.js
 
-Gallifrey-Rules is a sophisticated Node.js library written in TypeScript, designed to streamline and enhance the management of real-time event-driven architectures.
+Gallifrey Rules is a sophisticated [Node.js](https://nodejs.org/en) library written in [TypeScript](https://www.typescriptlang.org/), designed to streamline and enhance the management of real-time event-driven architectures.
 
-In the realm of real-time event consumption, systems often operate as black boxes. Typically, an entry point function pulls events from streaming platforms like [Apache Kafka.](https://kafka.apache.org/) These consumers execute business logic, retrieve necessary data, and perform state mutations within the system.
+In the realm of real-time event consumption, systems often operate as black boxes. Typically, an entry point function pulls events from streaming platforms like [Apache Kafka®](https://kafka.apache.org/) These consumers execute business logic, retrieve necessary data, and perform state mutations within the system.
 
 ### Example Scenario: E-commerce Order Processing
 
@@ -22,12 +22,15 @@ Consider an e-commerce platform where a user adds items to their cart and comple
 
 As systems grow in complexity, maintaining these consumers becomes increasingly challenging. Visibility equally suffers. 
 
-## Introducing Gallifrey-Rules
+## Introducing Gallifrey Rules
 
-Gallifrey-Rules enforces disciplined event handling practices in two primary ways:
+Gallifrey Rules enforces disciplined and structured event handling practices in two primary ways:
 
 1. **Event Definition**: Mandates the definition of all events with basic properties such as event name, associated entity, event ID and the event payload.
-2. **Modular Architecture**: Utilizes plugins or modules to encapsulate functionalities of different roles.
+2. **Modular Architecture**: Utilizes plugins or modules to encapsulate functionalities of different roles. Business Logic, Data Hydration and State Mutations.
+
+**When Gallifrey Rules orchestrates your consumers, it intelligently infers critical insights and exerts 
+precise control over their behavior, providing the developer with a wealth of advantages and enhanced functionality.**
 
 ### Key Benefits for Developers
 
@@ -46,7 +49,7 @@ Gallifrey-Rules enforces disciplined event handling practices in two primary way
 * **Resilient Error Handling**: The ReactToFailure mechanism is abstracted behind a provider, giving developers control over how to handle unexpected errors in a customizable and consistent manner.
 * Fully supports [TypeScript](https://www.typescriptlang.org/).
 
-Gallifrey-Rules redefines event handling in Node.js, providing a robust framework that enhances reusability, maintainability, and visibility, making it an essential tool for developers dealing with complex real-time systems.
+Gallifrey Rules redefines event handling in Node.js, providing a robust framework that enhances reusability, maintainability, and visibility, making it an essential tool for developers dealing with complex real-time systems.
 
 ## Getting Started
 

@@ -3,6 +3,7 @@ import JournalLoggerInterface from '../interfaces/Providers/JournalLoggerInterfa
 import { logger } from './logger';
 import { ScheduledEventType } from '../engine-events/ScheduledEventType';
 import { AssertNotNull } from './Utils';
+import Config from './Config';
 
 export class EngineEventContext implements EngineEventContextInterface {
     private eventStore: { [key: string]: any } = {};
@@ -15,6 +16,7 @@ export class EngineEventContext implements EngineEventContextInterface {
         private readonly eventName: string,
         private readonly eventID: string,
         private readonly source: string,
+        private readonly eventLevelConfig: Config,
     ) {}
 
     getEntityName(): string {
@@ -69,5 +71,9 @@ export class EngineEventContext implements EngineEventContextInterface {
 
     getSource(): string {
         return this.source;
+    }
+
+    getEventLevelConfig(): Config {
+        return this.eventLevelConfig;
     }
 }

@@ -3,13 +3,22 @@ import { EOL } from 'node:os';
 import EngineCriticalError from '../errors/EngineCriticalError';
 
 export default class BaseConfig {
-    constructor(private prefix: string = '') {}
+    constructor(
+        private prefix: string = '',
+        private overrideData: { [name: string]: string | number | boolean } = {},
+    ) {}
     protected getEnvVariable(envName: string | string[], defaultValue: string, throwOnEmpty: boolean): string {
         const envNames = Array.isArray(envName) ? envName : [envName];
         let value;
         let fullEnvName;
         for (const env of envNames) {
             fullEnvName = this.getFullEnvName(env);
+            // if we have this in override data, take it from there
+            if (fullEnvName in this.overrideData) {
+                value = String(this.overrideData[fullEnvName]);
+                break;
+            }
+
             const envNameFile = fullEnvName + '_FILE';
             if (envNameFile in process.env && typeof process.env[envNameFile] === 'string') {
                 value = readFileSync(process.env[envNameFile]).toString();

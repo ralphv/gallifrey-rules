@@ -2,6 +2,9 @@ import BaseConfig from './BaseConfig';
 import { Cache } from './CoreDecorators';
 
 export default class Config extends BaseConfig {
+    constructor(overrideData: { [name: string]: string | number | boolean } = {}) {
+        super('', overrideData);
+    }
     getLogLevel() {
         return this.getEnvVariable(`GR_LOG_LEVEL`, 'info', false);
     }
@@ -32,11 +35,11 @@ export default class Config extends BaseConfig {
     }
 
     getInfluxDBOrg() {
-        return this.getEnvVariable('GR_INFLUXDB_ORG', 'sample_organization', false);
+        return this.getEnvVariable('GR_INFLUXDB_ORG', 'gallifrey-rules', false);
     }
 
     getInfluxDBBucket() {
-        return this.getEnvVariable('GR_INFLUXDB_BUCKET', 'sample_bucket', false);
+        return this.getEnvVariable('GR_INFLUXDB_BUCKET', 'gallifrey-rules-bucket', false);
     }
 
     getInfluxURL() {
