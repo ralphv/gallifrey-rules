@@ -99,14 +99,12 @@ export default class SchemaLoader {
     }
 
     @AssertSchemaLoaded
-    getRulesForEvent(namespace: string, entityName: string, eventName: string): string[] {
-        // @ts-expect-error expected
+    getRulesForEvent(entityName: string, eventName: string): string[] {
         return this.schema?.$entities?.[entityName]?.[eventName]?.$rules ?? [];
     }
 
     @AssertSchemaLoaded
-    getFiltersForEvent(namespace: string, entityName: string, eventName: string): string[] {
-        // @ts-expect-error expected
+    getFiltersForEvent(entityName: string, eventName: string): string[] {
         return this.schema?.$entities?.[entityName]?.[eventName]?.$filters ?? [];
     }
 
@@ -126,10 +124,9 @@ export default class SchemaLoader {
     private getEventLevelKeyObject(entityName: string, eventName: string, key: string) {
         const objects = []; // lowest level/highest priority first.
 
-        objects.push((this.schema as any)?.$entities?.[entityName]?.[eventName]?.[key]);
-        objects.push((this.schema as any)?.$entities?.[entityName]?.[key]);
-        objects.push((this.schema as any)?.$entities?.[key]);
-        objects.push((this.schema as any)?.[key]);
+        objects.push((this.schema as any)?.$entities?.[entityName]?.[eventName]?.[key]); // event level config
+        objects.push((this.schema as any)?.$entities?.[entityName]?.[key]); // entity level config
+        objects.push((this.schema as any)?.[key]); // namespace level config
 
         return objects
             .filter((a) => a !== undefined)
@@ -149,10 +146,9 @@ export default class SchemaLoader {
     ): ValueType | undefined {
         const values = []; // lowest level/highest priority first.
 
-        values.push((this.schema as any)?.$entities?.[entityName]?.[eventName]?.[key]);
-        values.push((this.schema as any)?.$entities?.[entityName]?.[key]);
-        values.push((this.schema as any)?.$entities?.[key]);
-        values.push((this.schema as any)?.[key]);
+        values.push((this.schema as any)?.$entities?.[entityName]?.[eventName]?.[key]); // event level value
+        values.push((this.schema as any)?.$entities?.[entityName]?.[key]); // entity level value
+        values.push((this.schema as any)?.[key]); // namespace level value
 
         // pick the first value in the array, it's the highest priority
         return values.filter((a) => a !== undefined)[0] ?? undefined;

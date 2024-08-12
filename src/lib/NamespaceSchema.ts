@@ -6,7 +6,7 @@ export type NamespaceSchema = {
     $namespaceAliases?: string[];
     $modulesPaths: string[];
     $entities: NamespaceSchemaEntity;
-    $config?: ConfigType;
+    $config?: ConfigType; // namespace level config
     $atomicEntity?: boolean;
     $atomicEvent?: boolean;
     $providers?: {
@@ -27,21 +27,17 @@ export type NamespaceSchema = {
 };
 
 export type NamespaceSchemaEntity = {
-    $config?: ConfigType;
-    $atomicEntity?: boolean;
-    $atomicEvent?: boolean;
-    $schemaFile?: string;
-    [entity: string]: ConfigType | NamespaceSchemaEvent | string | undefined | boolean;
+    [entity: string]: NamespaceSchemaEvent;
 };
 
 export type NamespaceSchemaEvent = {
-    $config?: any;
+    $config?: any; // entity level config
     $atomicEntity?: boolean;
     $atomicEvent?: boolean;
     $schemaFile: string;
     [event: string]:
         | {
-              $config?: ConfigType;
+              $config?: ConfigType; // event level config
               $atomicEntity?: boolean;
               $atomicEvent?: boolean;
               $schemaFile?: string;

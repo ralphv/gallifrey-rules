@@ -77,8 +77,8 @@ describe('schema loader', () => {
             $namespace: 'main',
             $config: { namespaceLevel: 1 },
             $entities: {
-                $config: { entityLevel: 2 },
                 entity: {
+                    $config: { entityLevel: 2 },
                     event: {
                         $rules: [],
                         $config: { eventLevel: 3 },
@@ -99,8 +99,8 @@ describe('schema loader', () => {
             $namespace: 'main',
             $config: { namespaceLevel: 1 },
             $entities: {
-                $config: { entityLevel: 2 },
                 entity: {
+                    $config: { entityLevel: 2 },
                     event: {
                         $rules: [],
                         $config: { eventLevel: 3, entityLevel: 3 },
@@ -121,8 +121,8 @@ describe('schema loader', () => {
             $namespace: 'main',
             $config: { namespaceLevel: 1 },
             $entities: {
-                $config: { entityLevel: 2 },
                 entity: {
+                    $config: { entityLevel: 2 },
                     event: {
                         $rules: [],
                         $config: { eventLevel: 3, entityLevel: 3, namespaceLevel: 3 },
@@ -143,8 +143,8 @@ describe('schema loader', () => {
             $namespace: 'main',
             $config: { namespaceLevel: 1 },
             $entities: {
-                $config: { entityLevel: 2, namespaceLevel: 2 },
                 entity: {
+                    $config: { entityLevel: 2, namespaceLevel: 2 },
                     event: {
                         $rules: [],
                         $config: { eventLevel: 3 },
@@ -165,8 +165,8 @@ describe('schema loader', () => {
             $namespace: 'main',
             $config: { namespaceLevel: 1 },
             $entities: {
-                $config: { entityLevel: 2, namespaceLevel: 2 },
                 entity: {
+                    $config: { entityLevel: 2, namespaceLevel: 2 },
                     event: {
                         $rules: [],
                         $config: { eventLevel: 3, namespaceLevel: 3 },
@@ -187,8 +187,8 @@ describe('schema loader', () => {
             $namespace: 'main',
             $schemaFile: '1',
             $entities: {
-                $schemaFile: '2',
                 entity: {
+                    $schemaFile: '2',
                     event: {
                         $schemaFile: '3',
                         $rules: [],
@@ -205,8 +205,8 @@ describe('schema loader', () => {
             $namespace: 'main',
             $schemaFile: '1',
             $entities: {
-                $schemaFile: '2',
                 entity: {
+                    $schemaFile: '2',
                     event: {
                         $rules: [],
                     },

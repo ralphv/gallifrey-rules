@@ -3,7 +3,7 @@
   "$id": "gallifrey-rules/namespace-schema.01.json",
   "description": "namespace schema version 01",
   "type": "object",
-  "properties":{
+  "properties": {
     "$namespace": {
       "type": "string"
     },
@@ -24,7 +24,8 @@
       "$ref": "#/definitions/entities"
     },
     "$config": {
-      "type": "object"
+      "type": "object",
+      "description": "namespace level config"
     },
     "$atomicEntity": {
       "type": "boolean",
@@ -55,34 +56,18 @@
       }
     }
   },
-  "required": ["$namespace", "$modulesPaths", "$entities"],
+  "required": [
+    "$namespace",
+    "$modulesPaths",
+    "$entities"
+  ],
   "additionalProperties": false,
   "definitions": {
     "entities": {
       "type": "object",
-      "properties": {
-        "$config": {
-          "type": "object"
-        },
-        "$atomicEntity": {
-          "type": "boolean",
-          "description": "Lock will be based on the entity name and event ID"
-        },
-        "$atomicEvent": {
-          "type": "boolean",
-          "description": "Lock will be based on the entity name, event name and event ID"
-        },
-        "$schemaFile": {
-          "type": "string",
-          "description": "points to a JSON schema file to enforce on the event payload"
-        }
-      },
-      "patternProperties": {
-        "^(?!\\$config|\\$atomicEntity|\\$atomicEvent|\\$schemaFile)[\\w\\d_-]+$": {
-          "$ref": "#/definitions/namespaceSchemaEvent"
-        }
-      },
-      "additionalProperties": false
+      "additionalProperties": {
+        "$ref": "#/definitions/namespaceSchemaEvent"
+      }
     },
     "providers": {
       "type": "object",
@@ -125,7 +110,11 @@
         },
         "type": {
           "type": "string",
-          "enum": ["kafka", "kafka:scheduled-events", "kafka:async-actions"]
+          "enum": [
+            "kafka",
+            "kafka:scheduled-events",
+            "kafka:async-actions"
+          ]
         },
         "config": {
           "oneOf": [
@@ -134,9 +123,15 @@
                 "properties": {
                   "type": {
                     "anyOf": [
-                      { "const": "kafka" },
-                      { "const": "kafka:scheduled-events" },
-                      { "const": "kafka:async-actions" }
+                      {
+                        "const": "kafka"
+                      },
+                      {
+                        "const": "kafka:scheduled-events"
+                      },
+                      {
+                        "const": "kafka:async-actions"
+                      }
                     ]
                   }
                 }
@@ -151,7 +146,11 @@
           "type": "string"
         }
       },
-      "required": ["name", "type", "config"],
+      "required": [
+        "name",
+        "type",
+        "config"
+      ],
       "if": {
         "properties": {
           "type": {
@@ -160,7 +159,9 @@
         }
       },
       "then": {
-        "required": ["eventDispatcher"]
+        "required": [
+          "eventDispatcher"
+        ]
       },
       "additionalProperties": false
     },
@@ -174,14 +175,18 @@
           "type": "object"
         }
       },
-      "required": ["actionPluginName", "queuerConfig"],
+      "required": [
+        "actionPluginName",
+        "queuerConfig"
+      ],
       "additionalProperties": false
     },
     "namespaceSchemaEvent": {
       "type": "object",
       "properties": {
         "$config": {
-          "type": "object"
+          "type": "object",
+          "description": "entity level config"
         },
         "$atomicEntity": {
           "type": "boolean",
@@ -207,7 +212,8 @@
       "type": "object",
       "properties": {
         "$config": {
-          "type": "object"
+          "type": "object",
+          "description": "event level config"
         },
         "$atomicEntity": {
           "type": "boolean",
@@ -234,7 +240,9 @@
           }
         }
       },
-      "required": ["$rules"],
+      "required": [
+        "$rules"
+      ],
       "additionalProperties": false
     },
     "kafkaConsumerConfig": {
@@ -247,10 +255,14 @@
           },
           "topics": {
             "anyOf": [
-              { "type": "string" },
+              {
+                "type": "string"
+              },
               {
                 "type": "array",
-                "items": { "type": "string" }
+                "items": {
+                  "type": "string"
+                }
               }
             ],
             "description": "The topic or list of topics to listen to"
@@ -261,7 +273,9 @@
           },
           "brokers": {
             "type": "array",
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "description": "Optional brokers for this consumer. If not given, they would be expected to be provided in the environment variable `GR_KAFKA_BROKERS`"
           },
           "clientId": {
@@ -269,7 +283,11 @@
             "description": "Optional client ID. If not provided, it would be expected to be provided in the environment variable `GR_KAFKA_CLIENT_ID`"
           }
         },
-        "required": ["groupId", "topics", "fromBeginning"]
+        "required": [
+          "groupId",
+          "topics",
+          "fromBeginning"
+        ]
       }
     }
   }
