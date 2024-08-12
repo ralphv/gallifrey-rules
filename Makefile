@@ -50,9 +50,9 @@ create-kafka-connector-scheduled-events:
 
 .PHONY: run-integration-tests
 run-integration-tests:
-	docker compose -f docker/tests/scheduled-events.compose.yaml up -d
+	docker compose -f docker/tests/scheduled-events.compose.yaml down
 	docker compose -f docker/tests/scheduled-events.compose.yaml up -d
 	npm run test:integration
-	docker compose -f docker/tests/scheduled-events.compose.yaml up -d
+	docker compose -f docker/tests/scheduled-events.compose.yaml down
 
 
