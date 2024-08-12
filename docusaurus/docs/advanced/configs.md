@@ -15,7 +15,7 @@ This approach allows for seamless overrides at runtime as your requirements evol
 The [default ConfigurationProvider](https://github.com/ralphv/gallifrey-rules/blob/99d932a9a252a89ae368a0dc6d307ef1aca40e61/src/modules/EnvVariableConfigurationProvider.ts#L9) in Gallifrey Rules is designed to extract values from environment variables. 
 For instance, consider a scenario where [your plugin code retrieves the SMTP server details](https://github.com/ralphv/gallifrey-rules-sample/blob/main/src/modules/plugins/actions/SendEmailAction.ts#L14). 
 This value can be easily provided using the `CONFIG_DEFAULT_SMTP_SERVER` environment variable.
-[Learn more](docs/advanced/default-built-in-modules#envvariableconfigurationprovider).
+[Learn more](/docs/advanced/default-built-in-modules#envvariableconfigurationprovider).
 
 Gallifrey Rules further empowers users by enabling configuration values to be
 specified at `namespace/entity/event` levels. 
