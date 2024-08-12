@@ -34,7 +34,7 @@ export type NamespaceSchemaEvent = {
     $config?: any; // entity level config
     $atomicEntity?: boolean;
     $atomicEvent?: boolean;
-    $schemaFile: string;
+    $schemaFile?: string;
     [event: string]:
         | {
               $config?: ConfigType; // event level config
