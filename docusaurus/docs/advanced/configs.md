@@ -3,24 +3,34 @@ sidebar_position: 2
 ---
 # Configs
 
-Configuration values are a big part of any project and Gallifrey Rules tries to streamline that and give you tremendous flexibility with providing the values.
+In any software project, configuration values are crucial. Gallifrey Rules enhances this experience by offering unparalleled flexibility in managing these values across various levels of granularity.
 
-In short, anytime you need to pull config values from within your plugins you should use [the following methods](https://github.com/ralphv/gallifrey-rules/blob/99d932a9a252a89ae368a0dc6d307ef1aca40e61/src/interfaces/Providers/ConfigurationAccessorInterface.ts#L2).
-Even if you have a value that you don't plan to control or supply at runtime it's a good idea to just pass it through these methods
-and provide a default value that way in the future you can easily override that in runtime when you need to.
+To ensure consistency and future-proofing, 
+it's advisable to always use [the following methods](https://github.com/ralphv/gallifrey-rules/blob/99d932a9a252a89ae368a0dc6d307ef1aca40e61/src/interfaces/Providers/ConfigurationAccessorInterface.ts#L2) when accessing configuration values 
+within your plugins. 
+Even for configurations that may not require immediate control or modification at runtime, 
+it is best practice to use these methods with default values. 
+This approach allows for seamless overrides at runtime as your requirements evolve.
 
-The [default ConfigurationProvider](https://github.com/ralphv/gallifrey-rules/blob/99d932a9a252a89ae368a0dc6d307ef1aca40e61/src/modules/EnvVariableConfigurationProvider.ts#L9) provided by Gallifrey Rules pulls values from environment variables.
+The [default ConfigurationProvider](https://github.com/ralphv/gallifrey-rules/blob/99d932a9a252a89ae368a0dc6d307ef1aca40e61/src/modules/EnvVariableConfigurationProvider.ts#L9) in Gallifrey Rules is designed to extract values from environment variables. 
+For instance, consider a scenario where [your plugin code retrieves the SMTP server details](https://github.com/ralphv/gallifrey-rules-sample/blob/main/src/modules/plugins/actions/SendEmailAction.ts#L14). 
+This value can be easily provided using the `CONFIG_DEFAULT_SMTP_SERVER` environment variable.
+[Learn more](docs/advanced/default-built-in-modules#envvariableconfigurationprovider).
 
-As an example, if your [plugin code looks like this](https://github.com/ralphv/gallifrey-rules-sample/blob/main/src/modules/plugins/actions/SendEmailAction.ts#L14) that pulls the SMTP server value, then you can provide that
-using the environment variable `CONFIG_DEFAULT_SMTP_SERVER`. [Learn more](docs/advanced/default-built-in-modules#envvariableconfigurationprovider).
+Gallifrey Rules further empowers users by enabling configuration values to be
+specified at `namespace/entity/event` levels. 
+This feature provides a mechanism to override specific configurations for particular events 
+by utilizing the `$config` attribute on different levels.
 
-Furthermore, Gallifrey Rules allows you to provide configuration values `per event`. 
-This means you can easily override any value for a specific event by providing the [$config](https://github.com/ralphv/gallifrey-rules/blob/99d932a9a252a89ae368a0dc6d307ef1aca40e61/src/lib/NamespaceSchema.ts#L9) on that particular event.
+If you look closely at the schema, you will see the different levels where you can provide `$config` values.
 
-You may have noticed that you can provide `$config` on different levels in the Schema. 
+You can provide it at:
 
-You can provide it:
+1. [Namespace Level Config](https://github.com/ralphv/gallifrey-rules/blob/6bcd2e5b058219de3430b1455c84d94a2e31f0c2/src/lib/NamespaceSchema.ts#L9)
+2. [Entity Level Config](https://github.com/ralphv/gallifrey-rules/blob/6bcd2e5b058219de3430b1455c84d94a2e31f0c2/src/lib/NamespaceSchema.ts#L34)
+3. [Event Level Config](https://github.com/ralphv/gallifrey-rules/blob/6bcd2e5b058219de3430b1455c84d94a2e31f0c2/src/lib/NamespaceSchema.ts#L40)
 
-1. [Namespace Level Config](https://github.com/ralphv/gallifrey-rules/blob/99d932a9a252a89ae368a0dc6d307ef1aca40e61/src/lib/NamespaceSchema.ts#L9)
-2. [Per Entity](https://github.com/ralphv/gallifrey-rules/blob/99d932a9a252a89ae368a0dc6d307ef1aca40e61/src/lib/NamespaceSchema.ts#L28)
-3. 
+This capability is **exceptionally powerful**, allowing you to define overrides at varying levels of detail and control specific configurations at a more granular level.
+
+The values defined within the schema are consolidated into a single configuration object and supplied to the
+`ConfigurationProvider`, integrating them into its overarching configuration retrieval mechanism.
