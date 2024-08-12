@@ -3,11 +3,426 @@
 <head>
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.5.1">
-<title data-rh="true">Environment Variables | Gallifrey Rules</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://gallifrey-rules.dev/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://gallifrey-rules.dev/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://gallifrey-rules.dev/docs/advanced/environment-variables"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Environment Variables | Gallifrey Rules"><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://gallifrey-rules.dev/docs/advanced/environment-variables"><link data-rh="true" rel="alternate" href="https://gallifrey-rules.dev/docs/advanced/environment-variables" hreflang="en"><link data-rh="true" rel="alternate" href="https://gallifrey-rules.dev/docs/advanced/environment-variables" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.fc79977a.css">
-<script src="/assets/js/runtime~main.d0778a5c.js" defer="defer"></script>
-<script src="/assets/js/main.0caa17e0.js" defer="defer"></script>
+<title data-rh="true">Environment Variables | Gallifrey Rules</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://gallifrey-rules.dev/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://gallifrey-rules.dev/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://gallifrey-rules.dev/docs/advanced/environment-variables"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Environment Variables | Gallifrey Rules"><meta data-rh="true" name="description" content="This document outlines the environment variables used by Gallifrey Rules. These variables can be set in your environment to configure various aspects of the library&#x27;s behavior. Most environment variables are prefixed with GR_."><meta data-rh="true" property="og:description" content="This document outlines the environment variables used by Gallifrey Rules. These variables can be set in your environment to configure various aspects of the library&#x27;s behavior. Most environment variables are prefixed with GR_."><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://gallifrey-rules.dev/docs/advanced/environment-variables"><link data-rh="true" rel="alternate" href="https://gallifrey-rules.dev/docs/advanced/environment-variables" hreflang="en"><link data-rh="true" rel="alternate" href="https://gallifrey-rules.dev/docs/advanced/environment-variables" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.86cd5f92.css">
+<script src="/assets/js/runtime~main.7780c079.js" defer="defer"></script>
+<script src="/assets/js/main.e1ca278e.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
-<script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();t(null!==e?e:"light")}(),function(){try{const n=new URLSearchParams(window.location.search).entries();for(var[t,e]of n)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/"><div class="navbar__logo"><img src="/img/gallifrey-rules-25.png" alt="Gallifrey Rules Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/img/gallifrey-rules-25.png" alt="Gallifrey Rules Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Gallifrey Rules</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/docs/intro">Getting Started</a><a class="navbar__item navbar__link" href="/docs/advanced/scheduled-events">Advanced</a></div><div class="navbar__items navbar__items--right"><a href="https://github.com/ralphv/gallifrey-rules" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="Switch between dark and light mode (currently light mode)" aria-label="Switch between dark and light mode (currently light mode)" aria-live="polite"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/docs/intro">What is Gallifrey Rules?</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/docs/getting-started/">Getting Started</a><button aria-label="Expand sidebar category &#x27;Getting Started&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/docs/advanced/scheduled-events">Advanced</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/advanced/scheduled-events">Scheduled Events Setup</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/advanced/configs">Configs</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/advanced/async-actions">Async Actions</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/advanced/distributed-locks">Distributed Locks</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/docs/advanced/environment-variables">Environment Variables</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/advanced/default-providers">Default Providers</a></li></ul></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/docs/glossary">Glossary</a></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs" itemscope="" itemtype="https://schema.org/BreadcrumbList"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Advanced</span><meta itemprop="position" content="1"></li><li itemscope="" itemprop="itemListElement" itemtype="https://schema.org/ListItem" class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link" itemprop="name">Environment Variables</span><meta itemprop="position" content="2"></li></ul></nav><div class="theme-doc-markdown markdown"><header><h1>Environment Variables</h1></header></div></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/advanced/distributed-locks"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Distributed Locks</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/advanced/default-providers"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Default Providers</div></a></nav></div></div></div></div></main></div></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/docs/intro">Intro</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/getting-started/">Getting Started</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/advanced/scheduled-events">Advanced</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/glossary">Glossary</a></li><li class="footer__item"><a href="https://github.com/ralphv/gallifrey-rules-sample/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Sample Application<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div><div class="col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://stackoverflow.com/questions/tagged/gallifrey-rules" target="_blank" rel="noopener noreferrer" class="footer__link-item">Stack Overflow<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://github.com/ralphv/gallifrey-rules/discussions" target="_blank" rel="noopener noreferrer" class="footer__link-item">Discussions<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://github.com/ralphv/gallifrey-rules/issues" target="_blank" rel="noopener noreferrer" class="footer__link-item">Issues<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/ralphv/gallifrey-rules" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://github.com/ralphv/gallifrey-rules-sample" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub Sample App<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://www.npmjs.com/package/gallifrey-rules" target="_blank" rel="noopener noreferrer" class="footer__link-item">npm<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 Gallifrey Rules. Built with Docusaurus.</div></div></div></footer></div>
+<script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();t(null!==e?e:"light")}(),function(){try{const n=new URLSearchParams(window.location.search).entries();for(var[t,e]of n)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/"><div class="navbar__logo"><img src="/img/gallifrey-rules-25.png" alt="Gallifrey Rules Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/img/gallifrey-rules-25.png" alt="Gallifrey Rules Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Gallifrey Rules</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/docs/intro">Getting Started</a><a class="navbar__item navbar__link" href="/docs/advanced/scheduled-events">Advanced</a></div><div class="navbar__items navbar__items--right"><a href="https://github.com/ralphv/gallifrey-rules" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="Switch between dark and light mode (currently light mode)" aria-label="Switch between dark and light mode (currently light mode)" aria-live="polite"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/docs/intro">What is Gallifrey Rules?</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/docs/getting-started/">Getting Started</a><button aria-label="Expand sidebar category &#x27;Getting Started&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/docs/advanced/scheduled-events">Advanced</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/advanced/scheduled-events">Scheduled Events Setup</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/advanced/configs">Configs</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/advanced/async-actions">Async Actions</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/advanced/distributed-locks">Distributed Locks</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/advanced/error-handling">Error Handling</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/advanced/default-built-in-modules">Default Built in Modules</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/docs/advanced/environment-variables">Environment Variables</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/advanced/testing">Testing</a></li></ul></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/docs/glossary">Glossary</a></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs" itemscope="" itemtype="https://schema.org/BreadcrumbList"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Advanced</span><meta itemprop="position" content="1"></li><li itemscope="" itemprop="itemListElement" itemtype="https://schema.org/ListItem" class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link" itemprop="name">Environment Variables</span><meta itemprop="position" content="2"></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Environment Variables</h1></header><p>This document outlines the environment variables used by <strong>Gallifrey Rules</strong>. These variables can be set in your environment to configure various aspects of the library&#x27;s behavior. Most environment variables are prefixed with <code>GR_</code>.</p>
+<p>Please note that you can easily append <code>_FILE</code> to the end of the environment name to make it load from a file, this is especially useful for secrets.</p>
+<h2 id="#heading-id">List of variables</h2>
+<div class="tableOfContentsInline_prmo"><ul class="table-of-contents"><li><a href="#gr_log_level"><code>GR_LOG_LEVEL</code></a></li><li><a href="#gr_throw_on_not_module"><code>GR_THROW_ON_NOT_MODULE</code></a></li><li><a href="#gr_extensions_of_modules"><code>GR_EXTENSIONS_OF_MODULES</code></a></li><li><a href="#gr_skip_extensions_of_modules"><code>GR_SKIP_EXTENSIONS_OF_MODULES</code></a></li><li><a href="#gr_modules_paths"><code>GR_MODULES_PATHS</code></a></li><li><a href="#gr_module_name_pattern"><code>GR_MODULE_NAME_PATTERN</code></a></li><li><a href="#gr_influxdb_token"><code>GR_INFLUXDB_TOKEN</code></a></li><li><a href="#gr_influxdb_org"><code>GR_INFLUXDB_ORG</code></a></li><li><a href="#gr_influxdb_bucket"><code>GR_INFLUXDB_BUCKET</code></a></li><li><a href="#gr_influxdb_url"><code>GR_INFLUXDB_URL</code></a></li><li><a href="#gr_throw_on_event_unhandled_exception"><code>GR_THROW_ON_EVENT_UNHANDLED_EXCEPTION</code></a></li><li><a href="#gr_throw_on_critical_error"><code>GR_THROW_ON_CRITICAL_ERROR</code></a></li><li><a href="#gr_enable_consumer_metrics"><code>GR_ENABLE_CONSUMER_METRICS</code></a></li><li><a href="#gr_auto_commit_threshold"><code>GR_AUTO_COMMIT_THRESHOLD</code></a></li><li><a href="#gr_auto_commit_interval"><code>GR_AUTO_COMMIT_INTERVAL</code></a></li><li><a href="#gr_add_extra_to_console_journal_logs"><code>GR_ADD_EXTRA_TO_CONSOLE_JOURNAL_LOGS</code></a></li><li><a href="#gr_fail_event_on_single_rule_fail"><code>GR_FAIL_EVENT_ON_SINGLE_RULE_FAIL</code></a></li><li><a href="#gr_plugin_class_names_force_postfix"><code>GR_PLUGIN_CLASS_NAMES_FORCE_POSTFIX</code></a></li><li><a href="#gr_plugin_module_names_force_postfix"><code>GR_PLUGIN_MODULE_NAMES_FORCE_POSTFIX</code></a></li><li><a href="#gr_kafka_client_id"><code>GR_KAFKA_CLIENT_ID</code></a></li><li><a href="#gr_kafka_brokers"><code>GR_KAFKA_BROKERS</code></a></li><li><a href="#gr_db_username"><code>GR_DB_USERNAME</code></a></li><li><a href="#gr_db_hostname"><code>GR_DB_HOSTNAME</code></a></li><li><a href="#gr_db_name"><code>GR_DB_NAME</code></a></li><li><a href="#gr_db_password"><code>GR_DB_PASSWORD</code></a></li><li><a href="#gr_db_port"><code>GR_DB_PORT</code></a></li><li><a href="#gr_is_distributed_locks_enabled"><code>GR_IS_DISTRIBUTED_LOCKS_ENABLED</code></a></li><li><a href="#gr_distributed_locks_max_wait_time_seconds"><code>GR_DISTRIBUTED_LOCKS_MAX_WAIT_TIME_SECONDS</code></a></li><li><a href="#gr_is_continue_on_failed_acquire_lock"><code>GR_IS_CONTINUE_ON_FAILED_ACQUIRE_LOCK</code></a></li><li><a href="#gr_is_schema_file_mandatory"><code>GR_IS_SCHEMA_FILE_MANDATORY</code></a></li></ul></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_log_level"><code>GR_LOG_LEVEL</code><a href="#gr_log_level" class="hash-link" aria-label="Direct link to gr_log_level" title="Direct link to gr_log_level">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->Controls the default log level. These correspond to the values of the library <a href="https://github.com/stritti/log4js" target="_blank" rel="noopener noreferrer">log4js</a>.</p>
+<p><strong>Type:</strong><br>
+<!-- -->String. enums: <code>[&#x27;debug&#x27;, &#x27;info&#x27;, &#x27;warn&#x27;, &#x27;error&#x27;]</code></p>
+<p><strong>Default:</strong><br>
+<code>info</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_throw_on_not_module"><code>GR_THROW_ON_NOT_MODULE</code><a href="#gr_throw_on_not_module" class="hash-link" aria-label="Direct link to gr_throw_on_not_module" title="Direct link to gr_throw_on_not_module">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->Controls whether to throw an exception or ignore, if a module is missing the decorators to designate them as plugins or providers.</p>
+<p><strong>Type:</strong><br>
+<!-- -->Boolean.</p>
+<p><strong>Default:</strong><br>
+<code>FALSE</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_extensions_of_modules"><code>GR_EXTENSIONS_OF_MODULES</code><a href="#gr_extensions_of_modules" class="hash-link" aria-label="Direct link to gr_extensions_of_modules" title="Direct link to gr_extensions_of_modules">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->Specifies the extensions of files to consider as modules and attempt to load.</p>
+<p><strong>Type:</strong><br>
+<!-- -->Array of Path/String</p>
+<p><strong>Default:</strong><br>
+<code>.ts,.js</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>By default the engine will attempt to load all modules under the given folders. An alternative is to use <code>.module.js,.module.ts</code> to limit the files to those extensions.</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_skip_extensions_of_modules"><code>GR_SKIP_EXTENSIONS_OF_MODULES</code><a href="#gr_skip_extensions_of_modules" class="hash-link" aria-label="Direct link to gr_skip_extensions_of_modules" title="Direct link to gr_skip_extensions_of_modules">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->Specifies the extensions of files to ignore as modules.</p>
+<p><strong>Type:</strong><br>
+<!-- -->Array of Path/String</p>
+<p><strong>Default:</strong><br>
+<code>.d.ts</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>It is important to ignore the .d.ts files otherwise the engine will get confused an attempt to load the same modules twice which will throw errors in the process</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_modules_paths"><code>GR_MODULES_PATHS</code><a href="#gr_modules_paths" class="hash-link" aria-label="Direct link to gr_modules_paths" title="Direct link to gr_modules_paths">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->Specifies the default paths of modules to load.</p>
+<p><strong>Type:</strong><br>
+<!-- -->Array of Path/String</p>
+<p><strong>Default:</strong><br>
+<code>[]</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Usually you use the <code>$modulesPaths</code> in the schema to load the modules. But you can use this as an alternative for a cleaner namespace schema.</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_module_name_pattern"><code>GR_MODULE_NAME_PATTERN</code><a href="#gr_module_name_pattern" class="hash-link" aria-label="Direct link to gr_module_name_pattern" title="Direct link to gr_module_name_pattern">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->Controls the naming pattern of the module names. i.e. <code>getModuleName()</code></p>
+<p><strong>Type:</strong><br>
+<!-- -->Regex String</p>
+<p><strong>Default:</strong><br>
+<code>^[a-z]+(-[a-z0-9]+)*$</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>The default is to follow <a href="https://www.pluralsight.com/blog/software-development/programming-naming-conventions-explained#kebab-case" target="_blank" rel="noopener noreferrer">kebab-case</a> But you can change this or completely disable it.</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_influxdb_token"><code>GR_INFLUXDB_TOKEN</code><a href="#gr_influxdb_token" class="hash-link" aria-label="Direct link to gr_influxdb_token" title="Direct link to gr_influxdb_token">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->The InfluxDB token</p>
+<p><strong>Type:</strong><br>
+<!-- -->Secret String</p>
+<p><strong>Default:</strong><br>
+<!-- -->``</p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Required only if you specify <code>GR_INFLUXDB_URL</code></li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_influxdb_org"><code>GR_INFLUXDB_ORG</code><a href="#gr_influxdb_org" class="hash-link" aria-label="Direct link to gr_influxdb_org" title="Direct link to gr_influxdb_org">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->The InfluxDB organization</p>
+<p><strong>Type:</strong><br>
+<!-- -->String</p>
+<p><strong>Default:</strong><br>
+<code>gallifrey-rules</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Required only if you specify <code>GR_INFLUXDB_URL</code></li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_influxdb_bucket"><code>GR_INFLUXDB_BUCKET</code><a href="#gr_influxdb_bucket" class="hash-link" aria-label="Direct link to gr_influxdb_bucket" title="Direct link to gr_influxdb_bucket">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->The InfluxDB bucket</p>
+<p><strong>Type:</strong><br>
+<!-- -->String</p>
+<p><strong>Default:</strong><br>
+<code>gallifrey-rules-bucket</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Required only if you specify <code>GR_INFLUXDB_URL</code></li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_influxdb_url"><code>GR_INFLUXDB_URL</code><a href="#gr_influxdb_url" class="hash-link" aria-label="Direct link to gr_influxdb_url" title="Direct link to gr_influxdb_url">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->The InfluxDB server url (with http/https and port number if needed)</p>
+<p><strong>Type:</strong><br>
+<!-- -->String</p>
+<p><strong>Default:</strong><br>
+<!-- -->``</p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>If you don&#x27;t specify this, metrics will be disabled.</li>
+<li>If you do specify this, you need to specify the other InfluxDB needed parameters.</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_throw_on_event_unhandled_exception"><code>GR_THROW_ON_EVENT_UNHANDLED_EXCEPTION</code><a href="#gr_throw_on_event_unhandled_exception" class="hash-link" aria-label="Direct link to gr_throw_on_event_unhandled_exception" title="Direct link to gr_throw_on_event_unhandled_exception">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->Controls whether or not to bubble up unhandled exceptions from consumers.</p>
+<p><strong>Type:</strong><br>
+<!-- -->Boolean</p>
+<p><strong>Default:</strong><br>
+<code>TRUE</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Usually in production environments you want this to be false, which means it will log/deal with errors but continue consuming subsequent messages.</li>
+<li>If this is true, the consumers will stop and the engine will stop.</li>
+<li>Since this is a critical element of the engine&#x27;s behavior, it is defaults to true and expected to be manually specified in production environments.</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_throw_on_critical_error"><code>GR_THROW_ON_CRITICAL_ERROR</code><a href="#gr_throw_on_critical_error" class="hash-link" aria-label="Direct link to gr_throw_on_critical_error" title="Direct link to gr_throw_on_critical_error">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->Critical Errors are thrown when you use the exception <code>CriticalError</code> in your plugins code. You can decide on the behavior whether or not this means your consumer should stop or ignore and continue consuming subsequent messages. Please check the list of exception types that you can throw in your code to understand the different behaviors. [placeholder]</p>
+<p><strong>Type:</strong><br>
+<!-- -->Boolean</p>
+<p><strong>Default:</strong><br>
+<code>TRUE</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Usually you want this to be true, because throwing this type of exception in the plugin code means that there is some critical error and we need to hard stop.</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_enable_consumer_metrics"><code>GR_ENABLE_CONSUMER_METRICS</code><a href="#gr_enable_consumer_metrics" class="hash-link" aria-label="Direct link to gr_enable_consumer_metrics" title="Direct link to gr_enable_consumer_metrics">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->Controls whether the engine should enable metrics at a kafka consumer level.</p>
+<p><strong>Type:</strong><br>
+<!-- -->Boolean</p>
+<p><strong>Default:</strong><br>
+<code>TRUE</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_auto_commit_threshold"><code>GR_AUTO_COMMIT_THRESHOLD</code><a href="#gr_auto_commit_threshold" class="hash-link" aria-label="Direct link to gr_auto_commit_threshold" title="Direct link to gr_auto_commit_threshold">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->Controls the count of messages to do an auto commit.</p>
+<p><strong>Type:</strong><br>
+<!-- -->Number</p>
+<p><strong>Default:</strong><br>
+<code>1</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Usually in production environment you want to increase this number to get a better throughput. It&#x27;s a balance between throughput and error resilience. If your consumers are not <a href="https://en.wikipedia.org/wiki/Idempotence" target="_blank" rel="noopener noreferrer">idempotent</a> in nature, you might want to keep this low.</li>
+<li>Ideally your system design should have idempotent consumers which means idepotent events/rules.</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_auto_commit_interval"><code>GR_AUTO_COMMIT_INTERVAL</code><a href="#gr_auto_commit_interval" class="hash-link" aria-label="Direct link to gr_auto_commit_interval" title="Direct link to gr_auto_commit_interval">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->Controls the internal to auto commit in milliseconds.</p>
+<p><strong>Type:</strong><br>
+<!-- -->Number</p>
+<p><strong>Default:</strong><br>
+<code>5000</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Usually in production environment you want to increase this number to get a better throughput. It&#x27;s a balance between throughput and error resilience. If your consumers are not <a href="https://en.wikipedia.org/wiki/Idempotence" target="_blank" rel="noopener noreferrer">idempotent</a> in nature, you might want to keep this low.</li>
+<li>Ideally your system design should have idempotent consumers which means idepotent events/rules.</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_add_extra_to_console_journal_logs"><code>GR_ADD_EXTRA_TO_CONSOLE_JOURNAL_LOGS</code><a href="#gr_add_extra_to_console_journal_logs" class="hash-link" aria-label="Direct link to gr_add_extra_to_console_journal_logs" title="Direct link to gr_add_extra_to_console_journal_logs">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->Controls whether journal logs should print out the extra payloads.</p>
+<p><strong>Type:</strong><br>
+<!-- -->Boolean</p>
+<p><strong>Default:</strong><br>
+<code>FALSE</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Usually this is left off to increase readability of journal logs. However in troubleshooting situations, it makes sense to turn it on.</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_fail_event_on_single_rule_fail"><code>GR_FAIL_EVENT_ON_SINGLE_RULE_FAIL</code><a href="#gr_fail_event_on_single_rule_fail" class="hash-link" aria-label="Direct link to gr_fail_event_on_single_rule_fail" title="Direct link to gr_fail_event_on_single_rule_fail">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->When an event has multiple rules to process, this control whether when a single rule gets an  exception to bubble up or ignore. Ignoring means subsequent rules will still run.</p>
+<p><strong>Type:</strong><br>
+<!-- -->Boolean</p>
+<p><strong>Default:</strong><br>
+<code>TRUE</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Setting this to false means unhandled errors in rules will now not bubble up no matter what, this means they will just get logged and go through <code>ReactToRuleFailureProvider</code>.</li>
+<li>Ideally you want this to always be TRUE.</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_plugin_class_names_force_postfix"><code>GR_PLUGIN_CLASS_NAMES_FORCE_POSTFIX</code><a href="#gr_plugin_class_names_force_postfix" class="hash-link" aria-label="Direct link to gr_plugin_class_names_force_postfix" title="Direct link to gr_plugin_class_names_force_postfix">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->Controls whether or not class names of plugins should be postfixed with their plugin type. For Example, send email action should have the class named <code>SendEmailAction</code></p>
+<p><strong>Type:</strong><br>
+<!-- -->Boolean</p>
+<p><strong>Default:</strong><br>
+<code>TRUE</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Keeping this to true will help organize your classes and make them easily distinguishable. Highly recommended to be on.</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_plugin_module_names_force_postfix"><code>GR_PLUGIN_MODULE_NAMES_FORCE_POSTFIX</code><a href="#gr_plugin_module_names_force_postfix" class="hash-link" aria-label="Direct link to gr_plugin_module_names_force_postfix" title="Direct link to gr_plugin_module_names_force_postfix">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->Controls whether or not module names of plugins should be postfixed with their plugin type. For Example, send email action should have the module name <code>send-email-action</code></p>
+<p><strong>Type:</strong><br>
+<!-- -->Boolean</p>
+<p><strong>Default:</strong><br>
+<code>TRUE</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Keeping this to true will help organize your module names and make them easily distinguishable. Highly recommended to be on.</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_kafka_client_id"><code>GR_KAFKA_CLIENT_ID</code><a href="#gr_kafka_client_id" class="hash-link" aria-label="Direct link to gr_kafka_client_id" title="Direct link to gr_kafka_client_id">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->The client ID to be provided to Kafka server</p>
+<p><strong>Type:</strong><br>
+<!-- -->String</p>
+<p><strong>Default:</strong><br>
+<code>gallifrey-rules</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>You can override this value when you pass it in the config of the consumer in the Namespace schema [placeholder]</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_kafka_brokers"><code>GR_KAFKA_BROKERS</code><a href="#gr_kafka_brokers" class="hash-link" aria-label="Direct link to gr_kafka_brokers" title="Direct link to gr_kafka_brokers">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->The list of brokers of your Kafka setup</p>
+<p><strong>Type:</strong><br>
+<!-- -->Array/String</p>
+<p><strong>Default:</strong><br>
+<!-- -->``</p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>This must be filled in, otherwise you will have to manually specify it in the config of the consumer in the Namespace schema.</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_db_username"><code>GR_DB_USERNAME</code><a href="#gr_db_username" class="hash-link" aria-label="Direct link to gr_db_username" title="Direct link to gr_db_username">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->The postgres DB username</p>
+<p><strong>Type:</strong><br>
+<!-- -->Array/String</p>
+<p><strong>Default:</strong><br>
+<!-- -->``</p>
+<p><strong>Mandatory:</strong><br>
+<code>no. YES when using Postgres Distrubuted Locks Provider or Scheduled Events feature</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>This can also be specified using <code>POSTGRES_USERNAME</code></li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_db_hostname"><code>GR_DB_HOSTNAME</code><a href="#gr_db_hostname" class="hash-link" aria-label="Direct link to gr_db_hostname" title="Direct link to gr_db_hostname">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->The postgres DB server hostname</p>
+<p><strong>Type:</strong><br>
+<!-- -->Array/String</p>
+<p><strong>Default:</strong><br>
+<!-- -->``</p>
+<p><strong>Mandatory:</strong><br>
+<code>no. YES when using Postgres Distrubuted Locks Provider or Scheduled Events feature</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>This can also be specified using <code>POSTGRES_HOST</code></li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_db_name"><code>GR_DB_NAME</code><a href="#gr_db_name" class="hash-link" aria-label="Direct link to gr_db_name" title="Direct link to gr_db_name">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->The postgres database name</p>
+<p><strong>Type:</strong><br>
+<!-- -->Array/String</p>
+<p><strong>Default:</strong><br>
+<!-- -->``</p>
+<p><strong>Mandatory:</strong><br>
+<code>no. YES when using Postgres Distrubuted Locks Provider or Scheduled Events feature</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>This can also be specified using <code>POSTGRES_DB</code></li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_db_password"><code>GR_DB_PASSWORD</code><a href="#gr_db_password" class="hash-link" aria-label="Direct link to gr_db_password" title="Direct link to gr_db_password">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->The postgres DB password</p>
+<p><strong>Type:</strong><br>
+<!-- -->Array/String</p>
+<p><strong>Default:</strong><br>
+<!-- -->``</p>
+<p><strong>Mandatory:</strong><br>
+<code>no. YES when using Postgres Distrubuted Locks Provider or Scheduled Events feature</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>This can also be specified using <code>POSTGRES_PASSWORD</code></li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_db_port"><code>GR_DB_PORT</code><a href="#gr_db_port" class="hash-link" aria-label="Direct link to gr_db_port" title="Direct link to gr_db_port">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->The postgres DB server port</p>
+<p><strong>Type:</strong><br>
+<!-- -->Array/String</p>
+<p><strong>Default:</strong><br>
+<code>5432</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>This can also be specified using <code>POSTGRES_PORT</code></li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_is_distributed_locks_enabled"><code>GR_IS_DISTRIBUTED_LOCKS_ENABLED</code><a href="#gr_is_distributed_locks_enabled" class="hash-link" aria-label="Direct link to gr_is_distributed_locks_enabled" title="Direct link to gr_is_distributed_locks_enabled">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->Whether or not you want to use Postgres Distributed Locks Provider</p>
+<p><strong>Type:</strong><br>
+<!-- -->Boolean</p>
+<p><strong>Default:</strong><br>
+<code>FALSE</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>When set to true, the Postgres DB parameters should also be specified.</li>
+<li>To fully activate locks, you need to use <code>$atomicEvent</code> and/or <code>$atomicEntity</code> in your schema. [placeholder]</li>
+<li>To function correctly, all instances of the engine should be connected to the same Postgres DB parameters.</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_distributed_locks_max_wait_time_seconds"><code>GR_DISTRIBUTED_LOCKS_MAX_WAIT_TIME_SECONDS</code><a href="#gr_distributed_locks_max_wait_time_seconds" class="hash-link" aria-label="Direct link to gr_distributed_locks_max_wait_time_seconds" title="Direct link to gr_distributed_locks_max_wait_time_seconds">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->When distributed locks are used, what is the maximum wait time to attempt to aquire the lock.</p>
+<p><strong>Type:</strong><br>
+<!-- -->Number/Seconds</p>
+<p><strong>Default:</strong><br>
+<code>60</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_is_continue_on_failed_acquire_lock"><code>GR_IS_CONTINUE_ON_FAILED_ACQUIRE_LOCK</code><a href="#gr_is_continue_on_failed_acquire_lock" class="hash-link" aria-label="Direct link to gr_is_continue_on_failed_acquire_lock" title="Direct link to gr_is_continue_on_failed_acquire_lock">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->When distributed locks are used, and a lock has failed to be aquired, this controls the behavior of whether to throw an exception or ignore the lock and continue without it.</p>
+<p><strong>Type:</strong><br>
+<!-- -->Boolean</p>
+<p><strong>Default:</strong><br>
+<code>FALSE</code></p>
+<p><strong>Mandatory:</strong><br>
+<code>no</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Ideally you don&#x27;t want to continue if you fail to aquire the lock.</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="gr_is_schema_file_mandatory"><code>GR_IS_SCHEMA_FILE_MANDATORY</code><a href="#gr_is_schema_file_mandatory" class="hash-link" aria-label="Direct link to gr_is_schema_file_mandatory" title="Direct link to gr_is_schema_file_mandatory">​</a></h3>
+<p><strong>Description:</strong><br>
+<!-- -->Controls whether or not <code>$schemaFile</code> is mandatory in the Namespace. When mandatory, it should point to a JSON schema file to validate against the event payload.</p>
+<p><strong>Type:</strong><br>
+<!-- -->Path/String</p>
+<p><strong>Default:</strong><br>
+<!-- -->``</p>
+<p><strong>Mandatory:</strong><br>
+<code>no, YES in production unless explicitly specified and turned off</code></p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>It&#x27;s a good idea to have an extra layer of validation of the message payloads.</li>
+</ul>
+<hr></div></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/advanced/default-built-in-modules"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Default Built in Modules</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/advanced/testing"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Testing</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#gr_log_level" class="table-of-contents__link toc-highlight"><code>GR_LOG_LEVEL</code></a></li><li><a href="#gr_throw_on_not_module" class="table-of-contents__link toc-highlight"><code>GR_THROW_ON_NOT_MODULE</code></a></li><li><a href="#gr_extensions_of_modules" class="table-of-contents__link toc-highlight"><code>GR_EXTENSIONS_OF_MODULES</code></a></li><li><a href="#gr_skip_extensions_of_modules" class="table-of-contents__link toc-highlight"><code>GR_SKIP_EXTENSIONS_OF_MODULES</code></a></li><li><a href="#gr_modules_paths" class="table-of-contents__link toc-highlight"><code>GR_MODULES_PATHS</code></a></li><li><a href="#gr_module_name_pattern" class="table-of-contents__link toc-highlight"><code>GR_MODULE_NAME_PATTERN</code></a></li><li><a href="#gr_influxdb_token" class="table-of-contents__link toc-highlight"><code>GR_INFLUXDB_TOKEN</code></a></li><li><a href="#gr_influxdb_org" class="table-of-contents__link toc-highlight"><code>GR_INFLUXDB_ORG</code></a></li><li><a href="#gr_influxdb_bucket" class="table-of-contents__link toc-highlight"><code>GR_INFLUXDB_BUCKET</code></a></li><li><a href="#gr_influxdb_url" class="table-of-contents__link toc-highlight"><code>GR_INFLUXDB_URL</code></a></li><li><a href="#gr_throw_on_event_unhandled_exception" class="table-of-contents__link toc-highlight"><code>GR_THROW_ON_EVENT_UNHANDLED_EXCEPTION</code></a></li><li><a href="#gr_throw_on_critical_error" class="table-of-contents__link toc-highlight"><code>GR_THROW_ON_CRITICAL_ERROR</code></a></li><li><a href="#gr_enable_consumer_metrics" class="table-of-contents__link toc-highlight"><code>GR_ENABLE_CONSUMER_METRICS</code></a></li><li><a href="#gr_auto_commit_threshold" class="table-of-contents__link toc-highlight"><code>GR_AUTO_COMMIT_THRESHOLD</code></a></li><li><a href="#gr_auto_commit_interval" class="table-of-contents__link toc-highlight"><code>GR_AUTO_COMMIT_INTERVAL</code></a></li><li><a href="#gr_add_extra_to_console_journal_logs" class="table-of-contents__link toc-highlight"><code>GR_ADD_EXTRA_TO_CONSOLE_JOURNAL_LOGS</code></a></li><li><a href="#gr_fail_event_on_single_rule_fail" class="table-of-contents__link toc-highlight"><code>GR_FAIL_EVENT_ON_SINGLE_RULE_FAIL</code></a></li><li><a href="#gr_plugin_class_names_force_postfix" class="table-of-contents__link toc-highlight"><code>GR_PLUGIN_CLASS_NAMES_FORCE_POSTFIX</code></a></li><li><a href="#gr_plugin_module_names_force_postfix" class="table-of-contents__link toc-highlight"><code>GR_PLUGIN_MODULE_NAMES_FORCE_POSTFIX</code></a></li><li><a href="#gr_kafka_client_id" class="table-of-contents__link toc-highlight"><code>GR_KAFKA_CLIENT_ID</code></a></li><li><a href="#gr_kafka_brokers" class="table-of-contents__link toc-highlight"><code>GR_KAFKA_BROKERS</code></a></li><li><a href="#gr_db_username" class="table-of-contents__link toc-highlight"><code>GR_DB_USERNAME</code></a></li><li><a href="#gr_db_hostname" class="table-of-contents__link toc-highlight"><code>GR_DB_HOSTNAME</code></a></li><li><a href="#gr_db_name" class="table-of-contents__link toc-highlight"><code>GR_DB_NAME</code></a></li><li><a href="#gr_db_password" class="table-of-contents__link toc-highlight"><code>GR_DB_PASSWORD</code></a></li><li><a href="#gr_db_port" class="table-of-contents__link toc-highlight"><code>GR_DB_PORT</code></a></li><li><a href="#gr_is_distributed_locks_enabled" class="table-of-contents__link toc-highlight"><code>GR_IS_DISTRIBUTED_LOCKS_ENABLED</code></a></li><li><a href="#gr_distributed_locks_max_wait_time_seconds" class="table-of-contents__link toc-highlight"><code>GR_DISTRIBUTED_LOCKS_MAX_WAIT_TIME_SECONDS</code></a></li><li><a href="#gr_is_continue_on_failed_acquire_lock" class="table-of-contents__link toc-highlight"><code>GR_IS_CONTINUE_ON_FAILED_ACQUIRE_LOCK</code></a></li><li><a href="#gr_is_schema_file_mandatory" class="table-of-contents__link toc-highlight"><code>GR_IS_SCHEMA_FILE_MANDATORY</code></a></li></ul></div></div></div></div></main></div></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/docs/intro">Intro</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/getting-started/">Getting Started</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/advanced/scheduled-events">Advanced</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/glossary">Glossary</a></li><li class="footer__item"><a href="https://github.com/ralphv/gallifrey-rules-sample/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Sample Application<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div><div class="col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://stackoverflow.com/questions/tagged/gallifrey-rules" target="_blank" rel="noopener noreferrer" class="footer__link-item">Stack Overflow<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://github.com/ralphv/gallifrey-rules/discussions" target="_blank" rel="noopener noreferrer" class="footer__link-item">Discussions<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://github.com/ralphv/gallifrey-rules/issues" target="_blank" rel="noopener noreferrer" class="footer__link-item">Issues<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/ralphv/gallifrey-rules" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://github.com/ralphv/gallifrey-rules-sample" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub Sample App<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://www.npmjs.com/package/gallifrey-rules" target="_blank" rel="noopener noreferrer" class="footer__link-item">npm<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 Gallifrey Rules. Built with Docusaurus.</div></div></div></footer></div>
 </body>
 </html>
