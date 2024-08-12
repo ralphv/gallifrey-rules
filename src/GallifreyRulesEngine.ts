@@ -209,7 +209,8 @@ export class GallifreyRulesEngine {
             logger.error(
                 `handleAsyncActionEvent [EXCEPTION: ${actionName}]: ${JSON.stringify({ ...asyncActionEvent, error: e })}`,
             );
-            if (this.handleException(e, pause)) {
+            const { bubble } = this.handleException(e, pause);
+            if (bubble) {
                 throw e;
             }
         }
@@ -380,7 +381,8 @@ export class GallifreyRulesEngine {
                 })}`,
             );
             this.metrics?.countErrors(internalEvent);
-            if (this.handleException(e, pause)) {
+            const { bubble } = this.handleException(e, pause);
+            if (bubble) {
                 await this.reactToEventFailure(
                     new EngineReactToFailure(
                         await AssertNotNull(this.providersContext.configuration).getConfigurationAccessorInterface(
@@ -418,7 +420,10 @@ export class GallifreyRulesEngine {
         }
     }
 
-    private handleException(e: any, pause: (() => () => void) | undefined) {
+    private handleException(
+        e: any,
+        pause: (() => () => void) | undefined,
+    ): { bubble: boolean; type?: 'EngineCriticalError' | 'CriticalError' | 'Error' } {
         const config = new Config();
 
         if (pause && e instanceof PauseConsumer) {
@@ -428,37 +433,37 @@ export class GallifreyRulesEngine {
                 logger.info(`PauseConsumer timer expired, resuming`);
                 resume();
             }, e.getSeconds() * 1000);
-            return false;
+            return { bubble: false };
         }
 
         if (e instanceof EngineCriticalError) {
             logger.error(`An engine critical error has occurred while handling event: ${String(e)}`);
-            return true;
+            return { bubble: true, type: 'EngineCriticalError' };
         }
         if (e instanceof CriticalError) {
             logger.error(`A critical error has occurred while handling event: ${String(e)}`);
             if (!config.dontThrowOnCriticalError()) {
                 logger.warn(`throw on critical error exception is off, continuing`);
-                return false;
+                return { bubble: false };
             }
-            return true;
+            return { bubble: true, type: 'CriticalError' }; //todo rate limiting?
         }
         if (e instanceof InfoError) {
             logger.info(`An info error has occurred while handling event: ${String(e)}`);
-            return false;
+            return { bubble: false };
         }
         if (e instanceof WarningError) {
             logger.warn(`A warning error has occurred while handling event: ${String(e)}`);
-            return false; //todo we will figure out whether to stop or not
+            return { bubble: false }; //todo we will figure out whether to stop or not
         }
         if (!config.throwOnEventUnhandledException()) {
             logger.error(
                 `An unhandled error has occurred while handling event: ${String(e)} @${String((e as Error).stack ?? '')}`,
             );
             logger.warn(`throw on event unhandled exception is off, continuing`);
-            return false;
+            return { bubble: false };
         }
-        return true;
+        return { bubble: true, type: 'Error' };
     }
 
     @AssertInitialized
@@ -540,7 +545,8 @@ export class GallifreyRulesEngine {
                 await this.runRule(engineEventContext, event, ruleInstance, engineRule, source, pause);
             }
         } catch (e) {
-            if (this.handleException(e, pause)) {
+            const { bubble } = this.handleException(e, pause);
+            if (bubble) {
                 throw e;
             }
         }
@@ -746,11 +752,13 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger().endRunRule(ruleInstance.getModuleName(), ruleTimer, e as Error);
 
             const config = new Config();
-            if (this.handleException(e, pause)) {
-                if (config.getFailEventOnSingleRuleFail()) {
+            const { bubble, type } = this.handleException(e, pause);
+            if (bubble) {
+                if (config.getFailEventOnSingleRuleFail() || type === 'EngineCriticalError') {
                     // we need to bubble up and fail the whole event, we don't react to rule failure here
                     throw e;
                 }
+                // false, we turn everything off? no we should only turn off Unhandled
                 // we don't bubble, capture failure and logs, count errors here as higher level won't get a chance
                 this.metrics?.countErrors(event);
                 await this.reactToRuleFailure(

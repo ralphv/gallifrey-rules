@@ -33,7 +33,7 @@ create-postgres-scheduled-events:
 		-e POSTGRES_HOST='postgres' \
 		-e POSTGRES_PASSWORD='1q2w3e4r5t6y' \
 		-e POSTGRES_DB='postgres' \
-		gallifrey-rules-tools \
+		ghcr.io/ralphv/gallifrey-rules-tools:latest \
 		create-postgres-scheduled-events
 
 .PHONY: create-kafka-connector-scheduled-events
@@ -45,5 +45,5 @@ create-kafka-connector-scheduled-events:
 		-e POSTGRES_PASSWORD='1q2w3e4r5t6y' \
 		-e POSTGRES_DB='postgres' \
 		-e KAFKA_CONNECT_URL='http://connect:8083'	\
-		gallifrey-rules-tools \
+		ghcr.io/ralphv/gallifrey-rules-tools:latest \
 		create-kafka-connector-scheduled-events
