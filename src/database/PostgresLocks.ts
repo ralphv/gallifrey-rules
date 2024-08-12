@@ -1,36 +1,33 @@
-import { Client } from 'pg';
+import { Pool } from 'pg';
 import Config from '../lib/Config';
+import { TypeAssertNotNull } from '../lib/Utils';
 
-export default class PostgresDatabaseLocks {
+export default class PostgresLocks {
+    private static pool: Pool | undefined;
     private static initialized: boolean = false;
-    private readonly connectionConfig: any;
 
     constructor() {
         const config = new Config();
-        this.connectionConfig = {
-            user: config.getDBUser(true),
-            host: config.getDBHost(true),
-            database: config.getDBName(true),
-            password: config.getDBPasswordSecret(true).getSecretValue(),
-            port: config.getDBPort(),
-            keepAlive: true,
-            idle_in_transaction_session_timeout: 0,
-            connectionTimeoutMillis: 0,
-        };
+        if (!PostgresLocks.pool) {
+            PostgresLocks.pool = new Pool({
+                user: config.getDBUser(),
+                host: config.getDBHost(),
+                database: config.getDBName(),
+                password: config.getDBPasswordSecret().getSecretValue(),
+                port: config.getDBPort(),
+            });
+        }
+    }
+
+    static async closePool() {
+        if (PostgresLocks.pool) {
+            await PostgresLocks.pool.end();
+            PostgresLocks.pool = undefined;
+        }
     }
 
     private async getClient() {
-        const client = new Client(this.connectionConfig);
-        await client.connect();
-        return client;
-    }
-
-    private async initialize() {
-        if (PostgresDatabaseLocks.initialized) {
-            return;
-        }
-        await this.createAcquireLockFunction();
-        PostgresDatabaseLocks.initialized = true;
+        return await TypeAssertNotNull(PostgresLocks.pool).connect();
     }
 
     private async createAcquireLockFunction(): Promise<void> {
@@ -65,7 +62,7 @@ $$ LANGUAGE plpgsql;
             `,
             );
         } finally {
-            await client.end();
+            client.release();
         }
     }
 
@@ -83,7 +80,7 @@ $$ LANGUAGE plpgsql;
             const res = await client.query('SELECT acquire_lock($1, $2) AS lock_acquired', [lockKey, maxWaitMs]); // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             const lock_acquired = res.rows[0]?.lock_acquired || false;
             if (!lock_acquired) {
-                await client.end();
+                client.release();
                 return {
                     acquired: false,
                     release: async () => {},
@@ -93,13 +90,21 @@ $$ LANGUAGE plpgsql;
                     acquired: true,
                     release: async () => {
                         await client.query('SELECT pg_advisory_unlock(hashtext($1))', [lockKey]);
-                        await client.end();
+                        client.release();
                     },
                 };
             }
         } catch (e) {
-            await client.end();
+            client.release();
             throw e;
         }
+    }
+
+    async initialize() {
+        if (PostgresLocks.initialized) {
+            return;
+        }
+        await this.createAcquireLockFunction();
+        PostgresLocks.initialized = true;
     }
 }
