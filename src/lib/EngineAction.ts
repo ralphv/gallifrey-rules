@@ -1,10 +1,10 @@
 import { BaseActionPayload } from '../base-interfaces/BaseTypes';
 import ConfigurationAccessorInterface from '../interfaces/Providers/ConfigurationAccessorInterface';
-import EngineEventContextInterface from '../engine-interfaces/EngineEventContextInterface';
 import EngineBase from './EngineBase';
 import { EngineActionInterface } from '../engine-interfaces';
 import JournalLoggerInterface from '../interfaces/Providers/JournalLoggerInterface';
 import GetMetricsPointDelegate from '../delegates-interfaces/GetMetricsPointDelegate';
+import { EngineEventContext } from './EngineEventContext';
 
 export default class EngineAction<ActionPayloadType extends BaseActionPayload>
     extends EngineBase
@@ -12,7 +12,7 @@ export default class EngineAction<ActionPayloadType extends BaseActionPayload>
 {
     constructor(
         configurationAccessor: ConfigurationAccessorInterface,
-        engineEventContext: EngineEventContextInterface,
+        engineEventContext: EngineEventContext,
         loggerName: string,
         private payload: ActionPayloadType,
         journalLogger: JournalLoggerInterface,

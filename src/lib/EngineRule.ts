@@ -1,7 +1,6 @@
 import EngineRuleInterface from '../engine-interfaces/EngineRuleInterface';
 import { BaseDataObjectRequest, BaseDataObjectResponse } from '../base-interfaces/BaseTypes';
 import ConfigurationAccessorInterface from '../interfaces/Providers/ConfigurationAccessorInterface';
-import EngineEventContextInterface from '../engine-interfaces/EngineEventContextInterface';
 import DoActionDelegate from '../delegates-interfaces/DoActionDelegate';
 import PullDataObjectDelegate from '../delegates-interfaces/PullDataObjectDelegate';
 import EngineBase from './EngineBase';
@@ -13,12 +12,13 @@ import { ScheduledEventRequest, ScheduledEventResponse } from '../interfaces/Pro
 import GetScheduledEventContextDelegate from '../delegates-interfaces/GetScheduledEventContextDelegate';
 import InsertScheduledEventDelegate from '../delegates-interfaces/InsertScheduledEventDelegate';
 import IsScheduledEventDelegate from '../delegates-interfaces/IsScheduledEventDelegate';
+import { EngineEventContext } from './EngineEventContext';
 
 export default class EngineRule extends EngineBase implements EngineRuleInterface<any> {
     private readonly timer: PerformanceTimer;
     constructor(
         configurationAccessor: ConfigurationAccessorInterface,
-        engineEventContext: EngineEventContextInterface,
+        engineEventContext: EngineEventContext,
         private readonly doActionDelegate: DoActionDelegate,
         private readonly pullDataObjectDelegate: PullDataObjectDelegate,
         loggerName: string,

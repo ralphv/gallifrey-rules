@@ -9,20 +9,22 @@ import JournalLoggerInterface from '../interfaces/Providers/JournalLoggerInterfa
 import MetricsPointInterface from '../interfaces/Providers/MetricsPointInterface';
 import GetMetricsPointDelegate from '../delegates-interfaces/GetMetricsPointDelegate';
 import EngineEventInterface from '../engine-interfaces/EngineEventInterface';
+import { EngineEventContext } from './EngineEventContext';
 
 export default class EngineBase implements EngineLogInterface, EngineEventInterface {
     private l: Logger;
     constructor(
         private readonly engineContext: EngineContextInterface,
-        private readonly engineEventContext: EngineEventContextInterface | undefined,
+        private readonly engineEventContext: EngineEventContext | undefined,
         private readonly configurationAccessor: ConfigurationAccessorInterface | undefined,
         loggerName: string,
         private readonly journalLogger: JournalLoggerInterface | undefined,
         private readonly getMetricsPointDelegate: GetMetricsPointDelegate | undefined,
     ) {
-        const config = new Config(); // pass it in to get logger from event level?
         this.l = log4js.getLogger(loggerName);
-        this.l.level = config.getLogLevel();
+        this.l.level = engineEventContext
+            ? engineEventContext.getEventLevelConfig().getLogLevel()
+            : new Config().getLogLevel();
     }
 
     getConfigurationAccessor(): ConfigurationAccessorInterface {

@@ -1,11 +1,11 @@
 import { BaseDataObjectRequest } from '../base-interfaces/BaseTypes';
 import ConfigurationAccessorInterface from '../interfaces/Providers/ConfigurationAccessorInterface';
-import EngineEventContextInterface from '../engine-interfaces/EngineEventContextInterface';
 import EngineBase from './EngineBase';
 import { EngineDataObjectInterface } from '../engine-interfaces';
 import JournalLoggerInterface from '../interfaces/Providers/JournalLoggerInterface';
 import GetMetricsPointDelegate from '../delegates-interfaces/GetMetricsPointDelegate';
 import AddResultsIntoEventStoreDelegate from '../delegates-interfaces/AddResultsIntoEventStoreDelegate';
+import { EngineEventContext } from './EngineEventContext';
 
 export default class EngineDataObject<DataObjectRequestType extends BaseDataObjectRequest>
     extends EngineBase
@@ -13,7 +13,7 @@ export default class EngineDataObject<DataObjectRequestType extends BaseDataObje
 {
     constructor(
         configurationAccessor: ConfigurationAccessorInterface,
-        engineEventContext: EngineEventContextInterface,
+        engineEventContext: EngineEventContext,
         loggerName: string,
         private request: DataObjectRequestType,
         journalLogger: JournalLoggerInterface,
