@@ -846,11 +846,7 @@ export class GallifreyRulesEngine {
         const { entityName, eventName } = event;
 
         logger.debug(`Fetching filters for event: ${eventName}`);
-        const filterNames = this.schemaLoader.getFiltersForEvent(
-            AssertNotNull(this.getNamespace()),
-            entityName,
-            eventName,
-        );
+        const filterNames = this.schemaLoader.getFiltersForEvent(entityName, eventName);
         logger.debug(`Fetched filters for event: ${eventName}: ${filterNames.join(', ')}`);
         if (filterNames.length === 0) {
             logger.info(`No filters found for entityName: ${entityName}, eventName: ${eventName}`);
@@ -890,11 +886,7 @@ export class GallifreyRulesEngine {
         const { entityName, eventName } = event;
 
         logger.debug(`Fetching rules for event: ${eventName}`);
-        const rulesNames = this.schemaLoader.getRulesForEvent(
-            AssertNotNull(this.getNamespace()),
-            entityName,
-            eventName,
-        );
+        const rulesNames = this.schemaLoader.getRulesForEvent(entityName, eventName);
         logger.debug(`Fetched rules for event: ${eventName}: ${rulesNames.join(', ')}`);
         logger.debug(`Fetching rulesModules`);
         const rulesModules = this.modulesLoader.getModulesByName(AssertNotNull(this.getNamespace()), rulesNames);
