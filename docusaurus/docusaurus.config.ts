@@ -94,10 +94,6 @@ const config: Config = {
               to: '/docs/advanced/scheduled-events',
             },
             {
-              label: 'Glossary',
-              to: '/docs/glossary',
-            },
-            {
               label: 'Sample Application',
               href: 'https://github.com/ralphv/gallifrey-rules-sample/',
             },
