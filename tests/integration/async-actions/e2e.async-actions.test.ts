@@ -63,7 +63,6 @@ describe('e2e.async-actions', () => {
                 $asyncActions: [
                     {
                         actionPluginName: ModuleNames.SendEmailAction,
-                        queuerProviderName: 'kafka-action-queuer',
                         queuerConfig: {
                             groupId: 'e2e-group-async-actions',
                             topic: 'orders-namespace-async-actions',
@@ -90,7 +89,7 @@ describe('e2e.async-actions', () => {
             // 6. async consumer will pick up and execute action
             expect(getSpiedCalls(SendEmailAction.name, 'trigger').length !== 0).true;
         } catch (e) {
-            expect.fail(`this should not throw`);
+            expect.fail(`this should not throw: ${String(e)}`);
         } finally {
             await engine.shutdown();
         }

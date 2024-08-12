@@ -47,3 +47,12 @@ create-kafka-connector-scheduled-events:
 		-e KAFKA_CONNECT_URL='http://connect:8083'	\
 		ghcr.io/ralphv/gallifrey-rules-tools:latest \
 		create-kafka-connector-scheduled-events
+
+.PHONY: run-integration-tests
+run-integration-tests:
+	docker compose -f docker/tests/scheduled-events.compose.yaml up -d
+	docker compose -f docker/tests/scheduled-events.compose.yaml up -d
+	npm run test:integration
+	docker compose -f docker/tests/scheduled-events.compose.yaml up -d
+
+
