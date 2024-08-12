@@ -47,11 +47,14 @@ A rule is the core element in the engine. It is the business logic that runs for
 
 #### DataObject:
 
-A data object is a plugin that is concerned with pulling or hydrating data. Any data requests should go through data objects. API calls? GraphQL Calls? Loading data from database? All of those should go into data objects, Moroever data objects should not modify any state, just read data.
+A data object is a plugin that is concerned with pulling or hydrating data. Any data requests should go through data objects. API calls? GraphQL Calls? Loading data from database? All of those should go into data objects, Moreover data objects should not modify any state, just read data.
 
 #### Action:
 
 Actions take parameters and mutate something in your system based solely on those parameters. They should be like [pure functions](https://en.wikipedia.org/wiki/Pure_function) in nature. While actions can return data that you can act upon, usually a success or a failure result, it is **best practise** to avoid basing logic on that, it will be easier to transform your Actions into Async Actions in the future if your rule logic doesn't depend on the return value of Actions.
+
+Actions also have access to pulling configuration values, but you should not use any config values to directly influence the logic of the action, remember they should remain **pure functions**. Suppose you have an Action that sends a Slack message,
+you can use config values to figure out what the WebHook URL is, but you should not use config values to modify the contents of your Slack messages for example.
 
 ---
 
@@ -59,11 +62,11 @@ Actions take parameters and mutate something in your system based solely on thos
 
 Providers are modules that provide basic functionalites to the engine state. Most of the provider instances are created and retained throughout the lifetime of the engine. Some examples include your metrics provider or your scheduled events provider. 
 
-When the engine is initializing, there is some logic to decide which providers to load and it goes like this.
+When the engine is initializing, there is some logic involved to decide which providers to load, and it goes like this.
 
-1. Explicitly defining your provider name withint the `$providers` of your schema.
-2. If a provider isn't explicitly defined then if there is a single provider loaded for it's type, the engine will automatically use that or
-3. If there are multiple providers for it's type but only one is marked as `default` then it will use that. 
+1. Explicitly defining your provider name within the `$providers` of your schema.
+2. If a provider isn't explicitly defined but there is a single provider loaded for its type, the engine will automatically use that, or
+3. If there are multiple providers for its type but only one is marked as `default` then it will use that. 
 
 Otherwise the engine will complain that it can't figure out which provider to use, in this case it is asking you to explicitly provide it via the namespace schema.
 
@@ -72,5 +75,5 @@ Otherwise the engine will complain that it can't figure out which provider to us
 ### Module types and Interfaces:
 
 
-Check the list of default built in modules here [placeholder]
+Check the [list of built-in modules here](/docs/advanced/default-built-in-modules).
 
