@@ -173,8 +173,9 @@ export class GallifreyRulesEngine {
             asyncActionEvent.eventName,
             asyncActionEvent.eventId,
             source,
+            this.getEventLevelConfig(asyncActionEvent.entityName, asyncActionEvent.eventName),
         );
-        const config = await this.providersContext?.configuration?.getConfigurationAccessorInterface(
+        const configAccessor = await this.providersContext?.configuration?.getConfigurationAccessorInterface(
             engineEventContext,
             this.schemaLoader.getEventLevelConfig(asyncActionEvent.entityName, asyncActionEvent.eventName),
         );
@@ -182,7 +183,7 @@ export class GallifreyRulesEngine {
             new SafeJournalLoggerWrapper(
                 await this.instancesFactory.getJournalLoggerInterfaceProvider(
                     AssertNotNull(this.engineContext),
-                    AssertNotNull(config),
+                    AssertNotNull(configAccessor),
                 ),
             ),
         );
@@ -240,8 +241,9 @@ export class GallifreyRulesEngine {
             scheduledEvent.event.eventName,
             scheduledEvent.event.eventId,
             scheduledEvent.event.source,
+            this.getEventLevelConfig(scheduledEvent.event.entityName, scheduledEvent.event.eventName),
         );
-        const config = await this.providersContext?.configuration?.getConfigurationAccessorInterface(
+        const configAccessor = await this.providersContext?.configuration?.getConfigurationAccessorInterface(
             engineEventContext,
             this.schemaLoader.getEventLevelConfig(scheduledEvent.event.entityName, scheduledEvent.event.eventName),
         );
@@ -249,7 +251,7 @@ export class GallifreyRulesEngine {
             new SafeJournalLoggerWrapper(
                 await this.instancesFactory.getJournalLoggerInterfaceProvider(
                     AssertNotNull(this.engineContext),
-                    AssertNotNull(config),
+                    AssertNotNull(configAccessor),
                 ),
             ),
         );
@@ -292,16 +294,18 @@ export class GallifreyRulesEngine {
         logger.debug(`handleEvent [START: ${eventId}] Details: ${JSON.stringify(event, null, 2)}`);
         AssertTypeGuard(IsTypeGallifreyEventType, event);
 
-        await this.validatePayloadSchema(event);
-
         const engineEventContext = new EngineEventContext(
             AssertNotNull(this.getNamespace()),
             entityName,
             eventName,
             eventId,
             source,
+            this.getEventLevelConfig(entityName, eventName),
         );
-        const config = await this.providersContext?.configuration?.getConfigurationAccessorInterface(
+
+        await this.validatePayloadSchema(engineEventContext, event.payload);
+
+        const configAccessor = await this.providersContext?.configuration?.getConfigurationAccessorInterface(
             engineEventContext,
             this.schemaLoader.getEventLevelConfig(event.entityName, event.eventName),
         );
@@ -309,7 +313,7 @@ export class GallifreyRulesEngine {
             new SafeJournalLoggerWrapper(
                 await this.instancesFactory.getJournalLoggerInterfaceProvider(
                     AssertNotNull(this.engineContext),
-                    AssertNotNull(config),
+                    AssertNotNull(configAccessor),
                 ),
             ),
         );
@@ -332,8 +336,7 @@ export class GallifreyRulesEngine {
         );
 
         if (!acquired) {
-            const config = this.getEventLevelConfig(engineEventContext);
-            if (config.isContinueOnFailedAcquireLock()) {
+            if (engineEventContext.getEventLevelConfig().isContinueOnFailedAcquireLock()) {
                 logger.warn(`Failed to acquire distributed lock, but set to ignore, continuing with event.`);
             } else {
                 throw new EngineCriticalError(`Failed to acquire distributed lock`);
@@ -418,21 +421,8 @@ export class GallifreyRulesEngine {
         }
     }
 
-    private getEventLevelConfig(engineEventContext: EngineEventContext | GallifreyEventType<any>) {
-        if (!engineEventContext) {
-            return new Config();
-        }
-        if (IsTypeGallifreyEventType(engineEventContext)) {
-            return new Config(
-                this.schemaLoader.getEventLevelConfig(engineEventContext.entityName, engineEventContext.eventName),
-            );
-        }
-        return new Config(
-            this.schemaLoader.getEventLevelConfig(
-                engineEventContext.getEntityName(),
-                engineEventContext.getEventName(),
-            ),
-        );
+    private getEventLevelConfig(entityName: string, eventName: string) {
+        return new Config(this.schemaLoader.getEventLevelConfig(entityName, eventName));
     }
 
     private handleException(
@@ -440,8 +430,6 @@ export class GallifreyRulesEngine {
         engineEventContext: EngineEventContext,
         pause: (() => () => void) | undefined,
     ): { bubble: boolean; type?: 'EngineCriticalError' | 'CriticalError' | 'Error' } {
-        const config = this.getEventLevelConfig(engineEventContext);
-
         if (pause && e instanceof PauseConsumer) {
             logger.info(`Got PauseConsumer exception with seconds: ${e.getSeconds()}`);
             const resume = pause();
@@ -458,7 +446,7 @@ export class GallifreyRulesEngine {
         }
         if (e instanceof CriticalError) {
             logger.error(`A critical error has occurred while handling event: ${String(e)}`);
-            if (!config.dontThrowOnCriticalError()) {
+            if (!engineEventContext.getEventLevelConfig().dontThrowOnCriticalError()) {
                 logger.warn(`throw on critical error exception is off, continuing`);
                 return { bubble: false };
             }
@@ -472,7 +460,7 @@ export class GallifreyRulesEngine {
             logger.warn(`A warning error has occurred while handling event: ${String(e)}`);
             return { bubble: false }; //todo we will figure out whether to stop or not
         }
-        if (!config.throwOnEventUnhandledException()) {
+        if (!engineEventContext.getEventLevelConfig().throwOnEventUnhandledException()) {
             logger.error(
                 `An unhandled error has occurred while handling event: ${String(e)} @${String((e as Error).stack ?? '')}`,
             );
@@ -532,8 +520,7 @@ export class GallifreyRulesEngine {
         let engineRule;
         try {
             for (const ruleInstance of rulesInstances) {
-                //todo pass schema level config
-                const configurationAccessor = await TypeAssertNotNull(
+                const configAccessor = await TypeAssertNotNull(
                     this.providersContext.configuration,
                 ).getConfigurationAccessorInterface(
                     engineEventContext,
@@ -542,7 +529,7 @@ export class GallifreyRulesEngine {
                 logger.debug(`Getting configuration accessor from Configuration provider`);
 
                 engineRule = new EngineRule(
-                    configurationAccessor,
+                    configAccessor,
                     engineEventContext,
                     (actionName: string, payload: any) => this.doAction(event, engineEventContext, actionName, payload),
                     (dataObjectName: string, request?: any) =>
@@ -632,7 +619,7 @@ export class GallifreyRulesEngine {
         const [moduleData] = this.modulesLoader.getModulesByName(AssertNotNull(this.getNamespace()), [actionName]);
         this.modulesLoader.validatePluginType(moduleData, PluginType.Action);
         logger.debug(`Fetched action module: ${actionName}`);
-        const configurationAccessor = await TypeAssertNotNull(
+        const configAccessor = await TypeAssertNotNull(
             this.providersContext.configuration,
         ).getConfigurationAccessorInterface(
             engineEventContext,
@@ -641,7 +628,7 @@ export class GallifreyRulesEngine {
 
         const [actionInstance] = (await this.instancesFactory.getModulesInstances(
             engineEventContext,
-            configurationAccessor,
+            configAccessor,
             [moduleData],
             engineEventContext.getJournalLogger(),
             (measurementName: string) =>
@@ -650,7 +637,7 @@ export class GallifreyRulesEngine {
         logger.debug(`Fetched action module instance: ${actionName}`);
 
         const engineAction = new EngineAction(
-            configurationAccessor,
+            configAccessor,
             engineEventContext,
             `action - ${actionName}`,
             payload,
@@ -699,7 +686,7 @@ export class GallifreyRulesEngine {
         const [moduleData] = this.modulesLoader.getModulesByName(AssertNotNull(this.getNamespace()), [dataObjectName]);
         this.modulesLoader.validatePluginType(moduleData, PluginType.DataObject);
         logger.debug(`Fetched data object module: ${dataObjectName}`);
-        const configurationAccessor = await TypeAssertNotNull(
+        const configAccessor = await TypeAssertNotNull(
             this.providersContext.configuration,
         ).getConfigurationAccessorInterface(
             engineEventContext,
@@ -708,7 +695,7 @@ export class GallifreyRulesEngine {
 
         const [dataObjectInstance] = (await this.instancesFactory.getModulesInstances(
             engineEventContext,
-            configurationAccessor,
+            configAccessor,
             [moduleData],
             engineEventContext.getJournalLogger(),
             (measurementName: string) =>
@@ -717,7 +704,7 @@ export class GallifreyRulesEngine {
         logger.debug(`Fetched data object module instance: ${dataObjectName}`);
 
         const engineDataObject = new EngineDataObject(
-            configurationAccessor,
+            configAccessor,
             engineEventContext,
             `data object - ${dataObjectName}`,
             request,
@@ -767,10 +754,12 @@ export class GallifreyRulesEngine {
             this.metrics?.timeRule(event, ruleInstance.getModuleName(), ruleTimer);
             engineEventContext.getJournalLogger().endRunRule(ruleInstance.getModuleName(), ruleTimer, e as Error);
 
-            const config = this.getEventLevelConfig(engineEventContext);
             const { bubble, type } = this.handleException(e, engineEventContext, pause);
             if (bubble) {
-                if (config.getFailEventOnSingleRuleFail() || type === 'EngineCriticalError') {
+                if (
+                    engineEventContext.getEventLevelConfig().getFailEventOnSingleRuleFail() ||
+                    type === 'EngineCriticalError'
+                ) {
                     // we need to bubble up and fail the whole event, we don't react to rule failure here
                     throw e;
                 }
@@ -873,7 +862,7 @@ export class GallifreyRulesEngine {
         logger.debug(`Fetched filtersModules`);
 
         logger.debug(`Fetching filtersInstances`);
-        const configurationAccessor = await TypeAssertNotNull(
+        const configAccessor = await TypeAssertNotNull(
             this.providersContext.configuration,
         ).getConfigurationAccessorInterface(
             engineEventContext,
@@ -882,7 +871,7 @@ export class GallifreyRulesEngine {
 
         const filtersInstances = (await this.instancesFactory.getModulesInstances(
             engineEventContext,
-            configurationAccessor,
+            configAccessor,
             filtersModules,
             engineEventContext.getJournalLogger(),
             (measurementName: string) =>
@@ -917,7 +906,7 @@ export class GallifreyRulesEngine {
             return;
         }
         logger.debug(`Fetching rulesInstances`);
-        const configurationAccessor = await TypeAssertNotNull(
+        const configAccessor = await TypeAssertNotNull(
             this.providersContext.configuration,
         ).getConfigurationAccessorInterface(
             engineEventContext,
@@ -925,7 +914,7 @@ export class GallifreyRulesEngine {
         );
         const rulesInstances = (await this.instancesFactory.getModulesInstances(
             engineEventContext,
-            configurationAccessor,
+            configAccessor,
             rulesModules,
             engineEventContext.getJournalLogger(),
             (measurementName: string) =>
@@ -942,8 +931,7 @@ export class GallifreyRulesEngine {
         filtersInstances: FilterInterface<any>[],
     ): Promise<boolean> {
         for (const filterInstance of filtersInstances) {
-            //todo pass schema level config
-            const configurationAccessor = await TypeAssertNotNull(
+            const configAccessor = await TypeAssertNotNull(
                 this.providersContext.configuration,
             ).getConfigurationAccessorInterface(
                 engineEventContext,
@@ -952,7 +940,7 @@ export class GallifreyRulesEngine {
             logger.debug(`Getting configuration accessor from Configuration provider`);
 
             const engineFilter = new EngineFilter(
-                configurationAccessor,
+                configAccessor,
                 engineEventContext,
                 `filters - ${filterInstance.getModuleName()}`,
                 event.payload,
@@ -1100,11 +1088,13 @@ export class GallifreyRulesEngine {
         return new GallifreyRulesEngineKafkaConsumer(kafkaConsumer);
     }
 
-    private async validatePayloadSchema(event: GallifreyEventType<any>) {
-        const schemaFile = this.schemaLoader.getEventLevelSchemaFile(event.entityName, event.eventName);
+    private async validatePayloadSchema(engineEventContext: EngineEventContext, payload: any) {
+        const schemaFile = this.schemaLoader.getEventLevelSchemaFile(
+            engineEventContext.getEntityName(),
+            engineEventContext.getEventName(),
+        );
         if (!schemaFile) {
-            const config = this.getEventLevelConfig(event);
-            if (config.isSchemaFileMandatory()) {
+            if (engineEventContext.getEventLevelConfig().isSchemaFileMandatory()) {
                 throw new EngineCriticalError(`Event Payload SchemaFile was not found and is marked as mandatory`);
             }
             return;
@@ -1113,7 +1103,7 @@ export class GallifreyRulesEngine {
         const schemaTester = new JsonSchemaTester();
         try {
             logger.debug(`Testing payload schema against: ${schemaFile}`);
-            await schemaTester.loadAndTest(schemaFile, event.payload);
+            await schemaTester.loadAndTest(schemaFile, payload);
         } catch (e) {
             logger.debug(`Failed payload schema validation against: ${schemaFile}`);
             throw new EngineCriticalError(`Failed to validatePayloadSchema: ${String(e)}`);
@@ -1177,7 +1167,7 @@ export class GallifreyRulesEngine {
         const [moduleData] = this.modulesLoader.getModulesByName(AssertNotNull(this.getNamespace()), [asyncActionName]);
         this.modulesLoader.validatePluginType(moduleData, PluginType.Action);
         logger.debug(`Fetched action module: ${asyncActionName}`);
-        const configurationAccessor = await TypeAssertNotNull(
+        const configAccessor = await TypeAssertNotNull(
             this.providersContext.configuration,
         ).getConfigurationAccessorInterface(
             engineEventContext,
@@ -1186,7 +1176,7 @@ export class GallifreyRulesEngine {
 
         const [asyncActionInstance] = (await this.instancesFactory.getModulesInstances(
             engineEventContext,
-            configurationAccessor,
+            configAccessor,
             [moduleData],
             engineEventContext.getJournalLogger(),
             (measurementName: string) =>
@@ -1195,7 +1185,7 @@ export class GallifreyRulesEngine {
         logger.debug(`Fetched async action module instance: ${asyncActionName}`);
 
         const engineAction = new EngineAction(
-            configurationAccessor,
+            configAccessor,
             engineEventContext,
             `async action - ${asyncActionName}`,
             payload,

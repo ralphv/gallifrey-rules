@@ -20,8 +20,7 @@ export default class EngineBase implements EngineLogInterface, EngineEventInterf
         private readonly journalLogger: JournalLoggerInterface | undefined,
         private readonly getMetricsPointDelegate: GetMetricsPointDelegate | undefined,
     ) {
-        //todo getLogger from interface
-        const config = new Config();
+        const config = new Config(); // pass it in to get logger from event level?
         this.l = log4js.getLogger(loggerName);
         this.l.level = config.getLogLevel();
     }
