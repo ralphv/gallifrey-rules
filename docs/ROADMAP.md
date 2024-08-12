@@ -4,9 +4,6 @@
 * publish docusaurus and polish it
 * Add comments to all EngineInterfaces methods
 
-#### planned for 0.3.x release:
-* allow Config() to take in the event level config
-
 #### planned for future releases:
 
 * add actions such as SlackAction

@@ -7,25 +7,25 @@ Gallifrey Rules has a dynamic plugins loading system. The `$modulesPath` in the 
 
 Modules in Gallifrey Rules are conceptually divided into two types. Plugins and Providers.
 
-To create a module:
+### To create a module:
 
 1. Create a new TypeScript file with a TypeScript class in it.
 2. The Typescript class has to be the `default export`.
 3. You have to decorate the class with one of two decorators:
     
-    a. `@GallifreyPlugin`: It takes a single parameter, `PluginType`, which indicates the plugin type. 
+    a. [@GallifreyPlugin](https://github.com/ralphv/gallifrey-rules/blob/main/src/interfaces/InterfaceDecorators.ts#L27): It takes a single parameter, `PluginType`, which indicates the plugin type. 
    
-    b. `@GallifreyProvider`: It takes two parameters. The first one is the `ProviderType` and the second one is whether or not to mark this provider as the `default` one for it's class.
+    b. [@GallifreyProvider](https://github.com/ralphv/gallifrey-rules/blob/main/src/interfaces/InterfaceDecorators.ts#L49): It takes two parameters. The first one is the `ProviderType` and the second one is whether or not to mark this provider as the `default` one for it's class.
 
 4. You have to implement the Interface for your particular module.
 
-All interface will require at least providing the module name via `getModuleName()` method. The default naming pattern validation will force this to be all lower letters with `-` as seperator. Also know as [kebab-case](https://www.pluralsight.com/blog/software-development/programming-naming-conventions-explained#kebab-.case) You can also modify the naming convention patters. Learn more [PLACEHOLDER]  
+All interface will require at least providing the module name via `getModuleName()` method. The default naming pattern validation will force this to be all lower letters with `-` as seperator. Also know as [kebab-case](https://www.pluralsight.com/blog/software-development/programming-naming-conventions-explained#kebab-.case) You can also modify the naming convention patters. [Learn more](/docs/advanced/environment-variables#gr_module_name_pattern). 
 
 ---
 
 ### Engine Interfaces
 
-When Gallifrey Rules call methods on your modules, it will pass in an `Engine Interface`. For example for Rules, it will pass in `EngineRuleInterface`. These engine interfaces are provided to your modules to access the engine services. Through them you can for example, schedule future event, get configurations, do actions, pull data objects, add metrics and much more. Its easy to discover what the interfaces do through the IDE's code completion features. 
+When Gallifrey Rules call methods on your modules, it will pass in an `Engine Interface`. For example for Rules, it will pass in [EngineRuleInterface](https://github.com/ralphv/gallifrey-rules/blob/main/src/engine-interfaces/EngineRuleInterface.ts#L17). These engine interfaces are provided to your modules to access the engine services. Through them, you can, for example, schedule future event, get configurations, do actions, pull data objects, add metrics and much more. It's easy to discover what the interfaces do through the IDE's code completion features. 
 
 Some plugins will not get all the services, for example `Rules` can `schedule future events` because they are concerned with the business logic, however it doesn't make sense for an action to schedule a future event, so you won't find that in `EngineActionInterface`. Similarly an action should not be able to pull data because that's something a rule should do. Actions should only take a payload and do something based on that, think of them like [pure functions](https://en.wikipedia.org/wiki/Pure_function). The outcome of the action should never be influnced by external states. This is especially important when you want to modify your Action to run asynchronously.
 

@@ -61,7 +61,7 @@ Let's break this down:
 
 * `$namespace`: is your namespace, this uniquely identifies the instance of your engine. Usually you have one namespace per project.
 * `$modulesPaths`: is a list of directories that the engine loads all modules from. The `'$'` path is a special path that will get the 
-engine to load modules that come with the library itself. In the application example you can see that all of it's modules live under `modules` folder.
+engine to load modules that come with the library itself. In the application example you can see that all of it's modules live under [modules](https://github.com/ralphv/gallifrey-rules-sample/tree/main/src/modules) folder.
 * `$entities`: is your list of entities. [Learn more](../glossary.md#entity-or-entity-name).
 Under each entity, is the list of event names. and under each event name is your rules. 
 In this example we have a single entity `orders`. For orders, we have a single event called `new-order`. And
