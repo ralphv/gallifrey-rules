@@ -2,6 +2,9 @@ import BaseConfig from './BaseConfig';
 import { Cache } from './CoreDecorators';
 
 export default class Config extends BaseConfig {
+    constructor(overrideData: { [name: string]: string | number | boolean } = {}) {
+        super('', overrideData);
+    }
     getLogLevel() {
         return this.getEnvVariable(`GR_LOG_LEVEL`, 'info', false);
     }

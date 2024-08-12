@@ -69,5 +69,5 @@ When we get the event `new-order` of entity `orders`, we run the single rule `no
 * `$consumers`: is your list of consumers. Usually you should have at least one. In this example, we
 have a single consumer named `new-orders-consumer`, of type `kafka`. It's event dispatcher is `new-order-dispatcher`. 
 The [dispatcher code lives here](https://github.com/ralphv/gallifrey-rules-sample/blob/main/src/modules/providers/NewOrdersDispatcher.ts#L16).
-If you check the code you can see how the kafka message comes in and how we translate it into a [Gallifrey-Rules event](https://github.com/ralphv/gallifrey-rules/blob/main/src/GallifreyEventType.ts#L4).
+If you check the code you can see how the kafka message comes in and how we translate it into a [Gallifrey Rules event](https://github.com/ralphv/gallifrey-rules/blob/main/src/GallifreyEventType.ts#L4).
 * Under each consumer you have a config which might be different for different types of consumers. In this example, it's of type [interface KafkaConsumerConfig](https://github.com/ralphv/gallifrey-rules/blob/main/src/KafkaConsumer.ts#L309)

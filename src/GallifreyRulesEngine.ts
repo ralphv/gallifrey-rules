@@ -48,7 +48,6 @@ import { loadAll } from 'js-yaml';
 export class GallifreyRulesEngine {
     private readonly schemaLoader: SchemaLoader;
     private readonly modulesLoader: ModulesLoader;
-    private readonly config: Config;
     private readonly providersContext: ProvidersContext;
     private readonly instancesFactory: InstancesFactory;
     private engineContext?: EngineContext;
@@ -63,13 +62,13 @@ export class GallifreyRulesEngine {
     constructor() {
         this.schemaLoader = new SchemaLoader();
         this.modulesLoader = new ModulesLoader();
-        this.config = new Config();
         this.providersContext = new ProvidersContext();
         this.instancesFactory = new InstancesFactory(this.schemaLoader, this.modulesLoader);
     }
 
     describeEnvironment() {
-        return this.config.describe();
+        const config = new Config();
+        return config.describe();
     }
 
     async initializeFromFile(namespaceSchemaFile: string): Promise<void> {
@@ -107,12 +106,11 @@ export class GallifreyRulesEngine {
     }
 
     private async continueInitialize() {
+        const config = new Config();
         // loading modules
-        if (this.config.getModulesPaths().length !== 0) {
+        if (config.getModulesPaths().length !== 0) {
             logger.info(`Found modules path to load from config.`);
-            await Promise.all(
-                this.config.getModulesPaths().map((path) => this.modulesLoader.loadModulesFromPath(path)),
-            );
+            await Promise.all(config.getModulesPaths().map((path) => this.modulesLoader.loadModulesFromPath(path)));
         }
         if (this.schemaLoader.getModulesPath().length !== 0) {
             logger.info(`Found modules path to load from schema.`);
@@ -209,7 +207,7 @@ export class GallifreyRulesEngine {
             logger.error(
                 `handleAsyncActionEvent [EXCEPTION: ${actionName}]: ${JSON.stringify({ ...asyncActionEvent, error: e })}`,
             );
-            const { bubble } = this.handleException(e, pause);
+            const { bubble } = this.handleException(e, engineEventContext, pause);
             if (bubble) {
                 throw e;
             }
@@ -334,7 +332,7 @@ export class GallifreyRulesEngine {
         );
 
         if (!acquired) {
-            const config = new Config();
+            const config = this.getEventLevelConfig(engineEventContext);
             if (config.isContinueOnFailedAcquireLock()) {
                 logger.warn(`Failed to acquire distributed lock, but set to ignore, continuing with event.`);
             } else {
@@ -381,7 +379,7 @@ export class GallifreyRulesEngine {
                 })}`,
             );
             this.metrics?.countErrors(internalEvent);
-            const { bubble } = this.handleException(e, pause);
+            const { bubble } = this.handleException(e, engineEventContext, pause);
             if (bubble) {
                 await this.reactToEventFailure(
                     new EngineReactToFailure(
@@ -420,11 +418,29 @@ export class GallifreyRulesEngine {
         }
     }
 
+    private getEventLevelConfig(engineEventContext: EngineEventContext | GallifreyEventType<any>) {
+        if (!engineEventContext) {
+            return new Config();
+        }
+        if (IsTypeGallifreyEventType(engineEventContext)) {
+            return new Config(
+                this.schemaLoader.getEventLevelConfig(engineEventContext.entityName, engineEventContext.eventName),
+            );
+        }
+        return new Config(
+            this.schemaLoader.getEventLevelConfig(
+                engineEventContext.getEntityName(),
+                engineEventContext.getEventName(),
+            ),
+        );
+    }
+
     private handleException(
         e: any,
+        engineEventContext: EngineEventContext,
         pause: (() => () => void) | undefined,
     ): { bubble: boolean; type?: 'EngineCriticalError' | 'CriticalError' | 'Error' } {
-        const config = new Config();
+        const config = this.getEventLevelConfig(engineEventContext);
 
         if (pause && e instanceof PauseConsumer) {
             logger.info(`Got PauseConsumer exception with seconds: ${e.getSeconds()}`);
@@ -545,7 +561,7 @@ export class GallifreyRulesEngine {
                 await this.runRule(engineEventContext, event, ruleInstance, engineRule, source, pause);
             }
         } catch (e) {
-            const { bubble } = this.handleException(e, pause);
+            const { bubble } = this.handleException(e, engineEventContext, pause);
             if (bubble) {
                 throw e;
             }
@@ -751,8 +767,8 @@ export class GallifreyRulesEngine {
             this.metrics?.timeRule(event, ruleInstance.getModuleName(), ruleTimer);
             engineEventContext.getJournalLogger().endRunRule(ruleInstance.getModuleName(), ruleTimer, e as Error);
 
-            const config = new Config();
-            const { bubble, type } = this.handleException(e, pause);
+            const config = this.getEventLevelConfig(engineEventContext);
+            const { bubble, type } = this.handleException(e, engineEventContext, pause);
             if (bubble) {
                 if (config.getFailEventOnSingleRuleFail() || type === 'EngineCriticalError') {
                     // we need to bubble up and fail the whole event, we don't react to rule failure here
@@ -1087,7 +1103,7 @@ export class GallifreyRulesEngine {
     private async validatePayloadSchema(event: GallifreyEventType<any>) {
         const schemaFile = this.schemaLoader.getEventLevelSchemaFile(event.entityName, event.eventName);
         if (!schemaFile) {
-            const config = new Config();
+            const config = this.getEventLevelConfig(event);
             if (config.isSchemaFileMandatory()) {
                 throw new EngineCriticalError(`Event Payload SchemaFile was not found and is marked as mandatory`);
             }
