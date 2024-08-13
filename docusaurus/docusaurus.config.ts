@@ -68,6 +68,11 @@ const config: Config = {
           label: 'Advanced',
         },
         {
+          href: 'https://github.com/ralphv/gallifrey-rules/discussions',
+          label: 'Discussions',
+          position: 'left',
+        },
+        {
           href: 'https://github.com/ralphv/gallifrey-rules',
           label: 'GitHub',
           position: 'right',
@@ -170,6 +175,10 @@ const config: Config = {
       insights: false,
 
       //... other Algolia params
+    },
+    gtag: {
+      trackingID: 'G-J2CJB8T7GK',
+      anonymizeIP: true,
     },
   } satisfies Preset.ThemeConfig,
 };
