@@ -33,6 +33,10 @@ const config: Config = {
     [
       'classic',
       {
+        gtag: {
+          trackingID: 'G-J2CJB8T7GK',
+          anonymizeIP: false,
+        },
         docs: {
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
@@ -175,10 +179,6 @@ const config: Config = {
       insights: false,
 
       //... other Algolia params
-    },
-    gtag: {
-      trackingID: 'G-J2CJB8T7GK',
-      anonymizeIP: true,
     },
   } satisfies Preset.ThemeConfig,
 };
