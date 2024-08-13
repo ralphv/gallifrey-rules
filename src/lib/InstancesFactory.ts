@@ -2,7 +2,7 @@ import SchemaLoader from './SchemaLoader';
 import ModulesLoader, { ModuleData } from './ModulesLoader';
 import ConfigurationInterface from '../interfaces/Providers/ConfigurationInterface';
 import { ProviderType } from '../interfaces/InterfaceDecorators';
-import ModuleInterface from '../base-interfaces/ModuleInterface';
+import ModuleInterface, { WithModuleName, WithModuleNameType } from '../base-interfaces/ModuleInterface';
 import EngineContextInterface from '../engine-interfaces/EngineContextInterface';
 import { logger } from './logger';
 import JournalLoggerInterface from '../interfaces/Providers/JournalLoggerInterface';
@@ -23,13 +23,13 @@ export default class InstancesFactory {
         private modulesLoader: ModulesLoader,
     ) {}
 
-    private async getProvider(
+    private async getProvider<T extends ModuleInterface>(
         engineContext: EngineContextInterface,
         configurationAccessor: ConfigurationAccessorInterface | undefined,
         providerName: string | null,
         providerType: ProviderType,
         providerDescription: string,
-    ) {
+    ): Promise<WithModuleNameType<T>> {
         const instance = this.getProviderInstance(providerName, providerType, providerDescription);
         logger.info(`Initializing provider: ${providerDescription}`);
         if (instance.initialize) {
@@ -37,34 +37,34 @@ export default class InstancesFactory {
                 engineContext,
                 undefined,
                 configurationAccessor,
-                `provider - ${instance.getModuleName()}`,
+                `provider - ${WithModuleName(instance).getModuleName()}`,
                 undefined,
                 undefined,
             );
             await instance.initialize(engineBase);
         }
-        return instance;
+        return WithModuleName<T>(instance as T);
     }
 
-    private getProviderInstance(
+    private getProviderInstance<T extends ModuleInterface>(
         providerName: string | null,
         providerType: ProviderType,
         providerDescription: string,
-    ): ModuleInterface {
+    ): WithModuleNameType<T> {
         logger.info(`Requesting provider instance: ${providerDescription}`);
         // check if we have specs inside the schema first, if not we will check if they have
         if (!providerName) {
             const providers = this.modulesLoader.getModules().filter((a) => a.providerType === providerType);
             if (providers.length === 1) {
                 logger.info(`Provider ${providerDescription} has a single module: ${providers[0].name}, using that.`);
-                return new providers[0].classRef();
+                return WithModuleName<T>(new providers[0].classRef() as T);
             }
             const defaultProviders = this.modulesLoader
                 .getModules()
                 .filter((a) => a.providerType === providerType && a.isDefaultProvider);
             if (defaultProviders.length === 1) {
                 logger.info(`Provider ${providerDescription} has a default module: ${providers[0].name}, using that.`);
-                return new providers[0].classRef();
+                return WithModuleName<T>(new providers[0].classRef() as T);
             }
             throw new EngineCriticalError(
                 `${providerDescription} provider is missing from schema, doesn't have a single provider loaded, nor a default provider`,
@@ -75,83 +75,83 @@ export default class InstancesFactory {
                 .filter((a) => a.providerType === providerType && a.name === providerName);
             if (providers.length === 1) {
                 logger.info(`Create provider ${providerDescription} instance: ${providers[0].name}`);
-                return new providers[0].classRef();
+                return WithModuleName<T>(new providers[0].classRef() as T);
             }
             throw new EngineCriticalError(`${providerDescription} provider specified "${providerName}" is not found.`);
         }
     }
 
-    async getConfigurationInterfaceProvider(context: EngineContextInterface): Promise<ConfigurationInterface> {
-        return (await this.getProvider(
+    async getConfigurationInterfaceProvider(context: EngineContextInterface) {
+        return await this.getProvider<ConfigurationInterface>(
             context,
             undefined,
             this.schemaLoader.getConfigurationInterfaceProvider(),
             ProviderType.Configuration,
             `Configuration`,
-        )) as ConfigurationInterface;
+        );
     }
 
     async getJournalLoggerInterfaceProvider(
         context: EngineContextInterface,
         configurationAccessor: ConfigurationAccessorInterface,
-    ): Promise<JournalLoggerInterface> {
-        return (await this.getProvider(
+    ) {
+        return await this.getProvider<JournalLoggerInterface>(
             context,
             configurationAccessor,
             this.schemaLoader.getJournalLoggerInterfaceProvider(),
             ProviderType.JournalLogger,
             `JournalLogger`,
-        )) as JournalLoggerInterface;
+        );
     }
 
     async getLoggerInterfaceProvider(
         context: EngineContextInterface,
         configurationAccessor: ConfigurationAccessorInterface,
-    ): Promise<LoggerInterface> {
-        return (await this.getProvider(
+    ) {
+        return await this.getProvider<LoggerInterface>(
             context,
             configurationAccessor,
             this.schemaLoader.getLoggerInterfaceProvider(),
             ProviderType.Logger,
             `Logger`,
-        )) as LoggerInterface;
+        );
     }
 
     async getReactToFailureInterfaceProvider(
         context: EngineContextInterface,
         configurationAccessor: ConfigurationAccessorInterface,
-    ): Promise<ReactToFailureInterface> {
-        return (await this.getProvider(
+    ) {
+        return await this.getProvider<ReactToFailureInterface>(
             context,
             configurationAccessor,
             this.schemaLoader.getReactToFailureInterfaceProvider(),
             ProviderType.ReactToFailure,
             `ReactToFailure`,
-        )) as ReactToFailureInterface;
+        );
     }
 
     async getMetricsInterfaceProvider(
         context: EngineContextInterface,
         configurationAccessor: ConfigurationAccessorInterface,
-    ): Promise<MetricsInterface> {
-        return (await this.getProvider(
+    ) {
+        return await this.getProvider<MetricsInterface>(
             context,
             configurationAccessor,
             this.schemaLoader.getMetricsInterfaceProvider(),
             ProviderType.Metrics,
             `Metrics`,
-        )) as MetricsInterface;
+        );
     }
 
-    async getModulesInstances(
+    async getModulesInstances<T extends ModuleInterface>(
         engineContext: EngineContextInterface,
         configurationAccessor: ConfigurationAccessorInterface,
         modules: ModuleData[],
         journalLogger: JournalLoggerInterface | undefined,
         getMetricsPointDelegate: GetMetricsPointDelegate | undefined,
-    ) {
+    ): Promise<WithModuleNameType<T>[]> {
         const instances = modules.map((module) => {
-            return new module.classRef();
+            return WithModuleName(new module.classRef() as T);
         });
 
         await Promise.all(
@@ -160,60 +160,61 @@ export default class InstancesFactory {
                     engineContext,
                     undefined,
                     configurationAccessor,
-                    `initialize - ${instance.getModuleName()}`,
+                    `initialize - ${WithModuleName(instance).getModuleName()}`,
                     journalLogger,
                     getMetricsPointDelegate,
                 );
                 return instance.initialize ? instance.initialize(engineBase) : Promise.resolve();
             }),
         );
+
         return instances;
     }
 
     getEventDispatcherProvider(eventDispatcher: string) {
-        return this.getProviderInstance(
+        return this.getProviderInstance<WithModuleNameType<EventDispatcherInterface<any, any>>>(
             eventDispatcher,
             ProviderType.EventDispatcher,
             'EventDispatcher',
-        ) as EventDispatcherInterface<any, any>;
+        );
     }
 
     async getScheduledEventsInterfaceProvider(
         context: EngineContextInterface,
         configurationAccessor: ConfigurationAccessorInterface,
     ): Promise<ScheduledEventsInterface> {
-        return (await this.getProvider(
+        return await this.getProvider(
             context,
             configurationAccessor,
             this.schemaLoader.getScheduledEventsInterfaceProvider(),
             ProviderType.ScheduledEvents,
             `ScheduledEvents`,
-        )) as ScheduledEventsInterface;
+        );
     }
 
     async getDistributedLocksInterfaceProvider(
         context: EngineContextInterface,
         configurationAccessor: ConfigurationAccessorInterface,
-    ): Promise<DistributedLocksInterface> {
-        return (await this.getProvider(
+    ): Promise<WithModuleNameType<DistributedLocksInterface>> {
+        return await this.getProvider<DistributedLocksInterface>(
             context,
             configurationAccessor,
             this.schemaLoader.getDistributedLocksInterfaceProvider(),
             ProviderType.DistributedLocks,
             `DistributedLocks`,
-        )) as DistributedLocksInterface;
+        );
     }
 
     async getActionQueuerInterfaceProvider(
         context: EngineContextInterface,
         configurationAccessor: ConfigurationAccessorInterface,
-    ): Promise<ActionQueuerInterface<any, any>> {
-        return (await this.getProvider(
+    ): Promise<WithModuleNameType<ActionQueuerInterface<any, any>>> {
+        return await this.getProvider<ActionQueuerInterface<any, any>>(
             context,
             configurationAccessor,
             this.schemaLoader.getActionQueuerInterfaceProvider(),
             ProviderType.ActionQueuer,
             `ActionQueuer`,
-        )) as ActionQueuerInterface<any, any>;
+        );
     }
 }
