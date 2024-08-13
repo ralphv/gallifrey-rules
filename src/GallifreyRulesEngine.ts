@@ -44,6 +44,7 @@ import { EOL } from 'os';
 import colors from 'colors';
 import { ascii } from './ascii';
 import { loadAll } from 'js-yaml';
+import { WithModuleNameType } from './base-interfaces/ModuleInterface';
 
 export class GallifreyRulesEngine {
     private readonly schemaLoader: SchemaLoader;
@@ -513,7 +514,7 @@ export class GallifreyRulesEngine {
     private async runRules(
         event: GallifreyEventTypeInternal<any>,
         engineEventContext: EngineEventContext,
-        rulesInstances: RuleInterface<any>[],
+        rulesInstances: WithModuleNameType<RuleInterface<any>>[],
         source: string,
         pause?: () => () => void,
     ) {
@@ -626,14 +627,14 @@ export class GallifreyRulesEngine {
             this.schemaLoader.getEventLevelConfig(event.entityName, event.eventName),
         );
 
-        const [actionInstance] = (await this.instancesFactory.getModulesInstances(
+        const [actionInstance] = await this.instancesFactory.getModulesInstances<ActionInterface<any, any>>(
             engineEventContext,
             configAccessor,
             [moduleData],
             engineEventContext.getJournalLogger(),
             (measurementName: string) =>
                 AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
-        )) as ActionInterface<any, any>[];
+        );
         logger.debug(`Fetched action module instance: ${actionName}`);
 
         const engineAction = new EngineAction(
@@ -693,14 +694,14 @@ export class GallifreyRulesEngine {
             this.schemaLoader.getEventLevelConfig(event.entityName, event.eventName),
         );
 
-        const [dataObjectInstance] = (await this.instancesFactory.getModulesInstances(
+        const [dataObjectInstance] = await this.instancesFactory.getModulesInstances<DataObjectInterface<any, any>>(
             engineEventContext,
             configAccessor,
             [moduleData],
             engineEventContext.getJournalLogger(),
             (measurementName: string) =>
                 AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
-        )) as DataObjectInterface<any, any>[];
+        );
         logger.debug(`Fetched data object module instance: ${dataObjectName}`);
 
         const engineDataObject = new EngineDataObject(
@@ -737,7 +738,7 @@ export class GallifreyRulesEngine {
     private async runRule(
         engineEventContext: EngineEventContext,
         event: GallifreyEventTypeInternal<any>,
-        ruleInstance: RuleInterface<any>,
+        ruleInstance: WithModuleNameType<RuleInterface<any>>,
         engineRule: EngineRule,
         source: string,
         pause?: () => () => void,
@@ -801,7 +802,7 @@ export class GallifreyRulesEngine {
         engine: EngineReactToFailure,
         payload: any,
         error: any,
-        ruleInstance: RuleInterface<any>,
+        ruleInstance: WithModuleNameType<RuleInterface<any>>,
     ) {
         await AssertNotNull(this.providersContext.reactToFailure).reactToRuleFailure(
             engine,
@@ -865,14 +866,14 @@ export class GallifreyRulesEngine {
             this.schemaLoader.getEventLevelConfig(event.entityName, event.eventName),
         );
 
-        const filtersInstances = (await this.instancesFactory.getModulesInstances(
+        const filtersInstances = await this.instancesFactory.getModulesInstances<FilterInterface<any>>(
             engineEventContext,
             configAccessor,
             filtersModules,
             engineEventContext.getJournalLogger(),
             (measurementName: string) =>
                 AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
-        )) as FilterInterface<any>[];
+        );
         logger.debug(`Fetched filtersInstances: ${filtersInstances.length}`);
         return await this.runFilters(event, engineEventContext, filtersInstances);
     }
@@ -904,14 +905,14 @@ export class GallifreyRulesEngine {
             engineEventContext,
             this.schemaLoader.getEventLevelConfig(event.entityName, event.eventName),
         );
-        const rulesInstances = (await this.instancesFactory.getModulesInstances(
+        const rulesInstances = await this.instancesFactory.getModulesInstances<RuleInterface<any>>(
             engineEventContext,
             configAccessor,
             rulesModules,
             engineEventContext.getJournalLogger(),
             (measurementName: string) =>
                 AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
-        )) as RuleInterface<any>[];
+        );
         logger.debug(`Fetched rulesInstances: ${rulesInstances.length}`);
         //*/ isRuleEnabled?
         await this.runRules(event, engineEventContext, rulesInstances, source, pause);
@@ -920,7 +921,7 @@ export class GallifreyRulesEngine {
     private async runFilters(
         event: GallifreyEventTypeInternal<any>,
         engineEventContext: EngineEventContext,
-        filtersInstances: FilterInterface<any>[],
+        filtersInstances: WithModuleNameType<FilterInterface<any>>[],
     ): Promise<boolean> {
         for (const filterInstance of filtersInstances) {
             const configAccessor = await TypeAssertNotNull(
@@ -953,7 +954,7 @@ export class GallifreyRulesEngine {
     private async canContinueFilter(
         engineEventContext: EngineEventContext,
         event: GallifreyEventTypeInternal<any>,
-        filterInstance: FilterInterface<any>,
+        filterInstance: WithModuleNameType<FilterInterface<any>>,
         engineFilter: EngineFilter,
     ) {
         try {
@@ -1166,14 +1167,14 @@ export class GallifreyRulesEngine {
             this.schemaLoader.getEventLevelConfig(event.entityName, event.eventName),
         );
 
-        const [asyncActionInstance] = (await this.instancesFactory.getModulesInstances(
+        const [asyncActionInstance] = await this.instancesFactory.getModulesInstances<AsyncActionInterface<any, any>>(
             engineEventContext,
             configAccessor,
             [moduleData],
             engineEventContext.getJournalLogger(),
             (measurementName: string) =>
                 AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
-        )) as AsyncActionInterface<any, any>[];
+        );
         logger.debug(`Fetched async action module instance: ${asyncActionName}`);
 
         const engineAction = new EngineAction(
