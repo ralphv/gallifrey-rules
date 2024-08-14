@@ -1,6 +1,12 @@
 import { GallifreyRulesEngine } from './GallifreyRulesEngine';
 import { AssertNotNull } from './lib/Utils';
 import { GallifreyEventType } from './GallifreyEventType';
+import {
+    BaseActionPayload,
+    BaseActionResponse,
+    BaseDataObjectRequest,
+    BaseDataObjectResponse,
+} from './base-interfaces/BaseTypes';
 
 /**
  * Allows for easier testing
@@ -31,11 +37,14 @@ export class GallifreyRulesEngineForTesting extends GallifreyRulesEngine {
         return await AssertNotNull(this.pullDataObjectHook)(dataObjectName, request);
     }
 
-    public async testDoAction(
+    public async testDoAction<
+        ActionPayloadType extends BaseActionPayload,
+        ActionResponseType extends BaseActionResponse,
+    >(
         actionName: string,
-        request: any,
+        request: ActionPayloadType,
         event: GallifreyEventType<any> | undefined = undefined,
-    ): Promise<any> {
+    ): Promise<ActionResponseType> {
         if (event === undefined) {
             event = {
                 entityName: 'entity',
@@ -57,6 +66,44 @@ export class GallifreyRulesEngineForTesting extends GallifreyRulesEngine {
             event.eventId,
             event.source,
         );
-        return await this.doAction<any, any>(internalEvent, engineEventContext, actionName, request);
+        return await this.doAction<ActionPayloadType, ActionResponseType>(
+            internalEvent,
+            engineEventContext,
+            actionName,
+            request,
+        );
+    }
+
+    public async testPullDataObject<
+        DataObjectRequestType extends BaseDataObjectRequest,
+        DataObjectResponseType extends BaseDataObjectResponse,
+    >(dataObjectName: string, request: any, event: GallifreyEventType<any> | undefined = undefined) {
+        if (event === undefined) {
+            event = {
+                entityName: 'entity',
+                eventName: 'event',
+                source: 'source',
+                eventId: '1',
+                payload: {},
+                eventLag: 0,
+            };
+        }
+        const namespace = AssertNotNull(this.getNamespace());
+        const internalEvent = {
+            ...event,
+            namespace,
+        };
+        const engineEventContext = await this.createEngineEventContext(
+            internalEvent.entityName,
+            internalEvent.eventName,
+            event.eventId,
+            event.source,
+        );
+        return await this.pullDataObject<DataObjectRequestType, DataObjectResponseType>(
+            internalEvent,
+            engineEventContext,
+            dataObjectName,
+            request,
+        );
     }
 }

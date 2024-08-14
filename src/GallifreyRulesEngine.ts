@@ -1,4 +1,10 @@
-import { BaseActionPayload, BaseActionResponse, BaseEventPayload } from './base-interfaces/BaseTypes';
+import {
+    BaseActionPayload,
+    BaseActionResponse,
+    BaseDataObjectRequest,
+    BaseDataObjectResponse,
+    BaseEventPayload,
+} from './base-interfaces/BaseTypes';
 import CriticalError from './errors/CriticalError';
 import WarningError from './errors/WarningError';
 import InfoError from './errors/InfoError';
@@ -618,16 +624,19 @@ export class GallifreyRulesEngine {
         }
     }
 
-    private async pullDataObject(
+    protected async pullDataObject<
+        DataObjectRequestType extends BaseDataObjectRequest,
+        DataObjectResponseType extends BaseDataObjectResponse,
+    >(
         event: GallifreyEventTypeInternal<any>,
         engineEventContext: EngineEventContext,
         dataObjectName: string,
-        request?: any,
+        request: DataObjectRequestType,
     ) {
         logger.info(`pullDataObject: ${dataObjectName}`);
 
         if (this.isPullDataObjectHookAttached()) {
-            return await this.callPullDataObject(dataObjectName, request);
+            return (await this.callPullDataObject(dataObjectName, request)) as DataObjectResponseType;
         }
 
         const eventStoreKey = this.getDataObjectEventStoreKey(dataObjectName, request);
@@ -648,7 +657,9 @@ export class GallifreyRulesEngine {
             this.schemaLoader.getEventLevelConfig(event.entityName, event.eventName),
         );
 
-        const [dataObjectInstance] = await this.instancesFactory.getModulesInstances<DataObjectInterface<any, any>>(
+        const [dataObjectInstance] = await this.instancesFactory.getModulesInstances<
+            DataObjectInterface<DataObjectRequestType, DataObjectResponseType>
+        >(
             engineEventContext,
             configAccessor,
             [moduleData],
@@ -658,7 +669,7 @@ export class GallifreyRulesEngine {
         );
         logger.debug(`Fetched data object module instance: ${dataObjectName}`);
 
-        const engineDataObject = new EngineDataObject(
+        const engineDataObject = new EngineDataObject<DataObjectRequestType>(
             configAccessor,
             engineEventContext,
             `data object - ${dataObjectName}`,
