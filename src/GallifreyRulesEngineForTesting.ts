@@ -1,5 +1,6 @@
 import { GallifreyRulesEngine } from './GallifreyRulesEngine';
 import { AssertNotNull } from './lib/Utils';
+import { GallifreyEventType } from './GallifreyEventType';
 
 /**
  * Allows for easier testing
@@ -28,5 +29,34 @@ export class GallifreyRulesEngineForTesting extends GallifreyRulesEngine {
 
     protected async callPullDataObject(dataObjectName: string, request: any) {
         return await AssertNotNull(this.pullDataObjectHook)(dataObjectName, request);
+    }
+
+    public async testDoAction(
+        actionName: string,
+        request: any,
+        event: GallifreyEventType<any> | undefined = undefined,
+    ): Promise<any> {
+        if (event === undefined) {
+            event = {
+                entityName: 'entity',
+                eventName: 'event',
+                source: 'source',
+                eventId: '1',
+                payload: {},
+                eventLag: 0,
+            };
+        }
+        const namespace = AssertNotNull(this.getNamespace());
+        const internalEvent = {
+            ...event,
+            namespace,
+        };
+        const engineEventContext = await this.createEngineEventContext(
+            internalEvent.entityName,
+            internalEvent.eventName,
+            event.eventId,
+            event.source,
+        );
+        return await this.doAction<any, any>(internalEvent, engineEventContext, actionName, request);
     }
 }

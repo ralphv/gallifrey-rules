@@ -168,25 +168,11 @@ export class GallifreyRulesEngine {
             );
         }
 
-        const engineEventContext = new EngineEventContext(
-            AssertNotNull(this.getNamespace()),
+        const engineEventContext = await this.createEngineEventContext(
             asyncActionEvent.entityName,
             asyncActionEvent.eventName,
             asyncActionEvent.eventId,
             source,
-            this.getEventLevelConfig(asyncActionEvent.entityName, asyncActionEvent.eventName),
-        );
-        const configAccessor = await this.providersContext?.configuration?.getConfigurationAccessorInterface(
-            engineEventContext,
-            this.schemaLoader.getEventLevelConfig(asyncActionEvent.entityName, asyncActionEvent.eventName),
-        );
-        engineEventContext.setJournalLogger(
-            new SafeJournalLoggerWrapper(
-                await this.instancesFactory.getJournalLoggerInterfaceProvider(
-                    AssertNotNull(this.engineContext),
-                    AssertNotNull(configAccessor),
-                ),
-            ),
         );
 
         try {
@@ -236,28 +222,14 @@ export class GallifreyRulesEngine {
             );
         }
 
-        const engineEventContext = new EngineEventContext(
-            AssertNotNull(this.getNamespace()),
+        const engineEventContext = await this.createEngineEventContext(
             scheduledEvent.event.entityName,
             scheduledEvent.event.eventName,
             scheduledEvent.event.eventId,
             scheduledEvent.event.source,
-            this.getEventLevelConfig(scheduledEvent.event.entityName, scheduledEvent.event.eventName),
         );
-        const configAccessor = await this.providersContext?.configuration?.getConfigurationAccessorInterface(
-            engineEventContext,
-            this.schemaLoader.getEventLevelConfig(scheduledEvent.event.entityName, scheduledEvent.event.eventName),
-        );
-        engineEventContext.setJournalLogger(
-            new SafeJournalLoggerWrapper(
-                await this.instancesFactory.getJournalLoggerInterfaceProvider(
-                    AssertNotNull(this.engineContext),
-                    AssertNotNull(configAccessor),
-                ),
-            ),
-        );
-
         engineEventContext.setScheduledEvent(scheduledEvent);
+
         return await this.coreHandleEvent<any>(
             engineEventContext,
             {
@@ -295,29 +267,8 @@ export class GallifreyRulesEngine {
         logger.debug(`handleEvent [START: ${eventId}] Details: ${JSON.stringify(event, null, 2)}`);
         AssertTypeGuard(IsTypeGallifreyEventType, event);
 
-        const engineEventContext = new EngineEventContext(
-            AssertNotNull(this.getNamespace()),
-            entityName,
-            eventName,
-            eventId,
-            source,
-            this.getEventLevelConfig(entityName, eventName),
-        );
-
+        const engineEventContext = await this.createEngineEventContext(entityName, eventName, eventId, source);
         await this.validatePayloadSchema(engineEventContext, event.payload);
-
-        const configAccessor = await this.providersContext?.configuration?.getConfigurationAccessorInterface(
-            engineEventContext,
-            this.schemaLoader.getEventLevelConfig(event.entityName, event.eventName),
-        );
-        engineEventContext.setJournalLogger(
-            new SafeJournalLoggerWrapper(
-                await this.instancesFactory.getJournalLoggerInterfaceProvider(
-                    AssertNotNull(this.engineContext),
-                    AssertNotNull(configAccessor),
-                ),
-            ),
-        );
         return await this.coreHandleEvent<any>(engineEventContext, internalEvent, pause);
     }
 
@@ -598,7 +549,10 @@ export class GallifreyRulesEngine {
         );
     }
 
-    private async doAction<ActionPayloadType extends BaseActionPayload, ActionResponseType extends BaseActionResponse>(
+    protected async doAction<
+        ActionPayloadType extends BaseActionPayload,
+        ActionResponseType extends BaseActionResponse,
+    >(
         event: GallifreyEventTypeInternal<any>,
         engineEventContext: EngineEventContext,
         actionName: string,
@@ -1248,6 +1202,30 @@ export class GallifreyRulesEngine {
         // banner, once
         console.log(colors.red(ascii));
         console.log(colors.yellow(textSync('Gallifrey Rules', { horizontalLayout: 'full' })), EOL);
+    }
+
+    protected async createEngineEventContext(entityName: string, eventName: string, eventId: string, source: string) {
+        const engineEventContext = new EngineEventContext(
+            AssertNotNull(this.getNamespace()),
+            entityName,
+            eventName,
+            eventId,
+            source,
+            this.getEventLevelConfig(entityName, eventName),
+        );
+        const configAccessor = await this.providersContext?.configuration?.getConfigurationAccessorInterface(
+            engineEventContext,
+            this.schemaLoader.getEventLevelConfig(entityName, eventName),
+        );
+        engineEventContext.setJournalLogger(
+            new SafeJournalLoggerWrapper(
+                await this.instancesFactory.getJournalLoggerInterfaceProvider(
+                    AssertNotNull(this.engineContext),
+                    AssertNotNull(configAccessor),
+                ),
+            ),
+        );
+        return engineEventContext;
     }
 }
 
