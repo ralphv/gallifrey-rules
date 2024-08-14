@@ -11,14 +11,14 @@ import {
 import { logger } from './logger';
 import Config from './Config';
 import { AnyClass, ClassType } from './BaseTypes';
-import ModuleInterface from '../base-interfaces/ModuleInterface';
+import ModuleInterface, { WithModuleName, WithModuleNameType } from '../base-interfaces/ModuleInterface';
 import EngineCriticalError from '../errors/EngineCriticalError';
 import { getInterfaceMethods, getMethodNames, InterfaceNames } from './InterfaceMethodNames';
 
 export class ModuleData {
     constructor(
         public readonly className: string,
-        public readonly classRef: ClassType<ModuleInterface>,
+        public readonly classRef: ClassType<WithModuleNameType<ModuleInterface>>,
         public readonly name: string,
         public readonly file: string,
         public readonly namespaces: string[],
@@ -104,7 +104,16 @@ export default class ModulesLoader {
             );
             return;
         }
-        const instance = new ModuleClass() as ModuleInterface;
+        const _instance = new ModuleClass() as ModuleInterface;
+        if (!_instance.getModuleName) {
+            // dynamically add the moduleName from the className
+            const className = pluginClassName || providerClassName;
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            ModuleClass.prototype.getModuleName = () => {
+                return className;
+            };
+        }
+        const instance = WithModuleName(_instance);
         const name = instance.getModuleName();
         if (!name) {
             throw new EngineCriticalError(`Missing module name from: ${file}`);
@@ -241,7 +250,7 @@ New: ${JSON.stringify(module, null, 2)}`);
         }
     }
 
-    private validateProviderImplemented(providerType: ProviderType, instance: ModuleInterface) {
+    private validateProviderImplemented(providerType: ProviderType, instance: WithModuleNameType<ModuleInterface>) {
         const interfaceMethodNames = this.getProviderInterfaceMethodsToTest(providerType);
         const instanceMethodNames = getMethodNames(instance);
         const implemented = interfaceMethodNames.every((val) => instanceMethodNames.includes(val));
@@ -276,7 +285,7 @@ New: ${JSON.stringify(module, null, 2)}`);
         }
     }
 
-    private validateTagsImplemented(tags: string[], instance: ModuleInterface) {
+    private validateTagsImplemented(tags: string[], instance: WithModuleNameType<ModuleInterface>) {
         for (const tag of tags) {
             const interfaceMethodNames = this.getTagsInterfaceMethodsToTest(tag);
             const instanceMethodNames = getMethodNames(instance);
@@ -323,21 +332,21 @@ New: ${JSON.stringify(module, null, 2)}`);
             let postfix = undefined;
             switch (pluginType) {
                 case PluginType.Action:
-                    postfix = '-action';
+                    postfix = ['action'];
                     break;
                 case PluginType.Rule:
-                    postfix = '-rule';
+                    postfix = ['rule'];
                     break;
                 case PluginType.Filter:
-                    postfix = '-filter';
+                    postfix = ['filter'];
                     break;
                 case PluginType.DataObject:
-                    postfix = '-data-object';
+                    postfix = ['data-object', 'dataobject'];
                     break;
             }
-            if (postfix && !moduleName.endsWith(postfix)) {
+            if (postfix && postfix.every((pf) => !moduleName.toLowerCase().endsWith(pf))) {
                 throw new EngineCriticalError(
-                    `Module: ${moduleName} does not end with the proper postfix: ${postfix}. Class name: ${className}`,
+                    `Module: ${moduleName} does not end with the proper postfix: ${JSON.stringify(postfix)}. Class name: ${className}`,
                 );
             }
         }

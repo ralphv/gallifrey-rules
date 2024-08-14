@@ -1,9 +1,10 @@
 import JournalLoggerInterface from './interfaces/Providers/JournalLoggerInterface';
 import { DontThrowJustLog } from './lib/Decorators';
 import { GallifreyEventTypeInternal } from './lib/GallifreyEventTypeInternal';
+import { WithModuleNameType } from './base-interfaces/ModuleInterface';
 
 export default class SafeJournalLoggerWrapper implements JournalLoggerInterface {
-    constructor(private readonly journalLogger: JournalLoggerInterface) {}
+    constructor(private readonly journalLogger: WithModuleNameType<JournalLoggerInterface>) {}
 
     @DontThrowJustLog
     customLog(description: string, extra: any): void {
