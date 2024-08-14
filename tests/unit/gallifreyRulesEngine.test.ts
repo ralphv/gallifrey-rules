@@ -10,6 +10,7 @@ import { afterEach, beforeEach } from 'mocha';
 import sinon from 'sinon';
 import { logger } from '../../src/lib/logger';
 import { KafkaConsumer } from '../../src/KafkaConsumer';
+import ProcessMessageRule from './sample-namespace/modules-no-name/ProcessMessageRule';
 
 describe('gallifrey engine', () => {
     let infoSpy: sinon.SinonSpy;
@@ -832,5 +833,30 @@ describe('gallifrey engine', () => {
                 },
             ],
         } as NamespaceSchema);
+    });
+    it('initialize without getModuleName', async () => {
+        const engine = new GallifreyRulesEngine();
+        await engine.initialize({
+            $namespace: 'sample-namespace',
+            $entities: {
+                message: {
+                    'incoming-message': { $rules: [ProcessMessageRule.name] },
+                },
+            },
+            $modulesPaths: ['$', path.resolve(__dirname, './sample-namespace/modules-no-name')],
+        } as NamespaceSchema);
+
+        await engine.handleEvent<IncomingMessagePayloadType>(
+            {
+                eventId: '1000',
+                entityName: 'message',
+                eventName: 'incoming-message',
+                payload: {},
+                eventLag: 5,
+                source: 'unit-tests',
+            },
+            () => () => {},
+        );
+        await engine.shutdown();
     });
 });

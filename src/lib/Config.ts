@@ -27,7 +27,7 @@ export default class Config extends BaseConfig {
 
     @Cache
     getModuleNamePattern() {
-        return this.getEnvVariable('GR_MODULE_NAME_PATTERN', '^[a-z]+(-[a-z0-9]+)*$', false);
+        return this.getEnvVariable('GR_MODULE_NAME_PATTERN', '^[a-z]+(-[a-z0-9]+)*$|^[A-Z][a-zA-Z0-9]*$', false);
     }
 
     getInfluxDBToken() {

@@ -332,21 +332,21 @@ New: ${JSON.stringify(module, null, 2)}`);
             let postfix = undefined;
             switch (pluginType) {
                 case PluginType.Action:
-                    postfix = '-action';
+                    postfix = ['action'];
                     break;
                 case PluginType.Rule:
-                    postfix = '-rule';
+                    postfix = ['rule'];
                     break;
                 case PluginType.Filter:
-                    postfix = '-filter';
+                    postfix = ['filter'];
                     break;
                 case PluginType.DataObject:
-                    postfix = '-data-object';
+                    postfix = ['data-object', 'dataobject'];
                     break;
             }
-            if (postfix && !moduleName.endsWith(postfix)) {
+            if (postfix && postfix.every((pf) => !moduleName.toLowerCase().endsWith(pf))) {
                 throw new EngineCriticalError(
-                    `Module: ${moduleName} does not end with the proper postfix: ${postfix}. Class name: ${className}`,
+                    `Module: ${moduleName} does not end with the proper postfix: ${JSON.stringify(postfix)}. Class name: ${className}`,
                 );
             }
         }

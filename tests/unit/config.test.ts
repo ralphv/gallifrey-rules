@@ -168,12 +168,12 @@ describe('config and base config, array', () => {
         try {
             const config = new Config();
             expect(config.getModuleNamePattern()).to.not.be.empty;
-            expect(ModulesLoader.isValidModuleName('Invalid')).to.be.false;
+            expect(ModulesLoader.isValidModuleName('Invalid$')).to.be.false;
             process.env['GR_MODULE_NAME_PATTERN'] = '';
             expect(config.getModuleNamePattern()).to.not.be.empty;
             ClearCache();
             expect(config.getModuleNamePattern()).to.be.empty;
-            expect(ModulesLoader.isValidModuleName('Invalid')).to.be.true;
+            expect(ModulesLoader.isValidModuleName('Invalid$')).to.be.true;
             ClearCache();
         } finally {
             delete process.env['GR_MODULE_NAME_PATTERN'];
