@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.9](https://github.com/ralphv/gallifrey-rules/compare/v0.1.8...v0.1.9) (2024-08-13)
+
+### Features
+
+* Making getModuleName() optional, without it will default to class name.
+
 ## [0.1.6](https://github.com/ralphv/gallifrey-rules/compare/v0.1.5...v0.1.6) (2024-08-08)
 
 ### Features
