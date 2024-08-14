@@ -160,7 +160,7 @@ export default class InstancesFactory {
                     engineContext,
                     undefined,
                     configurationAccessor,
-                    `initialize - ${WithModuleName(instance).getModuleName()}`,
+                    `initialize - ${instance.getModuleName()}`,
                     journalLogger,
                     getMetricsPointDelegate,
                 );
@@ -172,7 +172,7 @@ export default class InstancesFactory {
     }
 
     getEventDispatcherProvider(eventDispatcher: string) {
-        return this.getProviderInstance<WithModuleNameType<EventDispatcherInterface<any, any>>>(
+        return this.getProviderInstance<EventDispatcherInterface<any, any>>(
             eventDispatcher,
             ProviderType.EventDispatcher,
             'EventDispatcher',
@@ -195,7 +195,7 @@ export default class InstancesFactory {
     async getDistributedLocksInterfaceProvider(
         context: EngineContextInterface,
         configurationAccessor: ConfigurationAccessorInterface,
-    ): Promise<WithModuleNameType<DistributedLocksInterface>> {
+    ) {
         return await this.getProvider<DistributedLocksInterface>(
             context,
             configurationAccessor,
@@ -208,7 +208,7 @@ export default class InstancesFactory {
     async getActionQueuerInterfaceProvider(
         context: EngineContextInterface,
         configurationAccessor: ConfigurationAccessorInterface,
-    ): Promise<WithModuleNameType<ActionQueuerInterface<any, any>>> {
+    ) {
         return await this.getProvider<ActionQueuerInterface<any, any>>(
             context,
             configurationAccessor,
