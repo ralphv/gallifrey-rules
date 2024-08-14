@@ -8,8 +8,7 @@ when we get the event `new-order` of entity `orders`, we run the single rule `no
 
 Let's see what [the rule looks like in our sample example](https://github.com/ralphv/gallifrey-rules-sample/blob/main/src/modules/plugins/rules/NotifyCustomerNewOrderRule.ts#L16).
 
-The rule plugin has to provide at least two methods. `getModuleName` which is required by all modules and
-`trigger` which is the entry of the rule. 
+The rule plugin has to provide at least one method. `trigger` which is the entry of the rule. 
 
 In the `trigger` method, you can see a simple 3-step logic.
 

@@ -19,7 +19,8 @@ Modules in Gallifrey Rules are conceptually divided into two types. Plugins and 
 
 4. You have to implement the Interface for your particular module.
 
-All interface will require at least providing the module name via `getModuleName()` method. The default naming pattern validation will force this to be all lower letters with `-` as seperator. Also know as [kebab-case](https://www.pluralsight.com/blog/software-development/programming-naming-conventions-explained#kebab-.case) You can also modify the naming convention patters. [Learn more](/docs/advanced/environment-variables#gr_module_name_pattern). 
+All interface will require at least providing the module name via `getModuleName()` method. Note that if you don't provide it, it will **automatically be provided by the engine and will default to the class name**.
+The default naming pattern validation will force this to be either [kebab-case](https://www.pluralsight.com/blog/software-development/programming-naming-conventions-explained#kebab-.case) OR [PascalCase](https://www.pluralsight.com/blog/software-development/programming-naming-conventions-explained#pascal-case). You can also modify the naming convention patters. [Learn more](/docs/advanced/environment-variables#gr_module_name_pattern). 
 
 ---
 
