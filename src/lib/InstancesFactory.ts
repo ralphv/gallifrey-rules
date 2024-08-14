@@ -30,20 +30,20 @@ export default class InstancesFactory {
         providerType: ProviderType,
         providerDescription: string,
     ): Promise<WithModuleNameType<T>> {
-        const instance = this.getProviderInstance(providerName, providerType, providerDescription);
+        const instance = WithModuleName<T>(this.getProviderInstance(providerName, providerType, providerDescription));
         logger.info(`Initializing provider: ${providerDescription}`);
         if (instance.initialize) {
             const engineBase = new EngineBase(
                 engineContext,
                 undefined,
                 configurationAccessor,
-                `provider - ${WithModuleName(instance).getModuleName()}`,
+                `provider - ${instance.getModuleName()}`,
                 undefined,
                 undefined,
             );
             await instance.initialize(engineBase);
         }
-        return WithModuleName<T>(instance as T);
+        return instance;
     }
 
     private getProviderInstance<T extends ModuleInterface>(
