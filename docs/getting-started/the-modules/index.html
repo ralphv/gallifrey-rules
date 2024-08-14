@@ -10,7 +10,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="Gallifrey Rules" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.64433164.css">
-<script src="/assets/js/runtime~main.2842e07e.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.f37d4bb8.js" defer="defer"></script>
 <script src="/assets/js/main.fea2e810.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -34,7 +34,8 @@
 <p>You have to implement the Interface for your particular module.</p>
 </li>
 </ol>
-<p>All interface will require at least providing the module name via <code>getModuleName()</code> method. The default naming pattern validation will force this to be all lower letters with <code>-</code> as seperator. Also know as <a href="https://www.pluralsight.com/blog/software-development/programming-naming-conventions-explained#kebab-.case" target="_blank" rel="noopener noreferrer">kebab-case</a> You can also modify the naming convention patters. <a href="/docs/advanced/environment-variables#gr_module_name_pattern">Learn more</a>.</p>
+<p>All interface will require at least providing the module name via <code>getModuleName()</code> method. Note that if you don&#x27;t provide it, it will <strong>automatically be provided by the engine and will default to the class name</strong>.
+The default naming pattern validation will force this to be either <a href="https://www.pluralsight.com/blog/software-development/programming-naming-conventions-explained#kebab-.case" target="_blank" rel="noopener noreferrer">kebab-case</a> OR <a href="https://www.pluralsight.com/blog/software-development/programming-naming-conventions-explained#pascal-case" target="_blank" rel="noopener noreferrer">PascalCase</a>. You can also modify the naming convention patters. <a href="/docs/advanced/environment-variables#gr_module_name_pattern">Learn more</a>.</p>
 <hr>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="engine-interfaces">Engine Interfaces<a href="#engine-interfaces" class="hash-link" aria-label="Direct link to Engine Interfaces" title="Direct link to Engine Interfaces">​</a></h3>
 <p>When Gallifrey Rules call methods on your modules, it will pass in an <code>Engine Interface</code>. For example for Rules, it will pass in <a href="https://github.com/ralphv/gallifrey-rules/blob/main/src/engine-interfaces/EngineRuleInterface.ts#L17" target="_blank" rel="noopener noreferrer">EngineRuleInterface</a>. These engine interfaces are provided to your modules to access the engine services. Through them, you can, for example, schedule future event, get configurations, do actions, pull data objects, add metrics and much more. It&#x27;s easy to discover what the interfaces do through the IDE&#x27;s code completion features.</p>

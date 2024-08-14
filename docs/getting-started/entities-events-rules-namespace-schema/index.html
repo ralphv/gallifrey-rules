@@ -10,7 +10,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="Gallifrey Rules" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.64433164.css">
-<script src="/assets/js/runtime~main.2842e07e.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.f37d4bb8.js" defer="defer"></script>
 <script src="/assets/js/main.fea2e810.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -18,8 +18,7 @@
 <p>In the previous page, we have established that we have a single entity <code>orders</code>. For orders, we have a single event called <code>new-order</code>. And
 when we get the event <code>new-order</code> of entity <code>orders</code>, we run the single rule <code>notify-customer-new-order-rule</code>.</p>
 <p>Let&#x27;s see what <a href="https://github.com/ralphv/gallifrey-rules-sample/blob/main/src/modules/plugins/rules/NotifyCustomerNewOrderRule.ts#L16" target="_blank" rel="noopener noreferrer">the rule looks like in our sample example</a>.</p>
-<p>The rule plugin has to provide at least two methods. <code>getModuleName</code> which is required by all modules and
-<code>trigger</code> which is the entry of the rule.</p>
+<p>The rule plugin has to provide at least one method. <code>trigger</code> which is the entry of the rule.</p>
 <p>In the <code>trigger</code> method, you can see a simple 3-step logic.</p>
 <ol>
 <li>Pull customer information using customerID: This is external data and so it should be done through
