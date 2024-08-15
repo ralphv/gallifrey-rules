@@ -5,4 +5,6 @@ export { default as EngineDataObjectInterface } from './EngineDataObjectInterfac
 export { default as EngineEventContextInterface } from './EngineEventContextInterface';
 export { default as EngineInterface } from './EngineEventInterface';
 export { default as EngineRuleInterface } from './EngineRuleInterface';
+export { ExtendEngineRuleInterface } from './EngineRuleInterface';
+export { ExtendEngineRuleInterfaceHelper } from './EngineRuleInterface';
 export { default as EngineFilterInterface } from './EngineFilterInterface';

@@ -10,6 +10,7 @@ import {
 import { IncomingMessagePayloadType } from '../IncomingMessagePayloadType';
 import EngineInterface from '../../../../src/engine-interfaces/EngineInterface';
 import EngineCriticalError from '../../../../src/errors/EngineCriticalError';
+import './MessageAction';
 
 @GallifreyPlugin(PluginType.Rule)
 export default class ProcessMessageRule implements RuleInterface<IncomingMessagePayloadType> {
@@ -35,6 +36,7 @@ export default class ProcessMessageRule implements RuleInterface<IncomingMessage
     }
 
     async trigger(engine: EngineRuleInterface<IncomingMessagePayloadType>): Promise<void> {
+        engine.doMessageAction()
         if (engine.getEventPayload().dataObjectNotFound) {
             await engine.pullDataObject('not-found', 0);
         }

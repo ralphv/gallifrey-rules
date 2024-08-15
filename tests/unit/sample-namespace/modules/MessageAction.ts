@@ -1,5 +1,23 @@
-import { ActionInterface, EngineActionInterface, GallifreyPlugin, PluginType } from '../../../../src';
-import EngineInterface from '../../../../src/engine-interfaces/EngineInterface';
+import {
+    ActionInterface,
+    EngineActionInterface,
+    EngineInterface,
+    ExtendEngineRuleInterface,
+    ExtendEngineRuleInterfaceHelper,
+    GallifreyPlugin,
+    PluginType,
+} from '../../../../src';
+
+declare module '../../../../src' {
+    interface ExtendEngineRuleInterface {
+        doMessageAction(payload: any): Promise<void>;
+    }
+}
+ExtendEngineRuleInterfaceHelper({
+    doMessageAction: (payload: any) => {
+        return (this as ExtendEngineRuleInterface).doAction(payload);
+    }
+});
 
 @GallifreyPlugin(PluginType.Action)
 export default class MessageAction implements ActionInterface<any, any> {
