@@ -2,6 +2,7 @@ import JournalLoggerInterface from './interfaces/Providers/JournalLoggerInterfac
 import { DontThrowJustLog } from './lib/Decorators';
 import { GallifreyEventTypeInternal } from './lib/GallifreyEventTypeInternal';
 import { WithModuleNameType } from './base-interfaces/ModuleInterface';
+import { CompleteScheduledEventRequest, TriggeredByEvent } from './interfaces/Providers/ScheduledEventsInterface';
 
 export default class SafeJournalLoggerWrapper implements JournalLoggerInterface {
     constructor(private readonly journalLogger: WithModuleNameType<JournalLoggerInterface>) {}
@@ -84,5 +85,15 @@ export default class SafeJournalLoggerWrapper implements JournalLoggerInterface 
     @DontThrowJustLog
     startQueueAsyncAction(name: string, payload: any): void {
         return this.journalLogger.startQueueAsyncAction(name, payload);
+    }
+
+    @DontThrowJustLog
+    insertScheduledEvent(
+        event: CompleteScheduledEventRequest,
+        triggeredBy: TriggeredByEvent,
+        scheduleAt: Date,
+        scheduledCount: number,
+    ): void {
+        return this.journalLogger.insertScheduledEvent(event, triggeredBy, scheduleAt, scheduledCount);
     }
 }

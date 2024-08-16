@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import ModuleInterface from '../../base-interfaces/ModuleInterface';
 import { GallifreyEventTypeInternal } from '../../lib/GallifreyEventTypeInternal';
+import { CompleteScheduledEventRequest, TriggeredByEvent } from './ScheduledEventsInterface';
 
 /**
  * author: Ralph Varjabedian
@@ -27,6 +28,13 @@ export default interface JournalLoggerInterface extends ModuleInterface {
     endPullDataObject(name: string, response: any, duration: number, error?: Error): void;
 
     customLog(description: string, extra: any): void;
+
+    insertScheduledEvent(
+        event: CompleteScheduledEventRequest,
+        triggeredBy: TriggeredByEvent,
+        scheduleAt: Date,
+        scheduledCount: number,
+    ): void;
 }
 
 export class __JournalLoggerInterface implements JournalLoggerInterface {
@@ -41,10 +49,6 @@ export class __JournalLoggerInterface implements JournalLoggerInterface {
     endPullDataObject(name: string, response: any, duration: number, error?: Error): void {}
 
     endRunRule(name: string, duration: number, error?: Error): void {}
-
-    getModuleName(): string {
-        return '';
-    }
 
     startDoAction(name: string, payload: any): void {}
 
@@ -63,4 +67,11 @@ export class __JournalLoggerInterface implements JournalLoggerInterface {
     endQueueAsyncAction(name: string, duration: number, error?: Error): void {}
 
     startQueueAsyncAction(name: string, payload: any): void {}
+
+    insertScheduledEvent(
+        event: CompleteScheduledEventRequest,
+        triggeredBy: TriggeredByEvent,
+        scheduleAt: Date,
+        scheduledCount: number,
+    ): void {}
 }

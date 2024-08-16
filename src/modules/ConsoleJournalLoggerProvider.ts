@@ -4,6 +4,7 @@ import { GallifreyEventTypeInternal } from '../lib/GallifreyEventTypeInternal';
 import { logger } from '../lib/logger';
 import Config from '../lib/Config';
 import { ModuleNames } from '../ModuleNames';
+import { CompleteScheduledEventRequest, TriggeredByEvent } from '../interfaces/Providers/ScheduledEventsInterface';
 
 @GallifreyProvider(ProviderType.JournalLogger)
 export default class ConsoleJournalLoggerProvider implements JournalLoggerInterface {
@@ -144,6 +145,18 @@ export default class ConsoleJournalLoggerProvider implements JournalLoggerInterf
 
     startQueueAsyncAction(name: string, payload: any): void {
         this.log?.logs.push({ description: `starting queue async action '${name}'`, extra: this.getExtra(payload) });
+    }
+
+    insertScheduledEvent(
+        event: CompleteScheduledEventRequest,
+        triggeredBy: TriggeredByEvent,
+        scheduleAt: Date,
+        scheduledCount: number,
+    ): void {
+        this.log?.logs.push({
+            description: `insert scheduled event: entityName: '${event.entityName}' eventName: '${event.eventName}' eventID: '${event.eventId}'`,
+            extra: this.getExtra({ event, triggeredBy, scheduleAt, scheduledCount }),
+        });
     }
 }
 

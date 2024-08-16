@@ -552,6 +552,18 @@ export class GallifreyRulesEngine {
             event.source = engineEventContext.getSource();
         }
 
+        engineEventContext.getJournalLogger().insertScheduledEvent(
+            event as CompleteScheduledEventRequest,
+            {
+                entityName: engineEventContext.getEntityName(),
+                eventID: engineEventContext.getEventID(),
+                eventName: engineEventContext.getEventName(),
+                namespace: AssertNotNull(this.getNamespace()),
+                source,
+            },
+            scheduleAt,
+            scheduledCount,
+        );
         return await AssertNotNull(this.providersContext.scheduledEvents).insertScheduledEvent(
             event as CompleteScheduledEventRequest,
             {
@@ -990,6 +1002,7 @@ export class GallifreyRulesEngine {
      * Used for testing in the derived classes
      * @protected
      */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     protected isPullDataObjectHookAttached(name: string) {
         return false;
     }
