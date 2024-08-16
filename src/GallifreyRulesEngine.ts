@@ -40,7 +40,11 @@ import GallifreyRulesEngineKafkaConsumer from './consumers/GallifreyRulesEngineK
 import { GallifreyRulesEngineConsumerInterface } from './consumers/GallifreyRulesEngineConsumerInterface';
 import { IsTypeScheduledEventType, ScheduledEventType } from './engine-events/ScheduledEventType';
 import EngineScheduledEventContextInterface from './engine-interfaces/EngineScheduledEventContextInterface';
-import { ScheduledEventRequest, ScheduledEventResponse } from './interfaces/Providers/ScheduledEventsInterface';
+import {
+    ScheduledEventRequest,
+    CompleteScheduledEventRequest,
+    ScheduledEventResponse,
+} from './interfaces/Providers/ScheduledEventsInterface';
 import DistributedLocksWrapper from './DistributedLocksWrapper';
 import EngineReactToFailure from './lib/EngineReactToFailure';
 import JsonSchemaTester from './lib/JsonSchemaTester';
@@ -541,8 +545,15 @@ export class GallifreyRulesEngine {
         const scheduledEvent = engineEventContext.getScheduledEvent();
         const scheduledCount = scheduledEvent !== undefined ? scheduledEvent.meta.scheduledCount + 1 : 1;
 
+        if (!event.namespace) {
+            event.namespace = this.getNamespace();
+        }
+        if (!event.source) {
+            event.source = engineEventContext.getSource();
+        }
+
         return await AssertNotNull(this.providersContext.scheduledEvents).insertScheduledEvent(
-            event,
+            event as CompleteScheduledEventRequest,
             {
                 entityName: engineEventContext.getEntityName(),
                 eventID: engineEventContext.getEventID(),

@@ -2,12 +2,14 @@
 /**
  * author: Ralph Varjabedian
  */
-import ModuleInterface from '../../base-interfaces/ModuleInterface';
+import ModuleInterface, { IsWithModuleNameType, WithModuleNameType } from '../../base-interfaces/ModuleInterface';
 import { GallifreyEventTypeInternal } from '../../lib/GallifreyEventTypeInternal';
+import EngineCriticalError from '../../errors/EngineCriticalError';
+import { AssertNotNull } from '../../lib/Utils';
 
 export default interface ScheduledEventsInterface extends ModuleInterface {
     insertScheduledEvent(
-        event: ScheduledEventRequest,
+        event: CompleteScheduledEventRequest,
         triggeredBy: TriggeredByEvent,
         scheduleAt: Date,
         scheduledCount: number,
@@ -15,9 +17,15 @@ export default interface ScheduledEventsInterface extends ModuleInterface {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface ScheduledEventRequest extends Omit<GallifreyEventTypeInternal<any>, 'eventLag'> {
-    //triggeredBy: EngineEventContextInterface; added by engine
-    //triggeredByPayload?: any; // not sure if we want to have it, the end user can include whatever is needed so decisions must not be made on old data
+export interface ScheduledEventRequest
+    extends Omit<GallifreyEventTypeInternal<any>, 'eventLag' | 'namespace' | 'source'> {
+    namespace?: string;
+    source?: string;
+}
+
+export interface CompleteScheduledEventRequest extends ScheduledEventRequest {
+    namespace: string;
+    source: string;
 }
 
 export interface ScheduledEventResponse {

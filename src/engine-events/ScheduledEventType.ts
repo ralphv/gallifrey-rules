@@ -1,4 +1,4 @@
-import { ScheduledEventRequest } from '../interfaces/Providers/ScheduledEventsInterface';
+import { CompleteScheduledEventRequest } from '../interfaces/Providers/ScheduledEventsInterface';
 import { IsObject } from '../BasicTypeGuards';
 import { DBConnectorScheduledEventType } from './DBConnectorScheduledEventType';
 
@@ -6,7 +6,7 @@ import { DBConnectorScheduledEventType } from './DBConnectorScheduledEventType';
  * This is the payload that we use to represent internally
  */
 export type ScheduledEventType = {
-    event: ScheduledEventRequest;
+    event: CompleteScheduledEventRequest;
     meta: {
         /**
          * the date when the scheduled event was requested to be inserted
