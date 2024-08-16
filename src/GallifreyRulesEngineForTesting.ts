@@ -1,5 +1,5 @@
 import { GallifreyRulesEngine } from './GallifreyRulesEngine';
-import { AssertNotNull } from './lib/Utils';
+import { AssertNotNull, TypeAssertNotNull } from './lib/Utils';
 import { GallifreyEventType } from './GallifreyEventType';
 import {
     BaseActionPayload,
@@ -16,6 +16,7 @@ import {
 export class GallifreyRulesEngineForTesting extends GallifreyRulesEngine {
     private disabledActions: { [key: string]: boolean } = {};
     private pullDataObjectHook: ((dataObjectName: string, request: any) => Promise<any>) | undefined;
+    private dataObjectResponses: { [name: string]: { response: any }[] } = {};
 
     public disableAction(actionName: string) {
         this.disabledActions[actionName] = true;
@@ -29,11 +30,27 @@ export class GallifreyRulesEngineForTesting extends GallifreyRulesEngine {
         return actionName in this.disabledActions;
     }
 
-    protected isPullDataObjectHookAttached() {
-        return this.pullDataObjectHook !== undefined;
+    protected isPullDataObjectHookAttached(name: string) {
+        return (
+            this.pullDataObjectHook !== undefined ||
+            (name in this.dataObjectResponses && this.dataObjectResponses[name].length > 0)
+        );
+    }
+
+    public addDataObjectResponse(name: string, response: any) {
+        if (!this.dataObjectResponses[name]) {
+            this.dataObjectResponses[name] = [];
+        }
+        this.dataObjectResponses[name].push({
+            response,
+        });
     }
 
     protected async callPullDataObject(dataObjectName: string, request: any) {
+        if (dataObjectName in this.dataObjectResponses && this.dataObjectResponses[dataObjectName].length > 0) {
+            const { response } = TypeAssertNotNull(this.dataObjectResponses[dataObjectName].shift());
+            return response;
+        }
         return await AssertNotNull(this.pullDataObjectHook)(dataObjectName, request);
     }
 

@@ -646,7 +646,7 @@ export class GallifreyRulesEngine {
     ) {
         logger.info(`pullDataObject: ${dataObjectName}`);
 
-        if (this.isPullDataObjectHookAttached()) {
+        if (this.isPullDataObjectHookAttached(dataObjectName)) {
             return (await this.callPullDataObject(dataObjectName, request)) as DataObjectResponseType;
         }
 
@@ -990,7 +990,7 @@ export class GallifreyRulesEngine {
      * Used for testing in the derived classes
      * @protected
      */
-    protected isPullDataObjectHookAttached() {
+    protected isPullDataObjectHookAttached(name: string) {
         return false;
     }
 
