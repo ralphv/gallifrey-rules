@@ -7,7 +7,7 @@ import { GallifreyEventTypeInternal } from '../../lib/GallifreyEventTypeInternal
 
 export default interface ScheduledEventsInterface extends ModuleInterface {
     insertScheduledEvent(
-        event: ScheduledEventRequest,
+        event: CompleteScheduledEventRequest,
         triggeredBy: TriggeredByEvent,
         scheduleAt: Date,
         scheduledCount: number,
@@ -15,9 +15,15 @@ export default interface ScheduledEventsInterface extends ModuleInterface {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface ScheduledEventRequest extends Omit<GallifreyEventTypeInternal<any>, 'eventLag'> {
-    //triggeredBy: EngineEventContextInterface; added by engine
-    //triggeredByPayload?: any; // not sure if we want to have it, the end user can include whatever is needed so decisions must not be made on old data
+export interface ScheduledEventRequest
+    extends Omit<GallifreyEventTypeInternal<any>, 'eventLag' | 'namespace' | 'source'> {
+    namespace?: string;
+    source?: string;
+}
+
+export interface CompleteScheduledEventRequest extends ScheduledEventRequest {
+    namespace: string;
+    source: string;
 }
 
 export interface ScheduledEventResponse {
@@ -30,7 +36,7 @@ export class __ScheduledEventsInterface implements ScheduledEventsInterface {
     }
 
     insertScheduledEvent(
-        event: ScheduledEventRequest,
+        event: CompleteScheduledEventRequest,
         triggeredBy: TriggeredByEvent,
         scheduleAt: Date,
         scheduledCount: number,

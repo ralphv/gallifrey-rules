@@ -1,6 +1,6 @@
 import { ScheduledEventsInterface } from '../interfaces/Providers';
 import {
-    ScheduledEventRequest,
+    CompleteScheduledEventRequest,
     ScheduledEventResponse,
     TriggeredByEvent,
 } from '../interfaces/Providers/ScheduledEventsInterface';
@@ -16,7 +16,7 @@ export default class PostgresScheduledEventsProvider implements ScheduledEventsI
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async insertScheduledEvent(
-        event: ScheduledEventRequest,
+        event: CompleteScheduledEventRequest,
         triggeredBy: TriggeredByEvent,
         scheduleAt: Date,
         scheduledCount: number,
