@@ -2,10 +2,8 @@
 /**
  * author: Ralph Varjabedian
  */
-import ModuleInterface, { IsWithModuleNameType, WithModuleNameType } from '../../base-interfaces/ModuleInterface';
+import ModuleInterface from '../../base-interfaces/ModuleInterface';
 import { GallifreyEventTypeInternal } from '../../lib/GallifreyEventTypeInternal';
-import EngineCriticalError from '../../errors/EngineCriticalError';
-import { AssertNotNull } from '../../lib/Utils';
 
 export default interface ScheduledEventsInterface extends ModuleInterface {
     insertScheduledEvent(
@@ -38,7 +36,7 @@ export class __ScheduledEventsInterface implements ScheduledEventsInterface {
     }
 
     insertScheduledEvent(
-        event: ScheduledEventRequest,
+        event: CompleteScheduledEventRequest,
         triggeredBy: TriggeredByEvent,
         scheduleAt: Date,
         scheduledCount: number,
