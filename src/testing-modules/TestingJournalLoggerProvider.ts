@@ -48,8 +48,8 @@ export default class TestingJournalLoggerProvider implements JournalLoggerInterf
         return this.records.length;
     }
 
-    public getRecordsOf(method: TestingJournalLoggerProviderMethods) {
-        return this.records.filter(({ method: a }) => a === method);
+    public getRecordsOf(method: TestingJournalLoggerProviderMethods | null) {
+        return this.records.filter(({ method: a }) => a === method || method === null);
     }
 
     public getEventsCount() {
@@ -64,12 +64,12 @@ export default class TestingJournalLoggerProvider implements JournalLoggerInterf
         return this.getRecordsOf('endDoAction').length;
     }
 
-    public getFirstError(method: TestingJournalLoggerProviderMethods) {
-        return this.getRecordsOf(method).filter((a) => a.error !== undefined)?.[0]?.error;
+    public hasError(error: string, method: TestingJournalLoggerProviderMethods | null = null) {
+        return this.getRecordsOf(method).filter((a) => a.error !== undefined && String(a.error) === error).length > 0;
     }
 
-    public getFirstCustomLog() {
-        return this.getRecordsOf('customLog')?.[0]?.description;
+    public hasCustomLog(description: string) {
+        return this.getRecordsOf('customLog').filter((a) => a.description === description).length > 0;
     }
 
     public getErrorsCount() {
