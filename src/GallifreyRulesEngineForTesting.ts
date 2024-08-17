@@ -7,6 +7,8 @@ import {
     BaseDataObjectRequest,
     BaseDataObjectResponse,
 } from './base-interfaces/BaseTypes';
+import { EngineEventContext } from './lib/EngineEventContext';
+import JournalLoggerInterface from './interfaces/Providers/JournalLoggerInterface';
 
 /**
  * Allows for easier testing
@@ -17,6 +19,28 @@ export class GallifreyRulesEngineForTesting extends GallifreyRulesEngine {
     private disabledActions: { [key: string]: boolean } = {};
     private pullDataObjectHook: ((dataObjectName: string, request: any) => Promise<any>) | undefined;
     private dataObjectResponses: { [name: string]: { response: any }[] } = {};
+    private lastEngineCreateContext: EngineEventContext | undefined;
+
+    protected async createEngineEventContext(
+        entityName: string,
+        eventName: string,
+        eventId: string,
+        source: string,
+    ): Promise<EngineEventContext> {
+        this.lastEngineCreateContext = await super.createEngineEventContext(entityName, eventName, eventId, source);
+        return this.lastEngineCreateContext;
+    }
+
+    public getLastCreatedEngineEventContext() {
+        return this.lastEngineCreateContext;
+    }
+
+    public getLastCreatedJournalLogger<T extends JournalLoggerInterface>() {
+        if (!this.lastEngineCreateContext) {
+            return undefined;
+        }
+        return this.lastEngineCreateContext.getJournalLogger() as T;
+    }
 
     public disableAction(actionName: string) {
         this.disabledActions[actionName] = true;
