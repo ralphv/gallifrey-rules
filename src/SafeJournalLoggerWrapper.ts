@@ -7,6 +7,10 @@ import { CompleteScheduledEventRequest, TriggeredByEvent } from './interfaces/Pr
 export default class SafeJournalLoggerWrapper implements JournalLoggerInterface {
     constructor(private readonly journalLogger: WithModuleNameType<JournalLoggerInterface>) {}
 
+    public getInternalJournalLogger() {
+        return this.journalLogger;
+    }
+
     @DontThrowJustLog
     customLog(description: string, extra: any): void {
         this.journalLogger.customLog(description, extra);

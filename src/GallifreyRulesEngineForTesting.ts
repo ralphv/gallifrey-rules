@@ -31,15 +31,8 @@ export class GallifreyRulesEngineForTesting extends GallifreyRulesEngine {
         return this.lastEngineCreateContext;
     }
 
-    public getLastCreatedEngineEventContext() {
-        return this.lastEngineCreateContext;
-    }
-
     public getLastCreatedJournalLogger<T extends JournalLoggerInterface>() {
-        if (!this.lastEngineCreateContext) {
-            return undefined;
-        }
-        return this.lastEngineCreateContext.getJournalLogger() as T;
+        return AssertNotNull(this.lastEngineCreateContext).getJournalLogger().getInternalJournalLogger() as T;
     }
 
     public disableAction(actionName: string) {
