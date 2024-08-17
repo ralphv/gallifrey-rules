@@ -21,23 +21,48 @@ export type TestingJournalLoggerProviderMethods =
     | 'startRunRule'
     | 'insertScheduledEvent';
 
+export type TestingJournalLoggerProviderRecordType = {
+    method: TestingJournalLoggerProviderMethods;
+    description?: string;
+    name?: string;
+    extra?: any;
+    request?: any;
+    response?: any;
+    duration?: number;
+    error?: Error;
+    payload?: any;
+    event?: any;
+    triggeredBy?: any;
+    scheduleAt?: Date;
+    scheduledCount?: number;
+};
+
+export interface TestingJournalLoggerProviderTestingMethods {
+    getRecords(): TestingJournalLoggerProviderRecordType[];
+    getRecordsCount(): number;
+    getRecordsOf(method: TestingJournalLoggerProviderMethods | undefined): TestingJournalLoggerProviderRecordType[];
+    getEventsCount(): number;
+    getRulesCount(): number;
+    getActionsCount(): number;
+    hasError(error: string, method?: TestingJournalLoggerProviderMethods | undefined): boolean;
+    hasCustomLog(description: string): boolean;
+    hasScheduledEvent(entityName: string, eventName: string): boolean;
+    getErrorsCount(): number;
+    isActionRun(name: string): boolean;
+    isActionFailed(name: string): boolean;
+    isRuleRun(name: string): boolean;
+    isRuleFailed(name: string): boolean;
+    isEventRun(name: string): boolean;
+    isEventFailed(name: string): boolean;
+    isDataObjectPulled(name: string): boolean;
+    isDataObjectFailed(name: string): boolean;
+}
+
 @GallifreyProvider(ProviderType.JournalLogger, true)
-export default class TestingJournalLoggerProvider implements JournalLoggerInterface {
-    private records: {
-        method: TestingJournalLoggerProviderMethods;
-        description?: string;
-        name?: string;
-        extra?: any;
-        request?: any;
-        response?: any;
-        duration?: number;
-        error?: Error;
-        payload?: any;
-        event?: any;
-        triggeredBy?: any;
-        scheduleAt?: Date;
-        scheduledCount?: number;
-    }[] = [];
+export default class TestingJournalLoggerProvider
+    implements JournalLoggerInterface, TestingJournalLoggerProviderTestingMethods
+{
+    private records: TestingJournalLoggerProviderRecordType[] = [];
 
     // Testing Helper Methods Start
     public getRecords() {
@@ -48,8 +73,8 @@ export default class TestingJournalLoggerProvider implements JournalLoggerInterf
         return this.records.length;
     }
 
-    public getRecordsOf(method: TestingJournalLoggerProviderMethods | null) {
-        return this.records.filter(({ method: a }) => a === method || method === null);
+    public getRecordsOf(method: TestingJournalLoggerProviderMethods | undefined) {
+        return this.records.filter(({ method: a }) => method === undefined || a === method);
     }
 
     public getEventsCount() {
@@ -64,7 +89,7 @@ export default class TestingJournalLoggerProvider implements JournalLoggerInterf
         return this.getRecordsOf('endDoAction').length;
     }
 
-    public hasError(error: string, method: TestingJournalLoggerProviderMethods | null = null) {
+    public hasError(error: string, method: TestingJournalLoggerProviderMethods | undefined = undefined) {
         return this.getRecordsOf(method).filter((a) => a.error !== undefined && String(a.error) === error).length > 0;
     }
 
@@ -184,5 +209,14 @@ export default class TestingJournalLoggerProvider implements JournalLoggerInterf
             scheduleAt,
             scheduledCount,
         });
+    }
+
+    hasScheduledEvent(entityName: string, eventName: string): boolean {
+        return (
+            this.getRecordsOf('insertScheduledEvent').filter(
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                (a) => a.event?.entityName === entityName && a.event?.eventName === eventName,
+            ).length > 0
+        );
     }
 }

@@ -8,7 +8,6 @@ import {
     BaseDataObjectResponse,
 } from './base-interfaces/BaseTypes';
 import { EngineEventContext } from './lib/EngineEventContext';
-import JournalLoggerInterface from './interfaces/Providers/JournalLoggerInterface';
 
 /**
  * Allows for easier testing
@@ -31,7 +30,7 @@ export class GallifreyRulesEngineForTesting extends GallifreyRulesEngine {
         return this.lastEngineCreateContext;
     }
 
-    public getLastCreatedJournalLogger<T extends JournalLoggerInterface>() {
+    public getLastCreatedJournalLogger<T>() {
         return AssertNotNull(this.lastEngineCreateContext).getJournalLogger().getInternalJournalLogger() as T;
     }
 
