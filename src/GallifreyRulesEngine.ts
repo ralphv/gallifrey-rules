@@ -408,7 +408,7 @@ export class GallifreyRulesEngine {
         }
         if (e instanceof CriticalError) {
             logger.error(`A critical error has occurred while handling event: ${String(e)}`);
-            if (!engineEventContext.getEventLevelConfig().dontThrowOnCriticalError()) {
+            if (!engineEventContext.getEventLevelConfig().throwOnCriticalError()) {
                 logger.warn(`throw on critical error exception is off, continuing`);
                 return { bubble: false };
             }

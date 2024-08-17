@@ -51,6 +51,10 @@ export default class ModulesLoader {
             // use internal path
             directory = path.resolve(__dirname, '..', 'modules');
         }
+        if (directory === '$testing') {
+            // use internal path
+            directory = path.resolve(__dirname, '..', 'testing-modules');
+        }
         const files = await this.getListOfFiles(
             directory,
             this.config.getExtensionsOfModules(),
