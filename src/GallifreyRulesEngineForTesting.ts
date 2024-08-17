@@ -54,7 +54,10 @@ export class GallifreyRulesEngineForTesting extends GallifreyRulesEngine {
         );
     }
 
-    public addDataObjectResponse(name: string, response: any) {
+    public addDataObjectResponse<DataObjectResponseType extends BaseDataObjectResponse>(
+        name: string,
+        response: DataObjectResponseType,
+    ) {
         if (!this.dataObjectResponses[name]) {
             this.dataObjectResponses[name] = [];
         }
