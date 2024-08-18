@@ -1,5 +1,5 @@
 import TestingDummyScheduledEventsProvider from './testing-modules/TestingDummyScheduledEventsProvider';
-import { TestingJournalLoggerProvider } from './index';
+import TestingJournalLoggerProvider from './testing-modules/TestingJournalLoggerProvider';
 
 export const ModuleNames = {
     ConsoleJournalLogger: `console-journal-logger`,
