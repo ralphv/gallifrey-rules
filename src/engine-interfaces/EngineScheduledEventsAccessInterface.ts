@@ -6,6 +6,7 @@ import EngineScheduledEventContextInterface from './EngineScheduledEventContextI
  */
 export default interface EngineScheduledEventsAccessInterface {
     insertScheduledEvent(event: ScheduledEventRequest, scheduleAt: Date): Promise<ScheduledEventResponse>;
+    insertEvent(event: ScheduledEventRequest): Promise<ScheduledEventResponse>;
     isScheduledEvent(): boolean; // was this triggered by a scheduled event?
     getScheduledEventContext(): EngineScheduledEventContextInterface | undefined;
 }

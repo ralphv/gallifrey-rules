@@ -80,4 +80,8 @@ export default class EngineRule extends EngineBase implements EngineRuleInterfac
     isScheduledEvent(): boolean {
         return this.isScheduledEventDelegate();
     }
+
+    insertEvent(event: ScheduledEventRequest): Promise<ScheduledEventResponse> {
+        return this.insertScheduledEventDelegate(event, undefined);
+    }
 }

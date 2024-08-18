@@ -539,7 +539,7 @@ export class GallifreyRulesEngine {
     private async insertScheduledEvent(
         engineEventContext: EngineEventContext,
         event: ScheduledEventRequest,
-        scheduleAt: Date,
+        scheduleAt: Date | undefined,
         source: string,
     ): Promise<ScheduledEventResponse> {
         const scheduledEvent = engineEventContext.getScheduledEvent();

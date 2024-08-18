@@ -32,7 +32,7 @@ export default interface JournalLoggerInterface extends ModuleInterface {
     insertScheduledEvent(
         event: CompleteScheduledEventRequest,
         triggeredBy: TriggeredByEvent,
-        scheduleAt: Date,
+        scheduleAt: Date | undefined,
         scheduledCount: number,
     ): void;
 }

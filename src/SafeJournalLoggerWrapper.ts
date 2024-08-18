@@ -95,7 +95,7 @@ export default class SafeJournalLoggerWrapper implements JournalLoggerInterface 
     insertScheduledEvent(
         event: CompleteScheduledEventRequest,
         triggeredBy: TriggeredByEvent,
-        scheduleAt: Date,
+        scheduleAt: Date | undefined,
         scheduledCount: number,
     ): void {
         return this.journalLogger.insertScheduledEvent(event, triggeredBy, scheduleAt, scheduledCount);
