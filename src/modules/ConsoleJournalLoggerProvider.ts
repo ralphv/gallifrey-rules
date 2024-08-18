@@ -166,7 +166,7 @@ export default class ConsoleJournalLoggerProvider implements JournalLoggerInterf
     }
 }
 
-interface ConsoleJournalLoggerProviderType {
+export interface ConsoleJournalLoggerProviderType {
     entityName: string;
     eventName: string;
     eventId: string;
