@@ -47,6 +47,8 @@ export function getScheduledEventTypeFromDBType(value: DBConnectorScheduledEvent
             source,
         },
         meta: {
+            id: value.payload.id,
+            scheduled_event_id: value.payload.scheduled_event_id,
             createdAt: new Date(value.payload.createdat),
             pulledAt: new Date(), //todo, add to db new column
             scheduledAt: new Date(value.payload.scheduledat),
