@@ -56,6 +56,7 @@ export default class ConsoleJournalLoggerProvider implements JournalLoggerInterf
             this.log?.logs.push({ description: `ending event, duration: ${duration}` });
         }
         logger.info(`JournalLog: ${JSON.stringify(this.log, null, 2)}`);
+        this.onEndEvent(this.log);
         this.log = undefined;
     }
 
@@ -157,6 +158,11 @@ export default class ConsoleJournalLoggerProvider implements JournalLoggerInterf
             description: `insert scheduled event: entityName: '${event.entityName}' eventName: '${event.eventName}' eventID: '${event.eventId}'`,
             extra: this.getExtra({ event, triggeredBy, scheduleAt, scheduledCount }),
         });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    protected onEndEvent(log: ConsoleJournalLoggerProviderType | undefined) {
+        // for deriving classes
     }
 }
 
