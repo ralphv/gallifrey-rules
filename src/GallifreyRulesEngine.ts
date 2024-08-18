@@ -408,7 +408,7 @@ export class GallifreyRulesEngine {
         }
         if (e instanceof CriticalError) {
             logger.error(`A critical error has occurred while handling event: ${String(e)}`);
-            if (!engineEventContext.getEventLevelConfig().dontThrowOnCriticalError()) {
+            if (!engineEventContext.getEventLevelConfig().throwOnCriticalError()) {
                 logger.warn(`throw on critical error exception is off, continuing`);
                 return { bubble: false };
             }
@@ -539,7 +539,7 @@ export class GallifreyRulesEngine {
     private async insertScheduledEvent(
         engineEventContext: EngineEventContext,
         event: ScheduledEventRequest,
-        scheduleAt: Date,
+        scheduleAt: Date | undefined,
         source: string,
     ): Promise<ScheduledEventResponse> {
         const scheduledEvent = engineEventContext.getScheduledEvent();
@@ -552,6 +552,18 @@ export class GallifreyRulesEngine {
             event.source = engineEventContext.getSource();
         }
 
+        engineEventContext.getJournalLogger().insertScheduledEvent(
+            event as CompleteScheduledEventRequest,
+            {
+                entityName: engineEventContext.getEntityName(),
+                eventID: engineEventContext.getEventID(),
+                eventName: engineEventContext.getEventName(),
+                namespace: AssertNotNull(this.getNamespace()),
+                source,
+            },
+            scheduleAt,
+            scheduledCount,
+        );
         return await AssertNotNull(this.providersContext.scheduledEvents).insertScheduledEvent(
             event as CompleteScheduledEventRequest,
             {
@@ -646,7 +658,7 @@ export class GallifreyRulesEngine {
     ) {
         logger.info(`pullDataObject: ${dataObjectName}`);
 
-        if (this.isPullDataObjectHookAttached()) {
+        if (this.isPullDataObjectHookAttached(dataObjectName)) {
             return (await this.callPullDataObject(dataObjectName, request)) as DataObjectResponseType;
         }
 
@@ -990,7 +1002,8 @@ export class GallifreyRulesEngine {
      * Used for testing in the derived classes
      * @protected
      */
-    protected isPullDataObjectHookAttached() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    protected isPullDataObjectHookAttached(name: string) {
         return false;
     }
 

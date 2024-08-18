@@ -2,6 +2,10 @@ import EngineCriticalError from '../errors/EngineCriticalError';
 import { Kafka } from 'kafkajs';
 import axios from 'axios';
 
+export function Expect<T>(input: T): T {
+    return input;
+}
+
 export function AssertNotNull<T>(input: T | undefined | null): T {
     if (input === null || input === undefined) {
         console.trace(`AssertNotNull failed`);

@@ -42,4 +42,8 @@ export default class EngineReactToFailure extends EngineBase implements EngineRe
     isScheduledEvent(): boolean {
         return this.isScheduledEventDelegate();
     }
+
+    insertEvent(event: ScheduledEventRequest): Promise<ScheduledEventResponse> {
+        return this.insertScheduledEventDelegate(event, undefined);
+    }
 }

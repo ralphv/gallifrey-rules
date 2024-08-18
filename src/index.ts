@@ -14,3 +14,7 @@ export { default as PauseConsumer } from './errors/PauseConsumer';
 export { KafkaConsumerConfig, IsTypeKafkaConsumerConfig } from './KafkaConsumer';
 export * from './ModuleNames';
 export { TimeAndWarn, DontThrowJustLog } from './lib/Decorators';
+export {
+    default as TestingJournalLoggerProvider,
+    TestingJournalLoggerProviderMethods,
+} from './testing-modules/TestingJournalLoggerProvider';

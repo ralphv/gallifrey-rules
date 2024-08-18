@@ -9,7 +9,7 @@ export default interface ScheduledEventsInterface extends ModuleInterface {
     insertScheduledEvent(
         event: CompleteScheduledEventRequest,
         triggeredBy: TriggeredByEvent,
-        scheduleAt: Date,
+        scheduleAt: Date | undefined,
         scheduledCount: number,
     ): Promise<ScheduledEventResponse>;
 }

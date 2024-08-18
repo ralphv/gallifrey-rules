@@ -3,7 +3,7 @@ import JournalLoggerInterface from '../interfaces/Providers/JournalLoggerInterfa
 import { GallifreyEventTypeInternal } from '../lib/GallifreyEventTypeInternal';
 import { logger } from '../lib/logger';
 import Config from '../lib/Config';
-import { ModuleNames } from '../ModuleNames';
+import { CompleteScheduledEventRequest, TriggeredByEvent } from '../interfaces/Providers/ScheduledEventsInterface';
 
 @GallifreyProvider(ProviderType.JournalLogger)
 export default class ConsoleJournalLoggerProvider implements JournalLoggerInterface {
@@ -55,6 +55,7 @@ export default class ConsoleJournalLoggerProvider implements JournalLoggerInterf
             this.log?.logs.push({ description: `ending event, duration: ${duration}` });
         }
         logger.info(`JournalLog: ${JSON.stringify(this.log, null, 2)}`);
+        this.onEndEvent(this.log);
         this.log = undefined;
     }
 
@@ -81,10 +82,6 @@ export default class ConsoleJournalLoggerProvider implements JournalLoggerInterf
         } else {
             this.log?.logs.push({ description: `ending rule '${name}', duration: ${duration}` });
         }
-    }
-
-    getModuleName(): string {
-        return ModuleNames.ConsoleJournalLogger;
     }
 
     startDoAction(name: string, payload: any): void {
@@ -145,9 +142,26 @@ export default class ConsoleJournalLoggerProvider implements JournalLoggerInterf
     startQueueAsyncAction(name: string, payload: any): void {
         this.log?.logs.push({ description: `starting queue async action '${name}'`, extra: this.getExtra(payload) });
     }
+
+    insertScheduledEvent(
+        event: CompleteScheduledEventRequest,
+        triggeredBy: TriggeredByEvent,
+        scheduleAt: Date,
+        scheduledCount: number,
+    ): void {
+        this.log?.logs.push({
+            description: `insert scheduled event: entityName: '${event.entityName}' eventName: '${event.eventName}' eventID: '${event.eventId}'`,
+            extra: this.getExtra({ event, triggeredBy, scheduleAt, scheduledCount }),
+        });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    protected onEndEvent(log: ConsoleJournalLoggerProviderType | undefined) {
+        // for deriving classes
+    }
 }
 
-interface ConsoleJournalLoggerProviderType {
+export interface ConsoleJournalLoggerProviderType {
     entityName: string;
     eventName: string;
     eventId: string;

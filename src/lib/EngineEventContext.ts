@@ -1,14 +1,14 @@
 import EngineEventContextInterface from '../engine-interfaces/EngineEventContextInterface';
-import JournalLoggerInterface from '../interfaces/Providers/JournalLoggerInterface';
 import { logger } from './logger';
 import { ScheduledEventType } from '../engine-events/ScheduledEventType';
 import { AssertNotNull } from './Utils';
 import Config from './Config';
+import SafeJournalLoggerWrapper from '../SafeJournalLoggerWrapper';
 
 export class EngineEventContext implements EngineEventContextInterface {
     private eventStore: { [key: string]: any } = {};
     private scheduledEvent: ScheduledEventType | undefined;
-    private journalLogger: JournalLoggerInterface | undefined;
+    private journalLogger: SafeJournalLoggerWrapper | undefined;
 
     constructor(
         private readonly namespace: string,
@@ -35,11 +35,11 @@ export class EngineEventContext implements EngineEventContextInterface {
         return this.namespace;
     }
 
-    public getJournalLogger(): JournalLoggerInterface {
+    public getJournalLogger(): SafeJournalLoggerWrapper {
         return AssertNotNull(this.journalLogger);
     }
 
-    public setJournalLogger(journalLogger: JournalLoggerInterface) {
+    public setJournalLogger(journalLogger: SafeJournalLoggerWrapper) {
         this.journalLogger = journalLogger;
     }
 

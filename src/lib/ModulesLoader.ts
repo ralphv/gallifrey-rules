@@ -15,6 +15,8 @@ import ModuleInterface, { WithModuleName, WithModuleNameType } from '../base-int
 import EngineCriticalError from '../errors/EngineCriticalError';
 import { getInterfaceMethods, getMethodNames, InterfaceNames } from './InterfaceMethodNames';
 
+const AutomaticAddedGetModuleNameSymbol = Symbol();
+
 export class ModuleData {
     constructor(
         public readonly className: string,
@@ -50,6 +52,10 @@ export default class ModulesLoader {
         if (directory === '$') {
             // use internal path
             directory = path.resolve(__dirname, '..', 'modules');
+        }
+        if (directory === '$testing') {
+            // use internal path
+            directory = path.resolve(__dirname, '..', 'testing-modules');
         }
         const files = await this.getListOfFiles(
             directory,
@@ -105,13 +111,15 @@ export default class ModulesLoader {
             return;
         }
         const _instance = new ModuleClass() as ModuleInterface;
-        if (!_instance.getModuleName) {
+        if (!_instance.getModuleName || AutomaticAddedGetModuleNameSymbol in ModuleClass.prototype) {
             // dynamically add the moduleName from the className
             const className = pluginClassName || providerClassName;
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             ModuleClass.prototype.getModuleName = () => {
                 return className;
             };
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            ModuleClass.prototype[AutomaticAddedGetModuleNameSymbol] = true;
         }
         const instance = WithModuleName(_instance);
         const name = instance.getModuleName();

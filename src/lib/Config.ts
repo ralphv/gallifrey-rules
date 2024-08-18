@@ -50,7 +50,7 @@ export default class Config extends BaseConfig {
         return this.getBoolEnvVariable('GR_THROW_ON_EVENT_UNHANDLED_EXCEPTION', true, false);
     }
 
-    dontThrowOnCriticalError() {
+    throwOnCriticalError() {
         return this.getBoolEnvVariable('GR_THROW_ON_CRITICAL_ERROR', true, false);
     }
 

@@ -83,7 +83,7 @@ export default class Database {
 
             const res = await client.query(insertQuery, [
                 payload.createdAt,
-                payload.scheduledAt,
+                payload.scheduledAt ?? new Date(),
                 payload.triggeredBy.namespace,
                 payload.triggeredBy.entityName,
                 payload.triggeredBy.eventName,
@@ -107,7 +107,7 @@ export default class Database {
 
 export interface ScheduledEventRecord {
     createdAt: Date;
-    scheduledAt: Date;
+    scheduledAt: Date | undefined;
     triggeredBy: {
         namespace: string;
         entityName: string;

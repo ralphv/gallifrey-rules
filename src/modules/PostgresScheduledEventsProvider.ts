@@ -18,7 +18,7 @@ export default class PostgresScheduledEventsProvider implements ScheduledEventsI
     async insertScheduledEvent(
         event: CompleteScheduledEventRequest,
         triggeredBy: TriggeredByEvent,
-        scheduleAt: Date,
+        scheduleAt: Date | undefined,
         scheduledCount: number,
     ): Promise<ScheduledEventResponse> {
         const database = new Database();
