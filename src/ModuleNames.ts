@@ -2,7 +2,6 @@ import TestingDummyScheduledEventsProvider from './testing-modules/TestingDummyS
 import TestingJournalLoggerProvider from './testing-modules/TestingJournalLoggerProvider';
 
 export const ModuleNames = {
-    ConsoleJournalLogger: `console-journal-logger`,
     DummyDistributedLocks: `dummy-distributed-locks`,
     DummyReactToFailure: `dummy-react-to-failure`,
     DummyScheduledEvents: `dummy-scheduled-events`,

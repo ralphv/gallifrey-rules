@@ -3,7 +3,6 @@ import JournalLoggerInterface from '../interfaces/Providers/JournalLoggerInterfa
 import { GallifreyEventTypeInternal } from '../lib/GallifreyEventTypeInternal';
 import { logger } from '../lib/logger';
 import Config from '../lib/Config';
-import { ModuleNames } from '../ModuleNames';
 import { CompleteScheduledEventRequest, TriggeredByEvent } from '../interfaces/Providers/ScheduledEventsInterface';
 
 @GallifreyProvider(ProviderType.JournalLogger)
@@ -83,10 +82,6 @@ export default class ConsoleJournalLoggerProvider implements JournalLoggerInterf
         } else {
             this.log?.logs.push({ description: `ending rule '${name}', duration: ${duration}` });
         }
-    }
-
-    getModuleName(): string {
-        return ModuleNames.ConsoleJournalLogger;
     }
 
     startDoAction(name: string, payload: any): void {
