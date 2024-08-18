@@ -6,6 +6,7 @@
 
 #### planned for future releases:
 
+* add to Rules another decorator that limits the entityName and/or eventName that the rule can run on
 * add actions such as SlackAction
 * support avro topics
 * provide an easy way to test an action, dataObject, filter?
