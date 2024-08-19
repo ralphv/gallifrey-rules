@@ -1,8 +1,8 @@
 # design requirements
 
 #### planned for 0.2.x release:
-* publish docusaurus and polish it
 * Add comments to all EngineInterfaces methods
+* Add a way for testing to specify config
 
 #### planned for future releases:
 
