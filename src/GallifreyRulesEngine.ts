@@ -1262,6 +1262,14 @@ export class GallifreyRulesEngine {
         );
         return engineEventContext;
     }
+
+    protected getSchemaLoader() {
+        return this.schemaLoader;
+    }
+
+    protected getInstancesFactory() {
+        return this.instancesFactory;
+    }
 }
 
 function AssertInitialized(originalMethod: any, context: ClassMethodDecoratorContext) {

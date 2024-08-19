@@ -8,6 +8,7 @@ import {
     BaseDataObjectResponse,
 } from './base-interfaces/BaseTypes';
 import { EngineEventContext } from './lib/EngineEventContext';
+import EngineCriticalError from './errors/EngineCriticalError';
 
 /**
  * Allows for easier testing
@@ -141,5 +142,30 @@ export class GallifreyRulesEngineForTesting extends GallifreyRulesEngine {
             dataObjectName,
             request,
         );
+    }
+
+    public async testEventOnTopic(topic: string, topicMessage: any) {
+        const consumerFound = this.getSchemaLoader()
+            .getConsumers()
+            .find((a) => {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                const topics = a.config?.topics;
+                if (!topics) return false;
+                if (Array.isArray(topics)) {
+                    return topics.includes(topic);
+                }
+                return topics === topic;
+            });
+
+        if (!consumerFound) {
+            throw new EngineCriticalError(`Consumer could not be found for this topic: ${topic}`);
+        }
+
+        const instance = this.getInstancesFactory().getEventDispatcherProvider(
+            AssertNotNull(consumerFound.eventDispatcher),
+        );
+
+        const event = instance.getEvent(topicMessage);
+        await this.handleEvent<any>(event);
     }
 }
