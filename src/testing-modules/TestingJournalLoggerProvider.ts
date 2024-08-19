@@ -118,11 +118,19 @@ export default class TestingJournalLoggerProvider
     }
 
     public isEventRun(name: string) {
-        return this.getRecordsOf('endEvent').filter((a) => a.name === name).length !== 0;
+        return (
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            this.getRecordsOf('startEvent').filter((a) => a?.event?.eventName === name).length !== 0 &&
+            this.getRecordsOf('endEvent').length !== 0
+        );
     }
 
     public isEventFailed(name: string) {
-        return this.getRecordsOf('endEvent').filter((a) => a.name === name && a.error !== undefined).length !== 0;
+        return (
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            this.getRecordsOf('startEvent').filter((a) => a?.event?.eventName === name).length !== 0 &&
+            this.getRecordsOf('endEvent').filter((a) => a.error !== undefined).length !== 0
+        );
     }
 
     public isDataObjectPulled(name: string) {
