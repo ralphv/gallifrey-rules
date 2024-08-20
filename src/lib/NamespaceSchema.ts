@@ -52,6 +52,11 @@ export type NamespaceSchemaConsumer<ConfigType> = {
     type: string;
     config: ConfigType;
     eventDispatcher?: string;
+    /**
+     * If specified, then this boolean environment variable will be
+     * used to determine whether to start this consumer or not
+     */
+    envVariable?: string;
 };
 
 export function IsTypeNamespaceSchemaConsumer(value: any): value is NamespaceSchemaConsumer<any> {
