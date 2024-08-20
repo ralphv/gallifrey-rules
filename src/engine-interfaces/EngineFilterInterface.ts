@@ -13,6 +13,11 @@ export default interface EngineFilterInterface<EventPayloadType extends BaseEven
      */
     getEventPayload(): EventPayloadType;
 
+    /**
+     * Pulls a Data Object
+     * @param dataObjectName The data object name
+     * @param request The request
+     */
     pullDataObject<
         DataObjectRequestType extends BaseDataObjectRequest,
         DataObjectResponseType extends BaseDataObjectResponse,

@@ -22,11 +22,21 @@ export default interface EngineRuleInterface<EventPayloadType extends BaseEventP
      */
     getEventPayload(): EventPayloadType;
 
+    /**
+     * Executes an action
+     * @param actionName The action name
+     * @param payload The payload of the action
+     */
     doAction<ActionPayloadType extends BaseActionPayload, ActionResponseType extends BaseActionResponse>(
         actionName: string,
         payload: ActionPayloadType,
     ): Promise<ActionResponseType>;
 
+    /**
+     * Pulls a Data Object
+     * @param dataObjectName The data object name
+     * @param request The request
+     */
     pullDataObject<
         DataObjectRequestType extends BaseDataObjectRequest,
         DataObjectResponseType extends BaseDataObjectResponse,

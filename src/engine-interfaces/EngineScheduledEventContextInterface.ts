@@ -1,6 +1,16 @@
 export default interface EngineScheduledEventContextInterface {
+    /**
+     * Created At
+     */
     createdAt: Date;
+    /**
+     * Scheduled At
+     */
     scheduledAt: Date;
+
+    /**
+     * Triggered By Event information
+     */
     triggeredBy: {
         namespace: string;
         entityName: string;
@@ -8,5 +18,9 @@ export default interface EngineScheduledEventContextInterface {
         eventID: string;
         source: string;
     };
-    scheduledCount: number; // engine knows that the event was a scheduled one or not, and so can increase this number
+
+    /**
+     * The number of times the event was scheduled
+     */
+    scheduledCount: number;
 }

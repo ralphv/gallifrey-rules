@@ -8,6 +8,9 @@ import EngineInterface from './EngineInterface';
  * Passed to actions
  */
 export default interface EngineActionInterface<ActionPayloadType extends BaseActionPayload> extends EngineInterface {
+    /**
+     * Gets the payload passed to the Action
+     */
     getPayload(): ActionPayloadType;
 
     /**
