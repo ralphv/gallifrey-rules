@@ -1,7 +1,7 @@
 {
   "name": "gallifrey-rules",
   "shortName": "GR",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A modern robust framework for handling real-time events",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
