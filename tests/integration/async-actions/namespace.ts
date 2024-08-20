@@ -18,6 +18,7 @@ export const namespaceSchema: NamespaceSchema = {
         {
             name: 'orders',
             type: 'kafka',
+            envVariable: 'ORDER_CONSUMER',
             config: {
                 groupId: `e2e-tests-1-${Math.random().toString(36)}`,
                 topics: [`orders-topic`],

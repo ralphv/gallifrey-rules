@@ -53,6 +53,7 @@ describe('e2e.async-actions', () => {
         }
     }).timeout(300000);
     it('test async', async () => {
+        process.env.ORDER_CONSUMER = 'TRUE';
         const engine = new GallifreyRulesEngine();
         try {
             // 1. make sure topics are fresh and created

@@ -1031,9 +1031,10 @@ export class GallifreyRulesEngine {
             logger.info(`Consumer: ${consumer.name} has environment variable: ${consumer.envVariable}`);
             const value = process.env[consumer.envVariable] ?? 'FALSE';
             if (value.toLowerCase() !== 'true') {
-                logger.warn(`Consumer: ${consumer.name} is not set to be active, skipping`);
+                logger.warn(`Consumer: ${consumer.name} is not set to be active, skipping.`);
                 return undefined;
             }
+            logger.info(`Consumer: ${consumer.name} is set to be active.`);
         }
 
         const config = new Config();
