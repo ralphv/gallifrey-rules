@@ -203,7 +203,10 @@ export class GallifreyRulesEngine {
             );
         } catch (e) {
             logger.error(
-                `handleAsyncActionEvent [EXCEPTION: ${actionName}]: ${JSON.stringify({ ...asyncActionEvent, error: e })}`,
+                `handleAsyncActionEvent [EXCEPTION: ${actionName}]: ${JSON.stringify({
+                    ...asyncActionEvent,
+                    error: e,
+                })}`,
             );
             const { bubble } = this.handleException(e, engineEventContext, pause);
             if (bubble) {
@@ -971,7 +974,8 @@ export class GallifreyRulesEngine {
         }
         const consumers = this.schemaLoader.getConsumers();
         logger.log(consumers.length === 0 ? 'warn' : 'info', `Found ${consumers.length} consumers`);
-        return await Promise.all(consumers.map((consumer) => this.startConsumer(consumer)));
+        return (await Promise.all(consumers.map((consumer) => this.startConsumer(consumer))))
+            .filter(a => a !== undefined) as GallifreyRulesEngineConsumerInterface[];
     }
 
     async stopConsumers() {
@@ -1018,9 +1022,18 @@ export class GallifreyRulesEngine {
 
     private async startConsumer(
         consumer: NamespaceSchemaConsumer<any>,
-    ): Promise<GallifreyRulesEngineConsumerInterface> {
+    ): Promise<GallifreyRulesEngineConsumerInterface | undefined> {
         logger.info(`Preparing consumer: ${consumer.name} of type: ${consumer.type}`);
         AssertTypeGuard(IsTypeNamespaceSchemaConsumer, consumer);
+
+        if (consumer.envVariable) {
+            logger.info(`Consumer: ${consumer.name} has environment variable: ${consumer.envVariable}`);
+            const value = process.env[consumer.envVariable] ?? 'FALSE';
+            if (value.toLowerCase() !== 'true') {
+                logger.warn(`Consumer: ${consumer.name} is not set to be active, skipping`);
+                return undefined;
+            }
+        }
 
         const config = new Config();
         logger.info(`Starting consumer: ${consumer.name} of type: ${consumer.type}`);
@@ -1032,17 +1045,16 @@ export class GallifreyRulesEngine {
             this,
         );
         switch (consumer.type) {
-            case 'kafka':
-                {
-                    if (!consumer.eventDispatcher) {
-                        throw new EngineCriticalError(`eventDispatcher is needed for 'kafka' consumer`);
-                    }
-                    const eventDispatcher = this.instancesFactory.getEventDispatcherProvider(consumer.eventDispatcher);
-                    await kafkaConsumer.startConsumer(consumer.config as KafkaConsumerConfig, (message) => {
-                        const payload = JSON.parse(String(message.value));
-                        return eventDispatcher.getEvent(payload);
-                    });
+            case 'kafka': {
+                if (!consumer.eventDispatcher) {
+                    throw new EngineCriticalError(`eventDispatcher is needed for 'kafka' consumer`);
                 }
+                const eventDispatcher = this.instancesFactory.getEventDispatcherProvider(consumer.eventDispatcher);
+                await kafkaConsumer.startConsumer(consumer.config as KafkaConsumerConfig, (message) => {
+                    const payload = JSON.parse(String(message.value));
+                    return eventDispatcher.getEvent(payload);
+                });
+            }
                 break;
             case 'kafka:scheduled-events':
                 await kafkaConsumer.startScheduleEventConsumer(consumer.config as KafkaConsumerConfig);
@@ -1274,6 +1286,7 @@ export class GallifreyRulesEngine {
 
 function AssertInitialized(originalMethod: any, context: ClassMethodDecoratorContext) {
     const methodName = String(context.name);
+
     function replacement(this: GallifreyRulesEngine, ...args: any[]) {
         if (!this.isInitialized()) {
             throw new EngineCriticalError(
@@ -1283,5 +1296,6 @@ function AssertInitialized(originalMethod: any, context: ClassMethodDecoratorCon
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
         return originalMethod.apply(this, args);
     }
+
     return replacement;
 }
