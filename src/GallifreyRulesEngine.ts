@@ -974,8 +974,9 @@ export class GallifreyRulesEngine {
         }
         const consumers = this.schemaLoader.getConsumers();
         logger.log(consumers.length === 0 ? 'warn' : 'info', `Found ${consumers.length} consumers`);
-        return (await Promise.all(consumers.map((consumer) => this.startConsumer(consumer))))
-            .filter(a => a !== undefined) as GallifreyRulesEngineConsumerInterface[];
+        return (await Promise.all(consumers.map((consumer) => this.startConsumer(consumer)))).filter(
+            (a) => a !== undefined,
+        );
     }
 
     async stopConsumers() {
@@ -1045,16 +1046,17 @@ export class GallifreyRulesEngine {
             this,
         );
         switch (consumer.type) {
-            case 'kafka': {
-                if (!consumer.eventDispatcher) {
-                    throw new EngineCriticalError(`eventDispatcher is needed for 'kafka' consumer`);
+            case 'kafka':
+                {
+                    if (!consumer.eventDispatcher) {
+                        throw new EngineCriticalError(`eventDispatcher is needed for 'kafka' consumer`);
+                    }
+                    const eventDispatcher = this.instancesFactory.getEventDispatcherProvider(consumer.eventDispatcher);
+                    await kafkaConsumer.startConsumer(consumer.config as KafkaConsumerConfig, (message) => {
+                        const payload = JSON.parse(String(message.value));
+                        return eventDispatcher.getEvent(payload);
+                    });
                 }
-                const eventDispatcher = this.instancesFactory.getEventDispatcherProvider(consumer.eventDispatcher);
-                await kafkaConsumer.startConsumer(consumer.config as KafkaConsumerConfig, (message) => {
-                    const payload = JSON.parse(String(message.value));
-                    return eventDispatcher.getEvent(payload);
-                });
-            }
                 break;
             case 'kafka:scheduled-events':
                 await kafkaConsumer.startScheduleEventConsumer(consumer.config as KafkaConsumerConfig);
