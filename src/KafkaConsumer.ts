@@ -76,12 +76,7 @@ export class KafkaConsumer {
             // consumer run will not block
             this.consumer.on('consumer.heartbeat', () => {
                 this.lastHeartbeat = new Date();
-                console.log(`heartbeat`);
             });
-            /*this.consumer.on('consumer.disconnect', () => {
-                console.error('Consumer disconnected. Exiting process...');
-                process.exit(1); // Exit the process with a non-zero status code
-            });*/
             await this.consumer.run({
                 autoCommit: true,
                 autoCommitThreshold: config.getAutoCommitThreshold(), //todo config? or pass
@@ -134,6 +129,9 @@ export class KafkaConsumer {
         try {
             logger.debug(`consumer: ${this.name} connect`);
             await this.consumer.connect();
+            this.consumer.on('consumer.heartbeat', () => {
+                this.lastHeartbeat = new Date();
+            });
             logger.debug(`consumer: ${this.name} subscribe to topic: ${JSON.stringify(topics)}`);
             await this.consumer.subscribe({
                 topics: Array.isArray(topics) ? topics : [topics],
@@ -197,6 +195,9 @@ export class KafkaConsumer {
         try {
             logger.debug(`async action consumer: ${this.name} connect`);
             await this.consumer.connect();
+            this.consumer.on('consumer.heartbeat', () => {
+                this.lastHeartbeat = new Date();
+            });
             logger.debug(`async action consumer: ${this.name} subscribe to topic: ${JSON.stringify(topics)}`);
             await this.consumer.subscribe({
                 topics: Array.isArray(topics) ? topics : [topics],
@@ -306,6 +307,10 @@ export class KafkaConsumer {
 
     getKafkaJSConsumer() {
         return this.consumer;
+    }
+
+    getLastHeartbeat() {
+        return this.lastHeartbeat;
     }
 }
 

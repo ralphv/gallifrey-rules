@@ -13,4 +13,8 @@ export default class GallifreyRulesEngineKafkaConsumer implements GallifreyRules
     getKafkaJSConsumer(): Consumer | undefined {
         return this.kafkaConsumer.getKafkaJSConsumer();
     }
+
+    getLastHeartbeat(): Date | undefined {
+        return this.kafkaConsumer.getLastHeartbeat();
+    }
 }

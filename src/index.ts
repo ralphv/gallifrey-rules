@@ -18,3 +18,4 @@ export {
     default as TestingJournalLoggerProvider,
     TestingJournalLoggerProviderMethods,
 } from './testing-modules/TestingJournalLoggerProvider';
+export { GallifreyRulesEngineConsumerInterface } from './consumers/GallifreyRulesEngineConsumerInterface';

@@ -8,4 +8,9 @@ export interface GallifreyRulesEngineConsumerInterface {
      * Get direct access to the underlying KafkaJS object
      */
     getKafkaJSConsumer(): Consumer | undefined;
+
+    /**
+     * Get last heartbeat
+     */
+    getLastHeartbeat(): Date | undefined;
 }
