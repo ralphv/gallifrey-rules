@@ -127,4 +127,9 @@ export default class Config extends BaseConfig {
         // mandatory only when production
         return this.getBoolEnvVariable(`GR_IS_SCHEMA_FILE_MANDATORY`, this.isProduction(), false);
     }
+
+    useExitTimeout() {
+        // for production use exit timeout by default to make sure container exits when consumers have to stop
+        return this.getBoolEnvVariable(`USE_EXIT_TIMEOUT`, this.isProduction(), false);
+    }
 }

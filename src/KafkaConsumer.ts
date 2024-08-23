@@ -24,6 +24,7 @@ export class KafkaConsumer {
     private consumer: Consumer | undefined;
     private afterHandleEventDelegate: AfterHandleEventDelegate<any> | undefined;
     private emitter = new EventEmitter();
+    private lastHeartbeat: Date | undefined;
 
     constructor(
         private readonly name: string,
@@ -73,6 +74,9 @@ export class KafkaConsumer {
             } as ConsumerSubscribeTopics);
             logger.debug(`consumer: ${this.name} run`);
             // consumer run will not block
+            this.consumer.on('consumer.heartbeat', () => {
+                this.lastHeartbeat = new Date();
+            });
             await this.consumer.run({
                 autoCommit: true,
                 autoCommitThreshold: config.getAutoCommitThreshold(), //todo config? or pass
@@ -125,6 +129,9 @@ export class KafkaConsumer {
         try {
             logger.debug(`consumer: ${this.name} connect`);
             await this.consumer.connect();
+            this.consumer.on('consumer.heartbeat', () => {
+                this.lastHeartbeat = new Date();
+            });
             logger.debug(`consumer: ${this.name} subscribe to topic: ${JSON.stringify(topics)}`);
             await this.consumer.subscribe({
                 topics: Array.isArray(topics) ? topics : [topics],
@@ -188,6 +195,9 @@ export class KafkaConsumer {
         try {
             logger.debug(`async action consumer: ${this.name} connect`);
             await this.consumer.connect();
+            this.consumer.on('consumer.heartbeat', () => {
+                this.lastHeartbeat = new Date();
+            });
             logger.debug(`async action consumer: ${this.name} subscribe to topic: ${JSON.stringify(topics)}`);
             await this.consumer.subscribe({
                 topics: Array.isArray(topics) ? topics : [topics],
@@ -293,6 +303,14 @@ export class KafkaConsumer {
                 logger.error(`Unhandled Exception stopping consumer: ${String(e)}`);
             }
         }
+    }
+
+    getKafkaJSConsumer() {
+        return this.consumer;
+    }
+
+    getLastHeartbeat() {
+        return this.lastHeartbeat;
     }
 }
 
