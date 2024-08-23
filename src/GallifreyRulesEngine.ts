@@ -1070,17 +1070,19 @@ export class GallifreyRulesEngine {
         }
         this.startedConsumers.push(kafkaConsumer);
         // stopping? let's stop all consumers
-        //let exitTimeout: undefined | NodeJS.Timeout;
+        let exitTimeout: undefined | NodeJS.Timeout;
         kafkaConsumer.addOnStopOnce(() => {
             logger.warn(`Consumer: ${consumer.name} received on stop, signaling process to stop.`);
             void this.stopConsumers();
-            /*if (exitTimeout) {
-                clearTimeout(exitTimeout);
+            if (config.useExitTimeout()) {
+                if (exitTimeout) {
+                    clearTimeout(exitTimeout);
+                }
+                exitTimeout = setTimeout(() => {
+                    logger.warn(`Exiting process after consumers shutdown.`);
+                    process.exit(1);
+                }, 5000);
             }
-            exitTimeout = setTimeout(() => {
-                logger.warn(`Exiting process after consumers shutdown.`);
-                process.exit(1);
-            }, 5000);*/
         });
         return new GallifreyRulesEngineKafkaConsumer(kafkaConsumer);
     }

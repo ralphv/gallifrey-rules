@@ -24,6 +24,7 @@ export class KafkaConsumer {
     private consumer: Consumer | undefined;
     private afterHandleEventDelegate: AfterHandleEventDelegate<any> | undefined;
     private emitter = new EventEmitter();
+    private lastHeartbeat: Date | undefined;
 
     constructor(
         private readonly name: string,
@@ -73,6 +74,14 @@ export class KafkaConsumer {
             } as ConsumerSubscribeTopics);
             logger.debug(`consumer: ${this.name} run`);
             // consumer run will not block
+            this.consumer.on('consumer.heartbeat', () => {
+                this.lastHeartbeat = new Date();
+                console.log(`heartbeat`);
+            });
+            /*this.consumer.on('consumer.disconnect', () => {
+                console.error('Consumer disconnected. Exiting process...');
+                process.exit(1); // Exit the process with a non-zero status code
+            });*/
             await this.consumer.run({
                 autoCommit: true,
                 autoCommitThreshold: config.getAutoCommitThreshold(), //todo config? or pass
@@ -293,6 +302,10 @@ export class KafkaConsumer {
                 logger.error(`Unhandled Exception stopping consumer: ${String(e)}`);
             }
         }
+    }
+
+    getKafkaJSConsumer() {
+        return this.consumer;
     }
 }
 
