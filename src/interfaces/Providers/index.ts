@@ -9,7 +9,7 @@ export { default as MetricsPointInterface } from './MetricsPointInterface';
 export {
     default as ScheduledEventsInterface,
     ScheduledEventRequest,
-    ScheduledEventResponse,
+    ScheduledEventIDResponse,
     TriggeredByEvent,
 } from './ScheduledEventsInterface';
 export { default as ReactToFailureInterface } from './ReactToFailureInterface';

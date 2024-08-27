@@ -11,7 +11,13 @@ export default interface ScheduledEventsInterface extends ModuleInterface {
         triggeredBy: TriggeredByEvent,
         scheduleAt: Date | undefined,
         scheduledCount: number,
-    ): Promise<ScheduledEventResponse>;
+    ): Promise<ScheduledEventIDResponse>;
+
+    deleteScheduledEvent(scheduledEventID: string): Promise<boolean>;
+
+    getScheduledEvent(scheduledEventID: string): Promise<ScheduledEventResponse | undefined>;
+
+    queryScheduledEvents(query: ScheduledEventQuery): Promise<ScheduledEventResponse[]>;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -21,12 +27,28 @@ export interface ScheduledEventRequest
     source?: string;
 }
 
+export interface ScheduledEventQuery {
+    namespace?: string;
+    entityName: string;
+    eventName: string;
+    eventID: string;
+}
+
+export interface ScheduledEventResponse {
+    scheduledEventID: string;
+    namespace: string;
+    entityName: string;
+    eventName: string;
+    eventID: string;
+    payload: any;
+}
+
 export interface CompleteScheduledEventRequest extends ScheduledEventRequest {
     namespace: string;
     source: string;
 }
 
-export interface ScheduledEventResponse {
+export interface ScheduledEventIDResponse {
     scheduledEventID: string;
 }
 
@@ -40,8 +62,20 @@ export class __ScheduledEventsInterface implements ScheduledEventsInterface {
         triggeredBy: TriggeredByEvent,
         scheduleAt: Date,
         scheduledCount: number,
-    ): Promise<ScheduledEventResponse> {
+    ): Promise<ScheduledEventIDResponse> {
         return Promise.reject('un-callable code');
+    }
+
+    deleteScheduledEvent(scheduledEventID: string): Promise<boolean> {
+        return Promise.resolve(false);
+    }
+
+    getScheduledEvent(scheduledEventID: string): Promise<ScheduledEventResponse | undefined> {
+        return Promise.resolve(undefined);
+    }
+
+    queryScheduledEvents(query: ScheduledEventQuery): Promise<ScheduledEventResponse[]> {
+        return Promise.resolve([]);
     }
 }
 

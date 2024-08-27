@@ -2,7 +2,7 @@
 import { ScheduledEventsInterface } from '../interfaces/Providers';
 import {
     ScheduledEventRequest,
-    ScheduledEventResponse,
+    ScheduledEventIDResponse,
     TriggeredByEvent,
 } from '../interfaces/Providers/ScheduledEventsInterface';
 import { GallifreyProvider, ProviderType } from '../interfaces/InterfaceDecorators';
@@ -19,7 +19,7 @@ export default class DummyScheduledEventsProvider implements ScheduledEventsInte
         triggeredBy: TriggeredByEvent,
         scheduleAt: Date,
         scheduledCount: number,
-    ): Promise<ScheduledEventResponse> {
+    ): Promise<ScheduledEventIDResponse> {
         return Promise.reject(`This is the dummy scheduled event provider, functionality unavailable`);
     }
 }
