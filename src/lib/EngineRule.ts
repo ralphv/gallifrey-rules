@@ -8,11 +8,15 @@ import PerformanceTimer from './PerformanceTimer';
 import JournalLoggerInterface from '../interfaces/Providers/JournalLoggerInterface';
 import GetMetricsPointDelegate from '../delegates-interfaces/GetMetricsPointDelegate';
 import EngineScheduledEventContextInterface from '../engine-interfaces/EngineScheduledEventContextInterface';
-import { ScheduledEventRequest, ScheduledEventResponse } from '../interfaces/Providers/ScheduledEventsInterface';
+import {
+    ScheduledEventRequest,
+    ScheduledEventIDResponse,
+    ScheduledEventResponse,
+    ScheduledEventQuery,
+} from '../interfaces/Providers/ScheduledEventsInterface';
 import GetScheduledEventContextDelegate from '../delegates-interfaces/GetScheduledEventContextDelegate';
-import InsertScheduledEventDelegate from '../delegates-interfaces/InsertScheduledEventDelegate';
-import IsScheduledEventDelegate from '../delegates-interfaces/IsScheduledEventDelegate';
 import { EngineEventContext } from './EngineEventContext';
+import ScheduledEventsDelegates from '../delegates-interfaces/InsertScheduledEventDelegate';
 
 export default class EngineRule extends EngineBase implements EngineRuleInterface<any> {
     private readonly timer: PerformanceTimer;
@@ -26,8 +30,7 @@ export default class EngineRule extends EngineBase implements EngineRuleInterfac
         journalLogger: JournalLoggerInterface,
         getMetricsPointDelegate: GetMetricsPointDelegate,
         private getScheduledEventContextDelegate: GetScheduledEventContextDelegate,
-        private insertScheduledEventDelegate: InsertScheduledEventDelegate,
-        private isScheduledEventDelegate: IsScheduledEventDelegate,
+        private scheduledEventsDelegates: ScheduledEventsDelegates,
     ) {
         super(
             engineEventContext,
@@ -73,15 +76,27 @@ export default class EngineRule extends EngineBase implements EngineRuleInterfac
         return this.getScheduledEventContextDelegate();
     }
 
-    insertScheduledEvent(event: ScheduledEventRequest, scheduleAt: Date): Promise<ScheduledEventResponse> {
-        return this.insertScheduledEventDelegate(event, scheduleAt);
+    insertScheduledEvent(event: ScheduledEventRequest, scheduleAt: Date): Promise<ScheduledEventIDResponse> {
+        return this.scheduledEventsDelegates.insertScheduledEvent(event, scheduleAt);
     }
 
     isScheduledEvent(): boolean {
-        return this.isScheduledEventDelegate();
+        return this.scheduledEventsDelegates.isScheduledEvent();
     }
 
-    insertEvent(event: ScheduledEventRequest): Promise<ScheduledEventResponse> {
-        return this.insertScheduledEventDelegate(event, undefined);
+    insertEvent(event: ScheduledEventRequest): Promise<ScheduledEventIDResponse> {
+        return this.scheduledEventsDelegates.insertScheduledEvent(event, undefined);
+    }
+
+    deleteScheduledEvent(scheduledEventID: string): Promise<boolean> {
+        return this.scheduledEventsDelegates.deleteScheduledEvent(scheduledEventID);
+    }
+
+    getScheduledEvent(scheduledEventID: string): Promise<ScheduledEventResponse | undefined> {
+        return this.scheduledEventsDelegates.getScheduledEvent(scheduledEventID);
+    }
+
+    queryScheduledEvents(query: ScheduledEventQuery): Promise<ScheduledEventResponse[]> {
+        return this.scheduledEventsDelegates.queryScheduledEvents(query);
     }
 }

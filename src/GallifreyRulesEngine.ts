@@ -43,7 +43,8 @@ import EngineScheduledEventContextInterface from './engine-interfaces/EngineSche
 import {
     ScheduledEventRequest,
     CompleteScheduledEventRequest,
-    ScheduledEventResponse,
+    ScheduledEventIDResponse,
+    ScheduledEventQuery,
 } from './interfaces/Providers/ScheduledEventsInterface';
 import DistributedLocksWrapper from './DistributedLocksWrapper';
 import EngineReactToFailure from './lib/EngineReactToFailure';
@@ -361,8 +362,7 @@ export class GallifreyRulesEngine {
                         (measurementName: string) =>
                             AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
                         () => this.getScheduledEventContext(engineEventContext),
-                        (event, scheduleAt) => this.insertScheduledEvent(engineEventContext, event, scheduleAt, source),
-                        () => engineEventContext.getScheduledEvent() !== undefined,
+                        this.getScheduledEventsDelegate(engineEventContext, source),
                     ),
                     internalEvent.payload,
                     e,
@@ -505,8 +505,7 @@ export class GallifreyRulesEngine {
                     (measurementName: string) =>
                         AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
                     () => this.getScheduledEventContext(engineEventContext),
-                    (event, scheduleAt) => this.insertScheduledEvent(engineEventContext, event, scheduleAt, source),
-                    () => engineEventContext.getScheduledEvent() !== undefined,
+                    this.getScheduledEventsDelegate(engineEventContext, source),
                 );
                 logger.info(`Calling trigger on rule: ${ruleInstance.getModuleName()}`);
                 // do we throw if a single rule fails?
@@ -544,7 +543,7 @@ export class GallifreyRulesEngine {
         event: ScheduledEventRequest,
         scheduleAt: Date | undefined,
         source: string,
-    ): Promise<ScheduledEventResponse> {
+    ): Promise<ScheduledEventIDResponse> {
         const scheduledEvent = engineEventContext.getScheduledEvent();
         const scheduledCount = scheduledEvent !== undefined ? scheduledEvent.meta.scheduledCount + 1 : 1;
 
@@ -770,8 +769,7 @@ export class GallifreyRulesEngine {
                         (measurementName: string) =>
                             AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
                         () => this.getScheduledEventContext(engineEventContext),
-                        (event, scheduleAt) => this.insertScheduledEvent(engineEventContext, event, scheduleAt, source),
-                        () => engineEventContext.getScheduledEvent() !== undefined,
+                        this.getScheduledEventsDelegate(engineEventContext, source),
                     ),
                     event.payload,
                     e,
@@ -1286,6 +1284,24 @@ export class GallifreyRulesEngine {
 
     protected getInstancesFactory() {
         return this.instancesFactory;
+    }
+
+    private getScheduledEventsDelegate(engineEventContext: EngineEventContext, source: string) {
+        return {
+            deleteScheduledEvent: (scheduledEventID: string) =>
+                AssertNotNull(this.providersContext.scheduledEvents).deleteScheduledEvent(scheduledEventID),
+            getScheduledEvent: (scheduledEventID: string) =>
+                AssertNotNull(this.providersContext.scheduledEvents).getScheduledEvent(scheduledEventID),
+            insertScheduledEvent: (event: ScheduledEventRequest, scheduleAt: Date | undefined) =>
+                this.insertScheduledEvent(engineEventContext, event, scheduleAt, source),
+            isScheduledEvent: () => engineEventContext.getScheduledEvent() !== undefined,
+            queryScheduledEvents: (query: ScheduledEventQuery) => {
+                if (!query.namespace) {
+                    query.namespace = AssertNotNull(this.getNamespace());
+                }
+                return AssertNotNull(this.providersContext.scheduledEvents).queryScheduledEvents(query);
+            },
+        };
     }
 }
 

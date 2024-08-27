@@ -18,6 +18,7 @@ export const scheduledEventsSchemas = {
             scheduled_count        INT          NOT NULL
         );
         CREATE INDEX idx_scheduledAt ON scheduled_events_landing (scheduledAt ASC);
+        CREATE INDEX idx_namespace_entityname_eventname_eventid ON scheduled_events_landing (event_namespace, event_entityName, event_eventName, event_eventID);
     `,
     scheduled_events: `
         CREATE TABLE IF NOT EXISTS scheduled_events

@@ -6,3 +6,8 @@ export { default as EngineEventContextInterface } from './EngineEventContextInte
 export { default as EngineInterface } from './EngineEventInterface';
 export { default as EngineRuleInterface } from './EngineRuleInterface';
 export { default as EngineFilterInterface } from './EngineFilterInterface';
+export {
+    ScheduledEventIDResponse,
+    ScheduledEventResponse,
+    ScheduledEventQuery,
+} from '../interfaces/Providers/ScheduledEventsInterface';

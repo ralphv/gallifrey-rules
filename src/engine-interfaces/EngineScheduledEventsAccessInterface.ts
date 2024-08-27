@@ -1,4 +1,9 @@
-import { ScheduledEventRequest, ScheduledEventResponse } from '../interfaces/Providers/ScheduledEventsInterface';
+import {
+    ScheduledEventQuery,
+    ScheduledEventRequest,
+    ScheduledEventIDResponse,
+    ScheduledEventResponse,
+} from '../interfaces/Providers/ScheduledEventsInterface';
 import EngineScheduledEventContextInterface from './EngineScheduledEventContextInterface';
 
 /**
@@ -10,13 +15,31 @@ export default interface EngineScheduledEventsAccessInterface {
      * @param event The event
      * @param scheduleAt The date/time to be scheduled at
      */
-    insertScheduledEvent(event: ScheduledEventRequest, scheduleAt: Date): Promise<ScheduledEventResponse>;
+    insertScheduledEvent(event: ScheduledEventRequest, scheduleAt: Date): Promise<ScheduledEventIDResponse>;
 
     /**
      * Inserts an immediate event to the events pipeline to be run as soon as possible
      * @param event The event
      */
-    insertEvent(event: ScheduledEventRequest): Promise<ScheduledEventResponse>;
+    insertEvent(event: ScheduledEventRequest): Promise<ScheduledEventIDResponse>;
+
+    /**
+     * Deletes a scheduled event as long as it hasn't been pulled
+     * @param scheduledEventID the ID
+     */
+    deleteScheduledEvent(scheduledEventID: string): Promise<boolean>;
+
+    /**
+     * Gets a scheduled event details
+     * @param scheduledEventID
+     */
+    getScheduledEvent(scheduledEventID: string): Promise<ScheduledEventResponse | undefined>;
+
+    /**
+     * Query scheduled events
+     * @param query
+     */
+    queryScheduledEvents(query: ScheduledEventQuery): Promise<ScheduledEventResponse[]>;
 
     /**
      * Was this event currently processing a scheduled event?

@@ -1,12 +1,12 @@
-import { ScheduledEventsInterface } from '../interfaces/Providers';
-import {
-    CompleteScheduledEventRequest,
-    ScheduledEventResponse,
-    TriggeredByEvent,
-} from '../interfaces/Providers/ScheduledEventsInterface';
 import { GallifreyProvider, ProviderType } from '../interfaces/InterfaceDecorators';
 import Database from '../database/Database';
 import { ModuleNames } from '../ModuleNames';
+import { ScheduledEventIDResponse, ScheduledEventsInterface, TriggeredByEvent } from '../interfaces/Providers';
+import {
+    CompleteScheduledEventRequest,
+    ScheduledEventQuery,
+    ScheduledEventResponse,
+} from '../interfaces/Providers/ScheduledEventsInterface';
 
 @GallifreyProvider(ProviderType.ScheduledEvents)
 export default class PostgresScheduledEventsProvider implements ScheduledEventsInterface {
@@ -20,7 +20,7 @@ export default class PostgresScheduledEventsProvider implements ScheduledEventsI
         triggeredBy: TriggeredByEvent,
         scheduleAt: Date | undefined,
         scheduledCount: number,
-    ): Promise<ScheduledEventResponse> {
+    ): Promise<ScheduledEventIDResponse> {
         const database = new Database();
         const response = await database.insertScheduledEvent({
             createdAt: new Date(),
@@ -44,5 +44,20 @@ export default class PostgresScheduledEventsProvider implements ScheduledEventsI
         return {
             scheduledEventID: String(response),
         };
+    }
+
+    async deleteScheduledEvent(scheduledEventID: string): Promise<boolean> {
+        const database = new Database();
+        return await database.deleteScheduledEvent(scheduledEventID);
+    }
+
+    async getScheduledEvent(scheduledEventID: string): Promise<ScheduledEventResponse | undefined> {
+        const database = new Database();
+        return await database.getScheduledEvent(scheduledEventID);
+    }
+
+    async queryScheduledEvents(query: ScheduledEventQuery): Promise<ScheduledEventResponse[]> {
+        const database = new Database();
+        return await database.queryScheduledEvents(query);
     }
 }
