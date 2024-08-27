@@ -11,6 +11,8 @@ export {
     ScheduledEventRequest,
     ScheduledEventIDResponse,
     TriggeredByEvent,
+    ScheduledEventQuery,
+    ScheduledEventResponse,
 } from './ScheduledEventsInterface';
 export { default as ReactToFailureInterface } from './ReactToFailureInterface';
 export { default as EventDispatcherInterface } from './EventDispatcherInterface';

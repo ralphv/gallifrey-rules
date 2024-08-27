@@ -1,7 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
 import Containers from './lib/Containers';
-import PostgresLocks from '../../src/database/PostgresLocks';
 import Database from '../../src/database/Database';
 
 describe('postgres scheduled events', () => {

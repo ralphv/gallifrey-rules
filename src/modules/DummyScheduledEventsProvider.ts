@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ScheduledEventsInterface } from '../interfaces/Providers';
-import {
-    ScheduledEventRequest,
-    ScheduledEventIDResponse,
-    TriggeredByEvent,
-} from '../interfaces/Providers/ScheduledEventsInterface';
 import { GallifreyProvider, ProviderType } from '../interfaces/InterfaceDecorators';
 import { ModuleNames } from '../ModuleNames';
+import {
+    ScheduledEventIDResponse,
+    ScheduledEventQuery,
+    ScheduledEventRequest,
+    ScheduledEventResponse,
+    ScheduledEventsInterface,
+    TriggeredByEvent,
+} from '../interfaces/Providers';
 
 @GallifreyProvider(ProviderType.ScheduledEvents, true)
 export default class DummyScheduledEventsProvider implements ScheduledEventsInterface {
@@ -21,5 +23,17 @@ export default class DummyScheduledEventsProvider implements ScheduledEventsInte
         scheduledCount: number,
     ): Promise<ScheduledEventIDResponse> {
         return Promise.reject(`This is the dummy scheduled event provider, functionality unavailable`);
+    }
+
+    deleteScheduledEvent(scheduledEventID: string): Promise<boolean> {
+        return Promise.resolve(false);
+    }
+
+    getScheduledEvent(scheduledEventID: string): Promise<ScheduledEventResponse | undefined> {
+        return Promise.resolve(undefined);
+    }
+
+    queryScheduledEvents(query: ScheduledEventQuery): Promise<ScheduledEventResponse[]> {
+        return Promise.resolve([]);
     }
 }
