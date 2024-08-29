@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { expect } from 'chai';
 import { TimeAndWarn } from '../../src/lib/Decorators';
 import { logger } from '../../src/lib/logger';

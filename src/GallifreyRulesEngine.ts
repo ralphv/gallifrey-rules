@@ -1320,7 +1320,7 @@ function AssertInitialized(originalMethod: any, context: ClassMethodDecoratorCon
                 `GallifreyRulesEngine:${methodName} method called without engine being initialized.`,
             );
         }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
         return originalMethod.apply(this, args);
     }
 

@@ -38,7 +38,6 @@ export default class Database {
     private async query(query: string, values: any[] = []): Promise<any[]> {
         const client = await this.getClient();
         try {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             return (await client.query(query, values)).rows;
         } finally {
             client.release();
@@ -100,7 +99,6 @@ export default class Database {
                 payload.scheduledCount,
             ]);
 
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             return res.rows[0].scheduled_event_id as number;
         } finally {
             client.release();

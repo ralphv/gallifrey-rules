@@ -20,7 +20,6 @@ export default interface ScheduledEventsInterface extends ModuleInterface {
     queryScheduledEvents(query: ScheduledEventQuery): Promise<ScheduledEventResponse[]>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ScheduledEventRequest
     extends Omit<GallifreyEventTypeInternal<any>, 'eventLag' | 'namespace' | 'source'> {
     namespace?: string;

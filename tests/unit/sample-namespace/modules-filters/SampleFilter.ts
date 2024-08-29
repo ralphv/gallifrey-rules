@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unused-vars,@typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { EngineFilterInterface, FilterInterface, GallifreyPlugin, PluginType } from '../../../../src';
 
 @GallifreyPlugin(PluginType.Filter)
