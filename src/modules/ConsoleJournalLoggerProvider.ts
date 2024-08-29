@@ -8,6 +8,8 @@ import { CompleteScheduledEventRequest, TriggeredByEvent } from '../interfaces/P
 @GallifreyProvider(ProviderType.JournalLogger)
 export default class ConsoleJournalLoggerProvider implements JournalLoggerInterface {
     private readonly addExtraToJournalLogs: boolean;
+    private errorFlagged = false;
+
     constructor() {
         const config = new Config();
         this.addExtraToJournalLogs = config.getAddExtraToJournalLogs();
@@ -33,6 +35,7 @@ export default class ConsoleJournalLoggerProvider implements JournalLoggerInterf
 
     endDoAction(name: string, response: any, duration: number, error?: Error): void {
         if (error) {
+            this.errorFlagged = true;
             this.log?.logs.push({
                 description: `Error ending action '${name}', error: '${String(error)}'`,
                 extra: this.getExtra(error),
@@ -47,6 +50,7 @@ export default class ConsoleJournalLoggerProvider implements JournalLoggerInterf
 
     endEvent(duration: number, error?: Error): void {
         if (error) {
+            this.errorFlagged = true;
             this.log?.logs.push({
                 description: `Error ending event: '${String(error)}'`,
                 extra: this.getExtra(error),
@@ -54,13 +58,18 @@ export default class ConsoleJournalLoggerProvider implements JournalLoggerInterf
         } else {
             this.log?.logs.push({ description: `ending event, duration: ${duration}` });
         }
-        logger.info(`JournalLog: ${JSON.stringify(this.log, null, 2)}`);
+        if (this.errorFlagged) {
+            logger.error(`JournalLog: ${JSON.stringify(this.log, null, 2)}`);
+        } else {
+            logger.info(`JournalLog: ${JSON.stringify(this.log, null, 2)}`);
+        }
         this.onEndEvent(this.log);
         this.log = undefined;
     }
 
     endPullDataObject(name: string, response: any, duration: number, error?: Error): void {
         if (error) {
+            this.errorFlagged = true;
             this.log?.logs.push({
                 description: `Error ending data-object '${name}', error: '${String(error)}'`,
                 extra: this.getExtra(error),
@@ -75,6 +84,7 @@ export default class ConsoleJournalLoggerProvider implements JournalLoggerInterf
 
     endRunRule(name: string, duration: number, error?: Error): void {
         if (error) {
+            this.errorFlagged = true;
             this.log?.logs.push({
                 description: `Error ending rule '${name}', error: '${String(error)}'`,
                 extra: this.getExtra(error),
@@ -112,6 +122,7 @@ export default class ConsoleJournalLoggerProvider implements JournalLoggerInterf
 
     endFilter(name: string, duration: number, error?: Error): void {
         if (error) {
+            this.errorFlagged = true;
             this.log?.logs.push({
                 description: `Error ending filter '${name}', error: '${String(error)}'`,
                 extra: this.getExtra(error),
@@ -131,6 +142,7 @@ export default class ConsoleJournalLoggerProvider implements JournalLoggerInterf
 
     endQueueAsyncAction(name: string, duration: number, error?: Error): void {
         if (error) {
+            this.errorFlagged = true;
             this.log?.logs.push({
                 description: `Error ending queue async action '${name}', duration: ${duration}, error: ${String(error)}`,
             });

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { EngineRuleInterface, GallifreyPlugin, PauseConsumer, PluginType, RuleInterface } from '../../../../src';
 import { IncomingMessagePayloadType } from '../IncomingMessagePayloadType';
 

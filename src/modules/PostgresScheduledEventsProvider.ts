@@ -14,7 +14,6 @@ export default class PostgresScheduledEventsProvider implements ScheduledEventsI
         return ModuleNames.PostgresScheduledEvents;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async insertScheduledEvent(
         event: CompleteScheduledEventRequest,
         triggeredBy: TriggeredByEvent,

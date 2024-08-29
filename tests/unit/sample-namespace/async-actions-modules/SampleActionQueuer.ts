@@ -6,7 +6,6 @@ export default class SampleActionQueuer implements ActionQueuerInterface<any, an
         return 'sample-action-queuer';
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     validateQueuerConfig(queuerConfig: any): void {
         if (!('topic' in queuerConfig)) {
             throw new Error(`Missing topic from queuerConfig`);

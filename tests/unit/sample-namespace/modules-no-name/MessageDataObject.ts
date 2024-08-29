@@ -20,7 +20,6 @@ export default class MessageDataObject implements DataObjectInterface<any, strin
             .submit();
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async get(engine: EngineDataObjectInterface<any>): Promise<string> {
         await engine
             .getMetricsPoint(`sample`)

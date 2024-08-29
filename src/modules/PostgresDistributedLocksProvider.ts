@@ -5,7 +5,6 @@ import PostgresLocks from '../database/PostgresLocks';
 
 @GallifreyProvider(ProviderType.DistributedLocks)
 export default class PostgresDistributedLocksProvider implements DistributedLocksInterface {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async acquireLock(lockId: string, maxWaitTime: number): Promise<ReleaseLock> {
         const db = new PostgresLocks();
         return db.acquireLock(lockId, maxWaitTime);
