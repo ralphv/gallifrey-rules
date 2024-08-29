@@ -642,6 +642,7 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger().endDoAction(actionName, response, duration);
             return response;
         } catch (e) {
+            logger.error(`Error at action trigger: ${String(e)}`);
             const duration = timer.end();
             this.metrics?.timeAction(event, actionInstance.getModuleName(), duration, triggeredAsAsync);
             engineEventContext.getJournalLogger().endDoAction(actionName, undefined, duration, e as Error);
@@ -714,6 +715,7 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger().endPullDataObject(dataObjectName, response, duration);
             return response;
         } catch (e) {
+            logger.error(`Error at data object get: ${String(e)}`);
             const duration = timer.end();
             this.metrics?.timeDataObject(event, dataObjectInstance.getModuleName(), duration);
             engineEventContext.getJournalLogger().endPullDataObject(dataObjectName, undefined, duration, e as Error);
@@ -741,6 +743,7 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger().endRunRule(ruleInstance.getModuleName(), ruleTimer);
             this.metrics?.timeRule(event, ruleInstance.getModuleName(), ruleTimer);
         } catch (e) {
+            logger.error(`Error at rule trigger: ${String(e)}`);
             const ruleTimer = engineRule.getTimer().end();
             this.metrics?.timeRule(event, ruleInstance.getModuleName(), ruleTimer);
             engineEventContext.getJournalLogger().endRunRule(ruleInstance.getModuleName(), ruleTimer, e as Error);
@@ -958,6 +961,7 @@ export class GallifreyRulesEngine {
             }
             return canContinue;
         } catch (e) {
+            logger.error(`Error at filter canContinue: ${String(e)}`);
             const filterTimer = engineFilter.getTimer().end();
             this.metrics?.timeFilter(event, filterInstance.getModuleName(), filterTimer);
             engineEventContext.getJournalLogger().endFilter(filterInstance.getModuleName(), filterTimer, e as Error);
@@ -1223,6 +1227,7 @@ export class GallifreyRulesEngine {
                 this.metrics?.queuedAction(event, asyncActionName, duration, true);
                 return undefined;
             } catch (e) {
+                logger.error(`Error at queueAction: ${String(e)}`);
                 const duration = timer.end();
                 this.metrics?.queuedAction(event, asyncActionName, duration, false);
                 engineEventContext.getJournalLogger().endQueueAsyncAction(asyncActionName, duration, e as Error);
@@ -1240,6 +1245,7 @@ export class GallifreyRulesEngine {
                 engineEventContext.getJournalLogger().endDoAction(asyncActionName, response, duration);
                 return response;
             } catch (e) {
+                logger.error(`Error at action trigger: ${String(e)}`);
                 const duration = timer.end();
                 this.metrics?.timeAction(event, asyncActionInstance.getModuleName(), duration, false);
                 engineEventContext.getJournalLogger().endDoAction(asyncActionName, undefined, duration, e as Error);
