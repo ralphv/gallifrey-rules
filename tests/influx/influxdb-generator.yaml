@@ -1,0 +1,177 @@
+influxdb:
+  url: "https://influxdb.urlip.com"
+  database: "bucket"
+  precision: "s"
+periodSeconds: 36000
+metrics:
+  - measurement: consumer_partition_lags
+    every: 1000
+    fields:
+      lag:
+        type: 'uint'
+        value: "$casual.integer(1, 10)"
+    tags:
+      namespace: sample
+      partition: '1'
+      topic: topic
+      group: group
+  - measurement: acquire_lock_timer
+    every: [200, 400]
+    fields:
+      timerMs:
+        type: 'float'
+        value: "$casual.double(10, 80)"
+      success:
+        type: 'uint'
+        value: 1
+  - measurement: release_lock_timer
+    every: [200, 400]
+    fields:
+      timerMs:
+        type: 'float'
+        value: "$casual.double(1, 40)"
+      success:
+        type: 'uint'
+        value: 1
+  - measurement: event_timer
+    every: [50, 200]
+    tags:
+      namespace: sample
+      entity: 'order'
+      event: "$casual.random_element(['create-order', 'delete-order', 'ship-order', 'submit-order'])"
+      source: 'ubuntu-1425'
+    fields:
+      timerMs:
+        type: 'float'
+        value: "$casual.double(100, 500)"
+  - measurement: event_timer
+    every: [50, 200]
+    tags:
+      namespace: sample
+      entity: 'order'
+      event: "$casual.random_element(['create-order', 'delete-order', 'ship-order', 'submit-order'])"
+      source: 'ubuntu-1425'
+    fields:
+      timerMs:
+        type: 'float'
+        value: "$casual.double(100, 300)"
+  - measurement: filter_timer
+    every: [50, 200]
+    tags:
+      namespace: sample
+      entity: 'order'
+      event: "$casual.random_element(['create-order', 'delete-order', 'ship-order', 'submit-order'])"
+      source: 'ubuntu-1425'
+      filter: 'is-north-america'
+    fields:
+      timerMs:
+        type: 'float'
+        value: "$casual.double(10, 50)"
+  - measurement: filter_timer
+    every: [50, 200]
+    tags:
+      namespace: sample
+      entity: 'order'
+      event: "$casual.random_element(['create-order', 'delete-order', 'ship-order', 'submit-order'])"
+      source: 'ubuntu-1425'
+      filter: 'is-eu'
+    fields:
+      timerMs:
+        type: 'float'
+        value: "$casual.double(10, 50)"
+  - measurement: rule_timer
+    every: [50, 200]
+    tags:
+      namespace: sample
+      entity: 'order'
+      event: 'create-order'
+      source: 'ubuntu-1425'
+      rule: 'process-new-order'
+    fields:
+      timerMs:
+        type: 'float'
+        value: "$casual.double(100, 300)"
+  - measurement: rule_timer
+    every: [50, 200]
+    tags:
+      namespace: sample
+      entity: 'order'
+      event: 'delete-order'
+      source: 'ubuntu-1425'
+      rule: 'delete-order'
+    fields:
+      timerMs:
+        type: 'float'
+        value: "$casual.double(100, 300)"
+  - measurement: rule_timer
+    every: [50, 200]
+    tags:
+      namespace: sample
+      entity: 'order'
+      event: 'ship-order'
+      source: 'ubuntu-1425'
+      rule: 'ship-order'
+    fields:
+      timerMs:
+        type: 'float'
+        value: "$casual.double(100, 300)"
+  - measurement: action_timer
+    every: [50, 200]
+    tags:
+      namespace: sample
+      entity: 'order'
+      event: 'create-order'
+      source: 'ubuntu-1425'
+      action: 'add-order-to-db'
+    fields:
+      timerMs:
+        type: 'float'
+        value: "$casual.double(100, 300)"
+  - measurement: action_timer
+    every: [50, 200]
+    tags:
+      namespace: sample
+      entity: 'order'
+      event: 'create-order'
+      source: 'ubuntu-1425'
+      action: 'cache-order'
+    fields:
+      timerMs:
+        type: 'float'
+        value: "$casual.double(50, 100)"
+  - measurement: data_object_timer
+    every: [50, 200]
+    tags:
+      namespace: sample
+      entity: 'order'
+      event: 'delete-order'
+      source: 'ubuntu-1425'
+      data_object: 'read-order'
+    fields:
+      timerMs:
+        type: 'float'
+        value: "$casual.double(50, 100)"
+  - measurement: data_object_timer
+    every: [50, 200]
+    tags:
+      namespace: sample
+      entity: 'order'
+      event: 'ship-order'
+      source: 'ubuntu-1425'
+      data_object: 'read-order'
+    fields:
+      timerMs:
+        type: 'float'
+        value: "$casual.double(50, 100)"
+  - measurement: data_object_timer
+    every: [200, 500]
+    tags:
+      namespace: sample
+      entity: 'order'
+      event: 'ship-order'
+      source: 'ubuntu-1425'
+      data_object: 'open-ai'
+    fields:
+      timerMs:
+        type: 'float'
+        value: "$casual.double(200, 10000)"
