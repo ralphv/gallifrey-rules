@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-misused-promises,no-async-promise-executor,@typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-misused-promises,no-async-promise-executor */
 import { beforeEach } from 'mocha';
 import sinon from 'sinon';
 import { logger } from '../../src/lib/logger';

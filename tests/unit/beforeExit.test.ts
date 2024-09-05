@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unused-vars,@typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { BeforeExit } from '../../src/lib/Decorators';
 describe('BeforeExit', () => {
     it('test simple case, no warnings', async () => {

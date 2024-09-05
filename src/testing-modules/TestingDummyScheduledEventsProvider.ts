@@ -11,7 +11,6 @@ import { ScheduledEventQuery, ScheduledEventResponse } from '../interfaces/Provi
 
 @GallifreyProvider(ProviderType.ScheduledEvents, true)
 export default class TestingDummyScheduledEventsProvider implements ScheduledEventsInterface {
-    // eslint-disable-next-line @typescript-eslint/require-await
     async insertScheduledEvent(
         event: ScheduledEventRequest,
         triggeredBy: TriggeredByEvent,

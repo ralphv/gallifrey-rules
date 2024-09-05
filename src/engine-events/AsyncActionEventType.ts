@@ -15,7 +15,6 @@ export interface AsyncActionEventType<PayloadType> {
 }
 
 export function IsTypeAsyncActionEventType(value: any): value is AsyncActionEventType<any> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     return (
         value !== null &&
         value !== undefined &&

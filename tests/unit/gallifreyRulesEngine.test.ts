@@ -15,10 +15,12 @@ import ProcessMessageRule from './sample-namespace/modules-no-name/ProcessMessag
 describe('gallifrey engine', () => {
     let infoSpy: sinon.SinonSpy;
     let warnSpy: sinon.SinonSpy;
+    let errorSpy: sinon.SinonSpy;
 
     beforeEach(() => {
         warnSpy = sinon.spy(logger, 'warn');
         infoSpy = sinon.spy(logger, 'info');
+        errorSpy = sinon.spy(logger, 'error');
     });
     const findCallWithText = (spy: sinon.SinonSpy, searchText: string) => {
         const found = spy
@@ -32,6 +34,7 @@ describe('gallifrey engine', () => {
     afterEach(async () => {
         warnSpy.restore();
         infoSpy.restore();
+        errorSpy.restore();
     });
     it('initialize from object', async () => {
         const engine = new GallifreyRulesEngine();
@@ -720,8 +723,7 @@ describe('gallifrey engine', () => {
         }
         await engine.shutdown();
 
-        const result = findCallWithText(infoSpy, 'JournalLog: ');
-        console.log(result);
+        const result = findCallWithText(errorSpy, 'JournalLog: ');
         expect(result).to.includes("starting filter 'sample-filter'");
         expect(result).to.includes("Error ending filter 'sample-filter', error: 'Error: throwing'");
     });

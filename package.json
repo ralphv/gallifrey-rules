@@ -1,7 +1,7 @@
 {
   "name": "gallifrey-rules",
   "shortName": "GR",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "A modern robust framework for handling real-time events",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -51,6 +51,7 @@
     "@typescript-eslint/parser": "^8.0.1",
     "casual": "^1.6.2",
     "chai": "^5.1.1",
+    "eslint": "^9.9.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "mocha": "^10.7.0",

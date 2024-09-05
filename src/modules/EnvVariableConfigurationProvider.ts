@@ -38,7 +38,6 @@ class EnvVariableAccessor extends BaseConfig implements ConfigurationAccessorInt
         return this.getBoolEnvVariable(this.getEnvKey(key), defaultValue, false);
     }
 
-    // eslint-disable-next-line
     async getNumericValue(key: string, defaultValue: number): Promise<number> {
         if (this.$config && key in this.$config) {
             return this.$config[key] as number;

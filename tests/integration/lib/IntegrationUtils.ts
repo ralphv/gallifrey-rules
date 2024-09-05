@@ -106,6 +106,5 @@ export function SpyCalls(originalMethod: any, context: ClassMethodDecoratorConte
 }
 
 export function getSpiedCalls(classRef: any, methodName: string) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     return spiedCalls.filter((spiedCall) => spiedCall.classRef === classRef && spiedCall.methodName === methodName);
 }

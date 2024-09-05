@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { DataObjectInterface, EngineDataObjectInterface, GallifreyPlugin, PluginType } from '../../../src';
 
 @GallifreyPlugin(PluginType.DataObject)
