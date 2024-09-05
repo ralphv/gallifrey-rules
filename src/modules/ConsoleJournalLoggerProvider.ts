@@ -63,7 +63,7 @@ export default class ConsoleJournalLoggerProvider implements JournalLoggerInterf
         } else {
             logger.info(`JournalLog: ${JSON.stringify(this.log, null, 2)}`);
         }
-        this.onEndEvent(this.log);
+        this.onEndEvent(this.log, this.errorFlagged);
         this.log = undefined;
     }
 
@@ -168,7 +168,7 @@ export default class ConsoleJournalLoggerProvider implements JournalLoggerInterf
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    protected onEndEvent(log: ConsoleJournalLoggerProviderType | undefined) {
+    protected onEndEvent(log: ConsoleJournalLoggerProviderType | undefined, errorFlagged: boolean) {
         // for deriving classes
     }
 }
