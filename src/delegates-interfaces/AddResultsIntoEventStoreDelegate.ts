@@ -1,3 +1,3 @@
 export default interface AddResultsIntoEventStoreDelegate {
-    (value: any): void;
+    (value: any): Promise<void>;
 }

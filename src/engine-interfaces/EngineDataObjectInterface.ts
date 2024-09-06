@@ -15,5 +15,5 @@ export default interface EngineDataObjectInterface<DataObjectRequestType extends
      * Adds the result into the event store, caching its value for the lifetime of the event
      * @param value The value to cache for the current request
      */
-    addResultIntoEventStore(value: any): void;
+    addResultIntoEventStore(value: any): Promise<void>;
 }
