@@ -3,7 +3,7 @@ import PerformanceTimer from './lib/PerformanceTimer';
 import { Metrics } from './lib/Metrics';
 import { GallifreyEventTypeInternal } from './lib/GallifreyEventTypeInternal';
 import Config from './lib/Config';
-import { logger } from './lib/logger';
+import { LoggerInterface } from './interfaces/Providers';
 
 export default class DistributedLocksWrapper {
     private readonly waitTimeInMs: number;
@@ -11,6 +11,7 @@ export default class DistributedLocksWrapper {
     constructor(
         private inner: DistributedLocksInterface,
         private metrics: Metrics,
+        private readonly logger: LoggerInterface,
     ) {
         const config = new Config();
         this.enabledLocks = config.isDistributedLocksEnabled();
@@ -36,12 +37,12 @@ export default class DistributedLocksWrapper {
 
         const timer = new PerformanceTimer().resume();
         try {
-            logger.info(`Starting acquireLock: ${lockId}`);
+            await this.logger.info(`Starting acquireLock: ${lockId}`);
             const { release, acquired } = await this.inner.acquireLock(lockId, this.waitTimeInMs);
             if (acquired) {
-                logger.info(`Acquired Lock successfully: ${lockId}`);
+                await this.logger.info(`Acquired Lock successfully: ${lockId}`);
             } else {
-                logger.error(`Failed to acquire Lock: ${lockId}`);
+                await this.logger.error(`Failed to acquire Lock: ${lockId}`);
             }
             const duration = timer.end();
             this.metrics.timeAcquireLock(event, duration, true);
@@ -63,7 +64,7 @@ export default class DistributedLocksWrapper {
         } catch (e) {
             const duration = timer.end();
             this.metrics.timeAcquireLock(event, duration, false);
-            logger.debug(`Failed to acquire lock exception: ${lockId}: ${String(e)}`);
+            await this.logger.debug(`Failed to acquire lock exception: ${lockId}: ${String(e)}`);
             throw e;
         }
     }

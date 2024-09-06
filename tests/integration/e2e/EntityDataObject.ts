@@ -4,7 +4,7 @@ import { DataObjectInterface, EngineDataObjectInterface, GallifreyPlugin, Plugin
 export default class EntityDataObject implements DataObjectInterface<number, string> {
     async get(engine: EngineDataObjectInterface<number>): Promise<string> {
         const data = `sample-data-${engine.getRequest()}`;
-        engine.addResultIntoEventStore(data);
+        await engine.addResultIntoEventStore(data);
         return data;
     }
 

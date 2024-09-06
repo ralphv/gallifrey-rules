@@ -287,8 +287,8 @@ export class KafkaConsumer {
         });
     }
 
-    public addOnStopOnce(fn: () => void) {
-        this.emitter.once(EMITTER_STOP, fn);
+    public addOnStopOnce(fn: () => Promise<void>) {
+        this.emitter.once(EMITTER_STOP, () => void fn());
     }
 
     public async stopConsumerAndWait() {

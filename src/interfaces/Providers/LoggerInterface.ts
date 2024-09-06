@@ -5,10 +5,10 @@
 import ModuleInterface from '../../base-interfaces/ModuleInterface';
 
 export default interface LoggerInterface extends ModuleInterface {
-    debug(message: string, payload: any): Promise<void>;
-    info(message: string, payload: any): Promise<void>;
-    warn(message: string, payload: any): Promise<void>;
-    error(message: string, payload: any): Promise<void>;
+    debug(message: string, payload?: any): Promise<void>;
+    info(message: string, payload?: any): Promise<void>;
+    warn(message: string, payload?: any): Promise<void>;
+    error(message: string, payload?: any): Promise<void>;
 }
 
 export class __LoggerInterface implements LoggerInterface {

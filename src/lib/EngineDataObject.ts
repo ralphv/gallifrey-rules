@@ -34,7 +34,7 @@ export default class EngineDataObject<DataObjectRequestType extends BaseDataObje
         return this.request;
     }
 
-    addResultIntoEventStore(value: any) {
-        this.addResultsIntoEventStoreDelegate(value);
+    async addResultIntoEventStore(value: any) {
+        return this.addResultsIntoEventStoreDelegate(value);
     }
 }
