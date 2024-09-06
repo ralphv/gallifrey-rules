@@ -76,3 +76,39 @@ export async function deleteKafkaConnectConnector(url: string, connectorName: st
         }
     }
 }
+
+export function ObjectWithSecret<KeyType extends string, ValueType, ObjectType extends object>(
+    key: KeyType,
+    secret: ValueType,
+    obj?: ObjectType,
+): ObjectType & { [K in KeyType]: ValueType } {
+    if (!obj) {
+        obj = {} as ObjectType;
+    }
+    Object.defineProperty(obj, key, {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        get: () => secret,
+        enumerable: false,
+        configurable: false,
+    });
+    return obj as ObjectType & { [K in KeyType]: ValueType };
+}
+
+type Secrets<T extends string> = { [K in T]: any };
+export function ObjectWithSecrets<KeyType extends string, ValueType, ObjectType extends object>(
+    secrets: Secrets<KeyType>,
+    obj?: ObjectType,
+): ObjectType & { [K in KeyType]: ValueType } {
+    if (!obj) {
+        obj = {} as ObjectType;
+    }
+    for (const [key, secret] of Object.entries(secrets)) {
+        Object.defineProperty(obj, key, {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            get: () => secret,
+            enumerable: false,
+            configurable: false,
+        });
+    }
+    return obj as ObjectType & { [K in KeyType]: ValueType };
+}
