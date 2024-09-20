@@ -124,9 +124,13 @@ export default class BaseConfig {
 }
 
 export class SecretString extends String {
-    constructor(private readonly secret: string) {
+    constructor(secret: string) {
         super(`****************`);
-        this.secret = secret;
+        Object.defineProperty(this, 'secret', {
+            get: () => secret,
+            enumerable: false,
+            configurable: false,
+        });
     }
 
     toString(): string {
@@ -134,6 +138,7 @@ export class SecretString extends String {
     }
 
     getSecretValue() {
-        return this.secret;
+        // @ts-expect-error defined as property
+        return this.secret as string;
     }
 }
