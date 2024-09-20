@@ -123,10 +123,11 @@ export default class BaseConfig {
     }
 }
 
+const SecretStringSymbol = Symbol();
 export class SecretString extends String {
     constructor(secret: string) {
         super(`****************`);
-        Object.defineProperty(this, 'secret', {
+        Object.defineProperty(this, SecretStringSymbol, {
             get: () => secret,
             enumerable: false,
             configurable: false,
@@ -138,7 +139,7 @@ export class SecretString extends String {
     }
 
     getSecretValue() {
-        // @ts-expect-error defined as property
-        return this.secret as string;
+        // @ts-expect-error will be there
+        return this[SecretStringSymbol] as string;
     }
 }

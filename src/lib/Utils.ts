@@ -1,6 +1,7 @@
 import EngineCriticalError from '../errors/EngineCriticalError';
 import { Kafka } from 'kafkajs';
 import axios from 'axios';
+import { SecretString } from './BaseConfig';
 
 export function Expect<T>(input: T): T {
     return input;
@@ -81,34 +82,36 @@ export function ObjectWithSecret<KeyType extends string, ValueType, ObjectType e
     key: KeyType,
     secret: ValueType,
     obj?: ObjectType,
-): ObjectType & { [K in KeyType]: ValueType } {
+): ObjectType & { [K in KeyType]: SecretString } {
     if (!obj) {
         obj = {} as ObjectType;
     }
-    Object.defineProperty(obj, key, {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        get: () => secret,
-        enumerable: false,
-        configurable: false,
-    });
-    return obj as ObjectType & { [K in KeyType]: ValueType };
+    // @ts-expect-error ignore
+    obj[key] = new SecretString(secret);
+    return obj as ObjectType & { [K in KeyType]: SecretString };
 }
 
 type Secrets<T extends string> = { [K in T]: any };
-export function ObjectWithSecrets<KeyType extends string, ValueType, ObjectType extends object>(
+export function ObjectWithSecrets<KeyType extends string, ObjectType extends object>(
     secrets: Secrets<KeyType>,
     obj?: ObjectType,
-): ObjectType & { [K in KeyType]: ValueType } {
+): ObjectType & { [K in KeyType]: SecretString } {
     if (!obj) {
         obj = {} as ObjectType;
     }
     for (const [key, secret] of Object.entries(secrets)) {
-        Object.defineProperty(obj, key, {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-            get: () => secret,
-            enumerable: false,
-            configurable: false,
-        });
+        // @ts-expect-error ignore
+        obj[key] = new SecretString(secret);
     }
-    return obj as ObjectType & { [K in KeyType]: ValueType };
+    return obj as ObjectType & { [K in KeyType]: SecretString };
+}
+
+export function ObjectWithoutSecrets<T extends { [key: string]: any }>(obj: T): T {
+    const copy: { [key: string]: any } = {};
+
+    for (const [key, value] of Object.entries(obj)) {
+        copy[key] = value instanceof SecretString ? value.getSecretValue() : value;
+    }
+
+    return copy as T;
 }
