@@ -14,7 +14,7 @@ import Config from './lib/Config';
 import { ProvidersContext } from './lib/ProvidersContext';
 import InstancesFactory from './lib/InstancesFactory';
 import { EngineContext } from './lib/EngineContext';
-import { AssertNotNull, TypeAssertNotNull } from './lib/Utils';
+import { AssertNotNull, fe, TypeAssertNotNull } from './lib/Utils';
 import { EngineEventContext } from './lib/EngineEventContext';
 import RuleInterface from './interfaces/Plugins/RuleInterface';
 import EngineRule from './lib/EngineRule';
@@ -207,7 +207,7 @@ export class GallifreyRulesEngine {
             await this.getLogger().error(
                 `handleAsyncActionEvent [EXCEPTION: ${actionName}]: ${JSON.stringify({
                     ...asyncActionEvent,
-                    error: e,
+                    error: fe(e),
                 })}`,
             );
             const { bubble } = await this.handleException(e, engineEventContext, pause);
@@ -349,7 +349,7 @@ export class GallifreyRulesEngine {
                     eventId,
                     source,
                     eventLag,
-                    error: String(e),
+                    error: fe(e),
                 })}`,
             );
             this.metrics?.countErrors(internalEvent);
@@ -414,11 +414,11 @@ export class GallifreyRulesEngine {
         }
 
         if (e instanceof EngineCriticalError) {
-            await this.getLogger().error(`An engine critical error has occurred while handling event: ${String(e)}`);
+            await this.getLogger().error(`An engine critical error has occurred while handling event: ${fe(e)}`);
             return { bubble: true, type: 'EngineCriticalError' };
         }
         if (e instanceof CriticalError) {
-            await this.getLogger().error(`A critical error has occurred while handling event: ${String(e)}`);
+            await this.getLogger().error(`A critical error has occurred while handling event: ${fe(e)}`);
             if (!engineEventContext.getEventLevelConfig().throwOnCriticalError()) {
                 await this.getLogger().warn(`throw on critical error exception is off, continuing`);
                 return { bubble: false };
@@ -426,17 +426,15 @@ export class GallifreyRulesEngine {
             return { bubble: true, type: 'CriticalError' }; //todo rate limiting?
         }
         if (e instanceof InfoError) {
-            await this.getLogger().info(`An info error has occurred while handling event: ${String(e)}`);
+            await this.getLogger().info(`An info error has occurred while handling event: ${fe(e)}`);
             return { bubble: false };
         }
         if (e instanceof WarningError) {
-            await this.getLogger().warn(`A warning error has occurred while handling event: ${String(e)}`);
+            await this.getLogger().warn(`A warning error has occurred while handling event: ${fe(e)}`);
             return { bubble: false }; //todo we will figure out whether to stop or not
         }
         if (!engineEventContext.getEventLevelConfig().throwOnEventUnhandledException()) {
-            await this.getLogger().error(
-                `An unhandled error has occurred while handling event: ${String(e)} @${String((e as Error).stack ?? '')}`,
-            );
+            await this.getLogger().error(`An unhandled error has occurred while handling event: ${fe(e)}`);
             await this.getLogger().warn(`throw on event unhandled exception is off, continuing`);
             return { bubble: false };
         }
@@ -661,7 +659,7 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger().endDoAction(actionName, response, duration);
             return response;
         } catch (e) {
-            await this.getLogger().error(`Error at action trigger: ${String(e)}`);
+            await this.getLogger().error(`Error at action trigger: ${fe(e)}`);
             const duration = timer.end();
             this.metrics?.timeAction(event, actionInstance.getModuleName(), duration, triggeredAsAsync);
             engineEventContext.getJournalLogger().endDoAction(actionName, undefined, duration, e as Error);
@@ -735,7 +733,7 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger().endPullDataObject(dataObjectName, response, duration);
             return response;
         } catch (e) {
-            await this.getLogger().error(`Error at data object get: ${String(e)}`);
+            await this.getLogger().error(`Error at data object get: ${fe(e)}`);
             const duration = timer.end();
             this.metrics?.timeDataObject(event, dataObjectInstance.getModuleName(), duration);
             engineEventContext.getJournalLogger().endPullDataObject(dataObjectName, undefined, duration, e as Error);
@@ -763,7 +761,7 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger().endRunRule(ruleInstance.getModuleName(), ruleTimer);
             this.metrics?.timeRule(event, ruleInstance.getModuleName(), ruleTimer);
         } catch (e) {
-            await this.getLogger().error(`Error at rule trigger: ${String(e)}`);
+            await this.getLogger().error(`Error at rule trigger: ${fe(e)}`);
             const ruleTimer = engineRule.getTimer().end();
             this.metrics?.timeRule(event, ruleInstance.getModuleName(), ruleTimer);
             engineEventContext.getJournalLogger().endRunRule(ruleInstance.getModuleName(), ruleTimer, e as Error);
@@ -981,7 +979,7 @@ export class GallifreyRulesEngine {
             }
             return canContinue;
         } catch (e) {
-            await this.getLogger().error(`Error at filter canContinue: ${String(e)}`);
+            await this.getLogger().error(`Error at filter canContinue: ${fe(e)}`);
             const filterTimer = engineFilter.getTimer().end();
             this.metrics?.timeFilter(event, filterInstance.getModuleName(), filterTimer);
             engineEventContext.getJournalLogger().endFilter(filterInstance.getModuleName(), filterTimer, e as Error);
@@ -1130,7 +1128,7 @@ export class GallifreyRulesEngine {
             await schemaTester.loadAndTest(schemaFile, payload);
         } catch (e) {
             await this.getLogger().debug(`Failed payload schema validation against: ${schemaFile}`);
-            throw new EngineCriticalError(`Failed to validatePayloadSchema: ${String(e)}`);
+            throw new EngineCriticalError(`Failed to validatePayloadSchema: ${fe(e)}`);
         }
     }
 
@@ -1164,7 +1162,7 @@ export class GallifreyRulesEngine {
                 queuerInstance.validateQueuerConfig(queuerConfig);
             } catch (e) {
                 throw new EngineCriticalError(
-                    `Failed to validate queuer config for queuerProviderName: ${queuerInstance.getModuleName()}: ${String(e)}`,
+                    `Failed to validate queuer config for queuerProviderName: ${queuerInstance.getModuleName()}: ${fe(e)}`,
                 );
             }
             this.asyncActions.push(asyncAction);
@@ -1250,11 +1248,11 @@ export class GallifreyRulesEngine {
                 this.metrics?.queuedAction(event, asyncActionName, duration, true);
                 return undefined;
             } catch (e) {
-                await this.getLogger().error(`Error at queueAction: ${String(e)}`);
+                await this.getLogger().error(`Error at queueAction: ${fe(e)}`);
                 const duration = timer.end();
                 this.metrics?.queuedAction(event, asyncActionName, duration, false);
                 engineEventContext.getJournalLogger().endQueueAsyncAction(asyncActionName, duration, e as Error);
-                throw new EngineCriticalError(`Failed to queue async action: ${String(e)}`);
+                throw new EngineCriticalError(`Failed to queue async action: ${fe(e)}`);
             }
         } else {
             await this.getLogger().info(
@@ -1270,7 +1268,7 @@ export class GallifreyRulesEngine {
                 engineEventContext.getJournalLogger().endDoAction(asyncActionName, response, duration);
                 return response;
             } catch (e) {
-                await this.getLogger().error(`Error at action trigger: ${String(e)}`);
+                await this.getLogger().error(`Error at action trigger: ${fe(e)}`);
                 const duration = timer.end();
                 this.metrics?.timeAction(event, asyncActionInstance.getModuleName(), duration, false);
                 engineEventContext.getJournalLogger().endDoAction(asyncActionName, undefined, duration, e as Error);

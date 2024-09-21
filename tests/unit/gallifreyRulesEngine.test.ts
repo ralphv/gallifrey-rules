@@ -814,7 +814,7 @@ describe('gallifrey engine', () => {
             } as NamespaceSchema);
             expect.fail(`This should throw`);
         } catch (e) {
-            expect(String(e)).to.be.equal(
+            expect(String(e).match(/^.*$/m)?.[0]).to.be.equal(
                 'Error: Failed to validate queuer config for queuerProviderName: sample-action-queuer: Error: Missing topic from queuerConfig',
             );
         }

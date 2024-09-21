@@ -4,6 +4,7 @@ import { Metrics } from './lib/Metrics';
 import { GallifreyEventTypeInternal } from './lib/GallifreyEventTypeInternal';
 import Config from './lib/Config';
 import { LoggerInterface } from './interfaces/Providers';
+import { fe } from './lib/Utils';
 
 export default class DistributedLocksWrapper {
     private readonly waitTimeInMs: number;
@@ -64,7 +65,7 @@ export default class DistributedLocksWrapper {
         } catch (e) {
             const duration = timer.end();
             this.metrics.timeAcquireLock(event, duration, false);
-            await this.logger.debug(`Failed to acquire lock exception: ${lockId}: ${String(e)}`);
+            await this.logger.debug(`Failed to acquire lock exception: ${lockId}: ${fe(e)}`);
             throw e;
         }
     }

@@ -115,3 +115,16 @@ export function ObjectWithoutSecrets<T extends { [key: string]: any }>(obj: T): 
 
     return copy as T;
 }
+
+export function formatError(error: unknown) {
+    if (error instanceof Error) {
+        const message = error.message || 'Unknown error message';
+        const stack = error.stack || 'No stack trace available';
+        return `Error: ${message}\nStack Trace:\n${stack}`;
+    } else {
+        // Handle non-Error types if necessary
+        return `Unknown error type: ${JSON.stringify(error)}`;
+    }
+}
+
+export const fe = formatError;

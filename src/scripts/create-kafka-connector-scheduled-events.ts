@@ -13,8 +13,7 @@ void (async () => {
         await deployKafkaConnectConnector(process.env.KAFKA_CONNECT_URL as string, getConnector());
         console.log(`Done!`);
     } catch (e) {
-        // @ts-expect-error ignore
-        console.trace(`Error: ${String(e)} ${e.stackTrace as string}`);
+        console.trace(`Error: ${String(e)}`);
     }
 })();
 

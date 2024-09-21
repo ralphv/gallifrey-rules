@@ -7,6 +7,7 @@ import CriticalError from '../errors/CriticalError';
 import EngineCriticalError from '../errors/EngineCriticalError';
 import { Metrics } from './Metrics';
 import InfluxDBMetricsProvider from '../modules/InfluxDBMetricsProvider';
+import { fe } from './Utils';
 
 export function DontThrowJustLog(originalMethod: any, context: ClassMethodDecoratorContext) {
     const methodName = String(context.name);
@@ -22,9 +23,7 @@ export function DontThrowJustLog(originalMethod: any, context: ClassMethodDecora
             if (e instanceof CriticalError) {
                 throw e;
             }
-            logger.error(
-                `method "${methodName}" threw an exception but is marked to not throw: ${String(e)} @${String((e as Error).stack ?? '')}`,
-            );
+            logger.error(`method "${methodName}" threw an exception but is marked to not throw: ${fe(e)}`);
         }
     }
 
@@ -35,9 +34,7 @@ export function DontThrowJustLog(originalMethod: any, context: ClassMethodDecora
             if (e instanceof CriticalError) {
                 throw e;
             }
-            logger.error(
-                `async method "${methodName}" threw an exception but is marked to not throw: ${String(e)} @${String((e as Error).stack ?? '')}`,
-            );
+            logger.error(`async method "${methodName}" threw an exception but is marked to not throw: ${fe(e)}`);
         }
     }
 
@@ -105,9 +102,7 @@ export function BeforeExit(originalMethod: any, context: ClassMethodDecoratorCon
             try {
                 return instance[methodName]();
             } catch (e) {
-                console.trace(
-                    `Cleanup method "${methodName}" from BeforeExit decorator threw an exception: ${String(e)}`,
-                );
+                console.trace(`Cleanup method "${methodName}" from BeforeExit decorator threw an exception: ${fe(e)}`);
             }
         });
     });

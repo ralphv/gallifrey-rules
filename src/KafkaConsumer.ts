@@ -18,6 +18,7 @@ import {
 import { getScheduledEventTypeFromDBType, ScheduledEventType } from './engine-events/ScheduledEventType';
 import os from 'os';
 import { IsTypeKafkaActionQueuerMessageType, KafkaActionQueuerMessageType } from './modules/KafkaActionQueuerProvider';
+import { fe } from './lib/Utils';
 
 export class KafkaConsumer {
     private kafka: Kafka;
@@ -95,9 +96,7 @@ export class KafkaConsumer {
                         await this.engine.handleEvent<EventPayloadType>(event, pause);
                         this.afterHandleEvent(messagePayload, event);
                     } catch (e) {
-                        logger.error(
-                            `Unhandled Exception from HandleEvent: ${String(e)} @${String((e as Error).stack ?? '')}`,
-                        );
+                        logger.error(`Unhandled Exception from HandleEvent: ${fe(e)}`);
                         await this.stopConsumer();
                         throw e;
                     }
@@ -108,7 +107,7 @@ export class KafkaConsumer {
             );
         } catch (e) {
             logger.error(
-                `An error has occurred while starting the consumer: ${String(e)} @${String((e as Error).stack ?? '')}`,
+                `An error has occurred while starting the consumer: ${fe(e)} @${String((e as Error).stack ?? '')}`,
             );
             await this.stopConsumer();
             throw e;
@@ -161,9 +160,7 @@ export class KafkaConsumer {
                         await this.engine.handleScheduledEvent(event, pause);
                         this.afterHandleEvent(messagePayload, event);
                     } catch (e) {
-                        logger.error(
-                            `Unhandled Exception from HandleEvent: ${String(e)} @${String((e as Error).stack ?? '')}`,
-                        );
+                        logger.error(`Unhandled Exception from HandleEvent: ${fe(e)}`);
                         await this.stopConsumer();
                         throw e;
                     }
@@ -173,9 +170,7 @@ export class KafkaConsumer {
                 `consumer: ${this.name} is running on topic: ${JSON.stringify(topics)} with consumer group: ${groupId}`,
             );
         } catch (e) {
-            logger.error(
-                `An error has occurred while starting the consumer: ${String(e)} @${String((e as Error).stack ?? '')}`,
-            );
+            logger.error(`An error has occurred while starting the consumer: ${fe(e)}`);
             await this.stopConsumer();
             throw e;
         }
@@ -225,9 +220,7 @@ export class KafkaConsumer {
                         const asyncActionEvent = payload as KafkaActionQueuerMessageType;
                         await this.engine.handleAsyncActionEvent(asyncActionEvent, os.hostname(), pause);
                     } catch (e) {
-                        logger.error(
-                            `Unhandled Exception from HandleEvent: ${String(e)} @${String((e as Error).stack ?? '')}`,
-                        );
+                        logger.error(`Unhandled Exception from HandleEvent: ${fe(e)}`);
                         await this.stopConsumer();
                         throw e;
                     }
@@ -237,9 +230,7 @@ export class KafkaConsumer {
                 `consumer: ${this.name} is running on topic: ${JSON.stringify(topics)} with consumer group: ${groupId}`,
             );
         } catch (e) {
-            logger.error(
-                `An error has occurred while starting the consumer: ${String(e)} @${String((e as Error).stack ?? '')}`,
-            );
+            logger.error(`An error has occurred while starting the consumer: ${fe(e)}`);
             await this.stopConsumer();
             throw e;
         }
@@ -300,7 +291,7 @@ export class KafkaConsumer {
                 await consumer.disconnect();
                 logger.info(`Consumer disconnected: ${this.name}`);
             } catch (e) {
-                logger.error(`Unhandled Exception stopping consumer: ${String(e)}`);
+                logger.error(`Unhandled Exception stopping consumer: ${fe(e)}`);
             }
         }
     }

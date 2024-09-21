@@ -1,6 +1,7 @@
 import { Draft07, Draft, JsonError } from 'json-schema-library';
 import EngineCriticalError from '../errors/EngineCriticalError';
 import * as fs from 'fs';
+import { fe } from './Utils';
 
 export default class JsonSchemaTester {
     static cache: { [key: string]: Draft } = {};
@@ -23,7 +24,7 @@ export default class JsonSchemaTester {
             const buffer = await fs.promises.readFile(schemaFile);
             fileContents = JSON.parse(buffer.toString());
         } catch (e) {
-            throw new EngineCriticalError(`Failed to load json schema file: ${schemaFile}: ${String(e)}`);
+            throw new EngineCriticalError(`Failed to load json schema file: ${schemaFile}: ${fe(e)}`);
         }
 
         JsonSchemaTester.cache[schemaFile] = new Draft07(fileContents);
