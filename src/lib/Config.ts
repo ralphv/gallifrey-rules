@@ -132,4 +132,9 @@ export default class Config extends BaseConfig {
         // for production use exit timeout by default to make sure container exits when consumers have to stop
         return this.getBoolEnvVariable(`USE_EXIT_TIMEOUT`, this.isProduction(), false);
     }
+
+    @Cache
+    addStackTracesToLogs() {
+        return this.getBoolEnvVariable(`ADD_STACK_TRACES`, true, false);
+    }
 }

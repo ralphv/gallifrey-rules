@@ -2,6 +2,7 @@ import EngineCriticalError from '../errors/EngineCriticalError';
 import { Kafka } from 'kafkajs';
 import axios from 'axios';
 import { SecretString } from './BaseConfig';
+import Config from './Config';
 
 export function Expect<T>(input: T): T {
     return input;
@@ -118,11 +119,16 @@ export function ObjectWithoutSecrets<T extends { [key: string]: any }>(obj: T): 
 
 export function formatError(error: unknown) {
     if (error instanceof Error) {
-        const message = error.message || 'Unknown error message';
-        const stack = error.stack || 'No stack trace available';
-        return `Error: ${message}\nStack Trace:\n${stack}`;
+        const config = new Config();
+        if (config.addStackTracesToLogs()) {
+            const message = error.message || 'Unknown error message';
+            const stack = error.stack || 'No stack trace available';
+            return `Error: ${message}\nStack Trace:\n${stack}`;
+        } else {
+            const message = error.message || 'Unknown error message';
+            return `Error: ${message}`;
+        }
     } else {
-        // Handle non-Error types if necessary
         return `Unknown error type: ${JSON.stringify(error)}`;
     }
 }
