@@ -44,7 +44,7 @@ export interface TestingJournalLoggerProviderTestingMethods {
     getEventsCount(): number;
     getRulesCount(): number;
     getActionsCount(): number;
-    hasError(error: string, method?: TestingJournalLoggerProviderMethods | undefined): boolean;
+    hasError(error: string, method?: TestingJournalLoggerProviderMethods): boolean;
     hasCustomLog(description: string): boolean;
     hasScheduledEvent(entityName: string, eventName: string): boolean;
     getErrorsCount(): number;
