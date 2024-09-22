@@ -122,17 +122,17 @@ export class GallifreyRulesEngine {
         const config = new Config();
         // loading modules
         if (config.getModulesPaths().length !== 0) {
-            await this.getLogger().info(`Found modules path to load from config.`);
+            await this.getLogger().info(undefined, `Found modules path to load from config.`);
             await Promise.all(config.getModulesPaths().map((path) => this.modulesLoader.loadModulesFromPath(path)));
         }
         if (this.schemaLoader.getModulesPath().length !== 0) {
-            await this.getLogger().info(`Found modules path to load from schema.`);
+            await this.getLogger().info(undefined, `Found modules path to load from schema.`);
             await Promise.all(
                 this.schemaLoader.getModulesPath().map((path) => this.modulesLoader.loadModulesFromPath(path)),
             );
         }
         if (this.modulesLoader.getModules().length === 0) {
-            await this.getLogger().warn(`No modules has been loaded.`);
+            await this.getLogger().warn(undefined, `No modules has been loaded.`);
         }
 
         this.prepareEngineContext();
@@ -170,8 +170,9 @@ export class GallifreyRulesEngine {
     ): Promise<void> {
         const { namespace, actionName, payload, entityName, eventName, eventId } = asyncActionEvent;
         //const eventLag = 0; // todo: calculate
-        await this.getLogger().info(`handleAsyncActionEvent [START: ${actionName}]`);
+        await this.getLogger().info(undefined, `handleAsyncActionEvent [START: ${actionName}]`);
         await this.getLogger().debug(
+            undefined,
             `handleAsyncActionEvent [START: ${actionName}] Details: ${JSON.stringify(asyncActionEvent, null, 2)}`,
         );
         if (namespace !== this.getNamespace()) {
@@ -205,6 +206,7 @@ export class GallifreyRulesEngine {
             );
         } catch (e) {
             await this.getLogger().error(
+                undefined,
                 `handleAsyncActionEvent [EXCEPTION: ${actionName}]: ${JSON.stringify({
                     ...asyncActionEvent,
                     error: fe(e),
@@ -221,7 +223,15 @@ export class GallifreyRulesEngine {
     async handleScheduledEvent(scheduledEvent: ScheduledEventType, pause?: () => () => void): Promise<void> {
         const { entityName, eventName, eventId, source } = scheduledEvent.event;
         const eventLag = 0; // todo: calculate
+        const engineEventContext = await this.createEngineEventContext(
+            scheduledEvent.event.entityName,
+            scheduledEvent.event.eventName,
+            scheduledEvent.event.eventId,
+            scheduledEvent.event.source,
+        );
+
         await this.getLogger().info(
+            engineEventContext,
             `handleScheduledEvent [START: ${eventId}]: ${JSON.stringify({
                 entityName,
                 eventName,
@@ -231,6 +241,7 @@ export class GallifreyRulesEngine {
             })}`,
         );
         await this.getLogger().debug(
+            engineEventContext,
             `handleScheduledEvent [START: ${eventId}] Details: ${JSON.stringify(scheduledEvent, null, 2)}`,
         );
         if (scheduledEvent.event.namespace !== this.getNamespace()) {
@@ -239,12 +250,6 @@ export class GallifreyRulesEngine {
             );
         }
 
-        const engineEventContext = await this.createEngineEventContext(
-            scheduledEvent.event.entityName,
-            scheduledEvent.event.eventName,
-            scheduledEvent.event.eventId,
-            scheduledEvent.event.source,
-        );
         engineEventContext.setScheduledEvent(scheduledEvent);
 
         return await this.coreHandleEvent<any>(
@@ -272,7 +277,9 @@ export class GallifreyRulesEngine {
             namespace: this.getNamespace(),
         } as GallifreyEventTypeInternal<EventPayloadType>;
         const { entityName, eventName, eventId, eventLag, source } = internalEvent;
+        const engineEventContext = await this.createEngineEventContext(entityName, eventName, eventId, source);
         await this.getLogger().info(
+            engineEventContext,
             `handleEvent [START: ${eventId}]: ${JSON.stringify({
                 entityName,
                 eventName,
@@ -281,10 +288,12 @@ export class GallifreyRulesEngine {
                 eventLag,
             })}`,
         );
-        await this.getLogger().debug(`handleEvent [START: ${eventId}] Details: ${JSON.stringify(event, null, 2)}`);
+        await this.getLogger().debug(
+            engineEventContext,
+            `handleEvent [START: ${eventId}] Details: ${JSON.stringify(event, null, 2)}`,
+        );
         AssertTypeGuard(IsTypeGallifreyEventType, event);
 
-        const engineEventContext = await this.createEngineEventContext(entityName, eventName, eventId, source);
         await this.validatePayloadSchema(engineEventContext, event.payload);
         return await this.coreHandleEvent<any>(engineEventContext, internalEvent, pause);
     }
@@ -299,6 +308,7 @@ export class GallifreyRulesEngine {
         const { entityName, eventName, eventId, eventLag, source } = internalEvent;
 
         const { release, acquired } = await AssertNotNull(this.providersContext.distributedLocks).acquireLock(
+            engineEventContext,
             internalEvent,
             this.schemaLoader.getEventLevelAtomicEvent(entityName, eventName) ?? false,
             this.schemaLoader.getEventLevelAtomicEntity(entityName, eventName) ?? false,
@@ -307,6 +317,7 @@ export class GallifreyRulesEngine {
         if (!acquired) {
             if (engineEventContext.getEventLevelConfig().isContinueOnFailedAcquireLock()) {
                 await this.getLogger().warn(
+                    engineEventContext,
                     `Failed to acquire distributed lock, but set to ignore, continuing with event.`,
                 );
             } else {
@@ -321,7 +332,7 @@ export class GallifreyRulesEngine {
             if (canContinue) {
                 await this.processRules(internalEvent, engineEventContext, source, pause);
             } else {
-                await this.getLogger().info(`Skipping rules, canContinue is false`);
+                await this.getLogger().info(engineEventContext, `Skipping rules, canContinue is false`);
             }
 
             // check max event size as guardrails and more
@@ -343,6 +354,7 @@ export class GallifreyRulesEngine {
             this.metrics?.timeEvent(internalEvent, duration);
             engineEventContext.getJournalLogger().endEvent(duration, e as Error);
             await this.getLogger().error(
+                engineEventContext,
                 `handleEvent [EXCEPTION: ${eventId}]: ${JSON.stringify({
                     entityName,
                     eventName,
@@ -376,6 +388,7 @@ export class GallifreyRulesEngine {
             }
         } finally {
             await this.getLogger().info(
+                engineEventContext,
                 `handleEvent [END: ${eventId}]: ${JSON.stringify({
                     entityName,
                     eventName,
@@ -385,6 +398,7 @@ export class GallifreyRulesEngine {
                 })}`,
             );
             await this.getLogger().debug(
+                engineEventContext,
                 `handleEvent [END: ${eventId}] Details: ${JSON.stringify(internalEvent, null, 2)}`,
             );
             await release();
@@ -403,39 +417,57 @@ export class GallifreyRulesEngine {
         pause: (() => () => void) | undefined,
     ): Promise<{ bubble: boolean; type?: 'EngineCriticalError' | 'CriticalError' | 'Error' }> {
         if (pause && e instanceof PauseConsumer) {
-            await this.getLogger().info(`Got PauseConsumer exception with seconds: ${e.getSeconds()}`);
+            await this.getLogger().info(
+                engineEventContext,
+                `Got PauseConsumer exception with seconds: ${e.getSeconds()}`,
+            );
             const resume = pause();
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             setTimeout(async () => {
-                await this.getLogger().info(`PauseConsumer timer expired, resuming`);
+                await this.getLogger().info(engineEventContext, `PauseConsumer timer expired, resuming`);
                 resume();
             }, e.getSeconds() * 1000);
             return { bubble: false };
         }
 
         if (e instanceof EngineCriticalError) {
-            await this.getLogger().error(`An engine critical error has occurred while handling event: ${fe(e)}`);
+            await this.getLogger().error(
+                engineEventContext,
+                `An engine critical error has occurred while handling event: ${fe(e)}`,
+            );
             return { bubble: true, type: 'EngineCriticalError' };
         }
         if (e instanceof CriticalError) {
-            await this.getLogger().error(`A critical error has occurred while handling event: ${fe(e)}`);
+            await this.getLogger().error(
+                engineEventContext,
+                `A critical error has occurred while handling event: ${fe(e)}`,
+            );
             if (!engineEventContext.getEventLevelConfig().throwOnCriticalError()) {
-                await this.getLogger().warn(`throw on critical error exception is off, continuing`);
+                await this.getLogger().warn(engineEventContext, `throw on critical error exception is off, continuing`);
                 return { bubble: false };
             }
             return { bubble: true, type: 'CriticalError' }; //todo rate limiting?
         }
         if (e instanceof InfoError) {
-            await this.getLogger().info(`An info error has occurred while handling event: ${fe(e)}`);
+            await this.getLogger().info(
+                engineEventContext,
+                `An info error has occurred while handling event: ${fe(e)}`,
+            );
             return { bubble: false };
         }
         if (e instanceof WarningError) {
-            await this.getLogger().warn(`A warning error has occurred while handling event: ${fe(e)}`);
+            await this.getLogger().warn(
+                engineEventContext,
+                `A warning error has occurred while handling event: ${fe(e)}`,
+            );
             return { bubble: false }; //todo we will figure out whether to stop or not
         }
         if (!engineEventContext.getEventLevelConfig().throwOnEventUnhandledException()) {
-            await this.getLogger().error(`An unhandled error has occurred while handling event: ${fe(e)}`);
-            await this.getLogger().warn(`throw on event unhandled exception is off, continuing`);
+            await this.getLogger().error(
+                engineEventContext,
+                `An unhandled error has occurred while handling event: ${fe(e)}`,
+            );
+            await this.getLogger().warn(engineEventContext, `throw on event unhandled exception is off, continuing`);
             return { bubble: false };
         }
         return { bubble: true, type: 'Error' };
@@ -508,7 +540,10 @@ export class GallifreyRulesEngine {
                     engineEventContext,
                     this.schemaLoader.getEventLevelConfig(event.entityName, event.eventName),
                 );
-                await this.getLogger().debug(`Getting configuration accessor from Configuration provider`);
+                await this.getLogger().debug(
+                    engineEventContext,
+                    `Getting configuration accessor from Configuration provider`,
+                );
 
                 engineRule = new EngineRule(
                     configAccessor,
@@ -524,7 +559,10 @@ export class GallifreyRulesEngine {
                     () => this.getScheduledEventContext(engineEventContext),
                     this.getScheduledEventsDelegate(engineEventContext, source),
                 );
-                await this.getLogger().info(`Calling trigger on rule: ${ruleInstance.getModuleName()}`);
+                await this.getLogger().info(
+                    engineEventContext,
+                    `Calling trigger on rule: ${ruleInstance.getModuleName()}`,
+                );
                 // do we throw if a single rule fails?
                 await this.runRule(engineEventContext, event, ruleInstance, engineRule, source, pause);
             }
@@ -612,16 +650,19 @@ export class GallifreyRulesEngine {
             return this.doAsyncAction(event, engineEventContext, actionName, payload);
         }
 
-        await this.getLogger().info(`doAction: ${actionName}${triggeredAsAsync ? ' queued and triggered async' : ''}`);
+        await this.getLogger().info(
+            engineEventContext,
+            `doAction: ${actionName}${triggeredAsAsync ? ' queued and triggered async' : ''}`,
+        );
         if (this.isActionDisabled(actionName)) {
-            await this.getLogger().info(`isActionDisabled on action: ${actionName}`);
+            await this.getLogger().info(engineEventContext, `isActionDisabled on action: ${actionName}`);
             return undefined as ActionResponseType;
         }
 
-        await this.getLogger().debug(`Fetching action module: ${actionName}`);
+        await this.getLogger().debug(engineEventContext, `Fetching action module: ${actionName}`);
         const [moduleData] = this.modulesLoader.getModulesByName(AssertNotNull(this.getNamespace()), [actionName]);
         this.modulesLoader.validatePluginType(moduleData, PluginType.Action);
-        await this.getLogger().debug(`Fetched action module: ${actionName}`);
+        await this.getLogger().debug(engineEventContext, `Fetched action module: ${actionName}`);
         const configAccessor = await TypeAssertNotNull(
             this.providersContext.configuration,
         ).getConfigurationAccessorInterface(
@@ -637,7 +678,7 @@ export class GallifreyRulesEngine {
             (measurementName: string) =>
                 AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
         );
-        await this.getLogger().debug(`Fetched action module instance: ${actionName}`);
+        await this.getLogger().debug(engineEventContext, `Fetched action module instance: ${actionName}`);
 
         const engineAction = new EngineAction(
             configAccessor,
@@ -659,7 +700,7 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger().endDoAction(actionName, response, duration);
             return response;
         } catch (e) {
-            await this.getLogger().error(`Error at action trigger: ${fe(e)}`);
+            await this.getLogger().error(engineEventContext, `Error at action trigger: ${fe(e)}`);
             const duration = timer.end();
             this.metrics?.timeAction(event, actionInstance.getModuleName(), duration, triggeredAsAsync);
             engineEventContext.getJournalLogger().endDoAction(actionName, undefined, duration, e as Error);
@@ -676,7 +717,7 @@ export class GallifreyRulesEngine {
         dataObjectName: string,
         request: DataObjectRequestType,
     ) {
-        await this.getLogger().info(`pullDataObject: ${dataObjectName}`);
+        await this.getLogger().info(engineEventContext, `pullDataObject: ${dataObjectName}`);
 
         if (this.isPullDataObjectHookAttached(dataObjectName)) {
             return (await this.callPullDataObject(dataObjectName, request)) as DataObjectResponseType;
@@ -684,7 +725,10 @@ export class GallifreyRulesEngine {
 
         const eventStoreKey = this.getDataObjectEventStoreKey(dataObjectName, request);
         if (eventStoreKey && engineEventContext.isInEventStore(eventStoreKey)) {
-            await this.getLogger().info(`pullDataObject: ${dataObjectName} result found in event store.`);
+            await this.getLogger().info(
+                engineEventContext,
+                `pullDataObject: ${dataObjectName} result found in event store.`,
+            );
             engineEventContext.getJournalLogger().dataObjectPulledFromEventStore(dataObjectName, request);
             //todo metrics for cache hit on data objects
             return engineEventContext.getFromEventStore(eventStoreKey);
@@ -692,7 +736,7 @@ export class GallifreyRulesEngine {
 
         const [moduleData] = this.modulesLoader.getModulesByName(AssertNotNull(this.getNamespace()), [dataObjectName]);
         this.modulesLoader.validatePluginType(moduleData, PluginType.DataObject);
-        await this.getLogger().debug(`Fetched data object module: ${dataObjectName}`);
+        await this.getLogger().debug(engineEventContext, `Fetched data object module: ${dataObjectName}`);
         const configAccessor = await TypeAssertNotNull(
             this.providersContext.configuration,
         ).getConfigurationAccessorInterface(
@@ -710,7 +754,7 @@ export class GallifreyRulesEngine {
             (measurementName: string) =>
                 AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
         );
-        await this.getLogger().debug(`Fetched data object module instance: ${dataObjectName}`);
+        await this.getLogger().debug(engineEventContext, `Fetched data object module instance: ${dataObjectName}`);
 
         const engineDataObject = new EngineDataObject<DataObjectRequestType>(
             configAccessor,
@@ -733,7 +777,7 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger().endPullDataObject(dataObjectName, response, duration);
             return response;
         } catch (e) {
-            await this.getLogger().error(`Error at data object get: ${fe(e)}`);
+            await this.getLogger().error(engineEventContext, `Error at data object get: ${fe(e)}`);
             const duration = timer.end();
             this.metrics?.timeDataObject(event, dataObjectInstance.getModuleName(), duration);
             engineEventContext.getJournalLogger().endPullDataObject(dataObjectName, undefined, duration, e as Error);
@@ -761,7 +805,7 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger().endRunRule(ruleInstance.getModuleName(), ruleTimer);
             this.metrics?.timeRule(event, ruleInstance.getModuleName(), ruleTimer);
         } catch (e) {
-            await this.getLogger().error(`Error at rule trigger: ${fe(e)}`);
+            await this.getLogger().error(engineEventContext, `Error at rule trigger: ${fe(e)}`);
             const ruleTimer = engineRule.getTimer().end();
             this.metrics?.timeRule(event, ruleInstance.getModuleName(), ruleTimer);
             engineEventContext.getJournalLogger().endRunRule(ruleInstance.getModuleName(), ruleTimer, e as Error);
@@ -835,12 +879,13 @@ export class GallifreyRulesEngine {
     ) {
         if (!request) {
             await this.getLogger().warn(
+                engineEventContext,
                 `addResultIntoEventStore was called on the data object: ${dataObjectName} that has no request, ignoring`,
             );
             return;
         }
         const key = this.getDataObjectEventStoreKey(dataObjectName, request);
-        await engineEventContext.addToEventStore(key as string, value);
+        await engineEventContext.addToEventStore(engineEventContext, key as string, value);
     }
 
     private getDataObjectEventStoreKey(dataObjectName: string, request: any) {
@@ -856,19 +901,25 @@ export class GallifreyRulesEngine {
     ): Promise<boolean> {
         const { entityName, eventName } = event;
 
-        await this.getLogger().debug(`Fetching filters for event: ${eventName}`);
+        await this.getLogger().debug(engineEventContext, `Fetching filters for event: ${eventName}`);
         const filterNames = this.schemaLoader.getFiltersForEvent(entityName, eventName);
-        await this.getLogger().debug(`Fetched filters for event: ${eventName}: ${filterNames.join(', ')}`);
+        await this.getLogger().debug(
+            engineEventContext,
+            `Fetched filters for event: ${eventName}: ${filterNames.join(', ')}`,
+        );
         if (filterNames.length === 0) {
-            await this.getLogger().info(`No filters found for entityName: ${entityName}, eventName: ${eventName}`);
+            await this.getLogger().info(
+                engineEventContext,
+                `No filters found for entityName: ${entityName}, eventName: ${eventName}`,
+            );
             return true; // continue
         }
 
         const filtersModules = this.modulesLoader.getModulesByName(AssertNotNull(this.getNamespace()), filterNames);
         this.modulesLoader.validatePluginType(filtersModules, PluginType.Filter);
-        await this.getLogger().debug(`Fetched filtersModules`);
+        await this.getLogger().debug(engineEventContext, `Fetched filtersModules`);
 
-        await this.getLogger().debug(`Fetching filtersInstances`);
+        await this.getLogger().debug(engineEventContext, `Fetching filtersInstances`);
         const configAccessor = await TypeAssertNotNull(
             this.providersContext.configuration,
         ).getConfigurationAccessorInterface(
@@ -884,7 +935,7 @@ export class GallifreyRulesEngine {
             (measurementName: string) =>
                 AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
         );
-        await this.getLogger().debug(`Fetched filtersInstances: ${filtersInstances.length}`);
+        await this.getLogger().debug(engineEventContext, `Fetched filtersInstances: ${filtersInstances.length}`);
         return await this.runFilters(event, engineEventContext, filtersInstances);
     }
 
@@ -896,19 +947,25 @@ export class GallifreyRulesEngine {
     ) {
         const { entityName, eventName } = event;
 
-        await this.getLogger().debug(`Fetching rules for event: ${eventName}`);
+        await this.getLogger().debug(engineEventContext, `Fetching rules for event: ${eventName}`);
         const rulesNames = this.schemaLoader.getRulesForEvent(entityName, eventName);
-        await this.getLogger().debug(`Fetched rules for event: ${eventName}: ${rulesNames.join(', ')}`);
-        await this.getLogger().debug(`Fetching rulesModules`);
+        await this.getLogger().debug(
+            engineEventContext,
+            `Fetched rules for event: ${eventName}: ${rulesNames.join(', ')}`,
+        );
+        await this.getLogger().debug(engineEventContext, `Fetching rulesModules`);
         const rulesModules = this.modulesLoader.getModulesByName(AssertNotNull(this.getNamespace()), rulesNames);
         this.modulesLoader.validatePluginType(rulesModules, PluginType.Rule);
-        await this.getLogger().debug(`Fetched rulesModules`);
+        await this.getLogger().debug(engineEventContext, `Fetched rulesModules`);
 
         if (rulesModules.length === 0) {
-            await this.getLogger().warn(`No rules found for entityName: ${entityName}, eventName: ${eventName}`);
+            await this.getLogger().warn(
+                engineEventContext,
+                `No rules found for entityName: ${entityName}, eventName: ${eventName}`,
+            );
             return;
         }
-        await this.getLogger().debug(`Fetching rulesInstances`);
+        await this.getLogger().debug(engineEventContext, `Fetching rulesInstances`);
         const configAccessor = await TypeAssertNotNull(
             this.providersContext.configuration,
         ).getConfigurationAccessorInterface(
@@ -923,7 +980,7 @@ export class GallifreyRulesEngine {
             (measurementName: string) =>
                 AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
         );
-        await this.getLogger().debug(`Fetched rulesInstances: ${rulesInstances.length}`);
+        await this.getLogger().debug(engineEventContext, `Fetched rulesInstances: ${rulesInstances.length}`);
         //*/ isRuleEnabled?
         await this.runRules(event, engineEventContext, rulesInstances, source, pause);
     }
@@ -940,7 +997,10 @@ export class GallifreyRulesEngine {
                 engineEventContext,
                 this.schemaLoader.getEventLevelConfig(event.entityName, event.eventName),
             );
-            await this.getLogger().debug(`Getting configuration accessor from Configuration provider`);
+            await this.getLogger().debug(
+                engineEventContext,
+                `Getting configuration accessor from Configuration provider`,
+            );
 
             const engineFilter = new EngineFilter(
                 configAccessor,
@@ -953,7 +1013,10 @@ export class GallifreyRulesEngine {
                 (dataObjectName: string, request?: any) =>
                     this.pullDataObject(event, engineEventContext, dataObjectName, request),
             );
-            await this.getLogger().info(`Calling canContinue on filter: ${filterInstance.getModuleName()}`);
+            await this.getLogger().info(
+                engineEventContext,
+                `Calling canContinue on filter: ${filterInstance.getModuleName()}`,
+            );
             if (!(await this.canContinueFilter(engineEventContext, event, filterInstance, engineFilter))) {
                 return false;
             }
@@ -979,7 +1042,7 @@ export class GallifreyRulesEngine {
             }
             return canContinue;
         } catch (e) {
-            await this.getLogger().error(`Error at filter canContinue: ${fe(e)}`);
+            await this.getLogger().error(engineEventContext, `Error at filter canContinue: ${fe(e)}`);
             const filterTimer = engineFilter.getTimer().end();
             this.metrics?.timeFilter(event, filterInstance.getModuleName(), filterTimer);
             engineEventContext.getJournalLogger().endFilter(filterInstance.getModuleName(), filterTimer, e as Error);
@@ -994,8 +1057,8 @@ export class GallifreyRulesEngine {
         }
         const consumers = this.schemaLoader.getConsumers();
         consumers.length === 0
-            ? await this.getLogger().warn(`Found ${consumers.length} consumers`)
-            : await this.getLogger().info(`Found ${consumers.length} consumers`);
+            ? await this.getLogger().warn(undefined, `Found ${consumers.length} consumers`)
+            : await this.getLogger().info(undefined, `Found ${consumers.length} consumers`);
         return (await Promise.all(consumers.map((consumer) => this.startConsumer(consumer)))).filter(
             (a) => a !== undefined,
         );
@@ -1046,21 +1109,24 @@ export class GallifreyRulesEngine {
     private async startConsumer(
         consumer: NamespaceSchemaConsumer<any>,
     ): Promise<GallifreyRulesEngineConsumerInterface | undefined> {
-        await this.getLogger().info(`Preparing consumer: ${consumer.name} of type: ${consumer.type}`);
+        await this.getLogger().info(undefined, `Preparing consumer: ${consumer.name} of type: ${consumer.type}`);
         AssertTypeGuard(IsTypeNamespaceSchemaConsumer, consumer);
 
         if (consumer.envVariable) {
-            await this.getLogger().info(`Consumer: ${consumer.name} has environment variable: ${consumer.envVariable}`);
+            await this.getLogger().info(
+                undefined,
+                `Consumer: ${consumer.name} has environment variable: ${consumer.envVariable}`,
+            );
             const value = process.env[consumer.envVariable] ?? 'FALSE';
             if (value.toLowerCase() !== 'true') {
-                await this.getLogger().warn(`Consumer: ${consumer.name} is not set to be active, skipping.`);
+                await this.getLogger().warn(undefined, `Consumer: ${consumer.name} is not set to be active, skipping.`);
                 return undefined;
             }
-            await this.getLogger().info(`Consumer: ${consumer.name} is set to be active.`);
+            await this.getLogger().info(undefined, `Consumer: ${consumer.name} is set to be active.`);
         }
 
         const config = new Config();
-        await this.getLogger().info(`Starting consumer: ${consumer.name} of type: ${consumer.type}`);
+        await this.getLogger().info(undefined, `Starting consumer: ${consumer.name} of type: ${consumer.type}`);
 
         const kafkaConsumer = new KafkaConsumer(
             consumer.name,
@@ -1094,7 +1160,10 @@ export class GallifreyRulesEngine {
         // stopping? let's stop all consumers
         let exitTimeout: undefined | NodeJS.Timeout;
         kafkaConsumer.addOnStopOnce(async () => {
-            await this.getLogger().warn(`Consumer: ${consumer.name} received on stop, signaling process to stop.`);
+            await this.getLogger().warn(
+                undefined,
+                `Consumer: ${consumer.name} received on stop, signaling process to stop.`,
+            );
             void this.stopConsumers();
             if (config.useExitTimeout()) {
                 if (exitTimeout) {
@@ -1102,7 +1171,7 @@ export class GallifreyRulesEngine {
                 }
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 exitTimeout = setTimeout(async () => {
-                    await this.getLogger().warn(`Exiting process after consumers shutdown.`);
+                    await this.getLogger().warn(undefined, `Exiting process after consumers shutdown.`);
                     process.exit(1);
                 }, 5000);
             }
@@ -1124,20 +1193,20 @@ export class GallifreyRulesEngine {
 
         const schemaTester = new JsonSchemaTester();
         try {
-            await this.getLogger().debug(`Testing payload schema against: ${schemaFile}`);
+            await this.getLogger().debug(engineEventContext, `Testing payload schema against: ${schemaFile}`);
             await schemaTester.loadAndTest(schemaFile, payload);
         } catch (e) {
-            await this.getLogger().debug(`Failed payload schema validation against: ${schemaFile}`);
+            await this.getLogger().debug(engineEventContext, `Failed payload schema validation against: ${schemaFile}`);
             throw new EngineCriticalError(`Failed to validatePayloadSchema: ${fe(e)}`);
         }
     }
 
     private async processAsyncActions() {
-        await this.getLogger().debug(`Starting to process AsyncActions from schema`);
+        await this.getLogger().debug(undefined, `Starting to process AsyncActions from schema`);
         const asyncActions = this.schemaLoader.getAsyncActions();
         for (const asyncAction of asyncActions) {
             const { actionPluginName, queuerConfig } = asyncAction;
-            await this.getLogger().info(`Processing AsyncAction: ${actionPluginName}`);
+            await this.getLogger().info(undefined, `Processing AsyncAction: ${actionPluginName}`);
             // action exists?
             const [moduleData] = this.modulesLoader.getModulesByName(AssertNotNull(this.getNamespace()), [
                 actionPluginName,
@@ -1157,7 +1226,7 @@ export class GallifreyRulesEngine {
                     undefined,
                 ),
             );
-            await this.getLogger().info(`Validating queuerConfig for: ${queuerInstance.getModuleName()}`);
+            await this.getLogger().info(undefined, `Validating queuerConfig for: ${queuerInstance.getModuleName()}`);
             try {
                 queuerInstance.validateQueuerConfig(queuerConfig);
             } catch (e) {
@@ -1178,17 +1247,17 @@ export class GallifreyRulesEngine {
         asyncActionName: string,
         payload: ActionPayloadType,
     ) {
-        await this.getLogger().info(`doAsyncAction: ${asyncActionName}`);
+        await this.getLogger().info(engineEventContext, `doAsyncAction: ${asyncActionName}`);
         if (this.isActionDisabled(asyncActionName)) {
-            await this.getLogger().info(`isActionDisabled on async action: ${asyncActionName}`);
+            await this.getLogger().info(engineEventContext, `isActionDisabled on async action: ${asyncActionName}`);
             return undefined as ActionResponseType;
         }
         const asyncActionConfig = AssertNotNull(this.asyncActions.find((a) => a.actionPluginName === asyncActionName));
 
-        await this.getLogger().debug(`Fetching async action module: ${asyncActionName}`);
+        await this.getLogger().debug(engineEventContext, `Fetching async action module: ${asyncActionName}`);
         const [moduleData] = this.modulesLoader.getModulesByName(AssertNotNull(this.getNamespace()), [asyncActionName]);
         this.modulesLoader.validatePluginType(moduleData, PluginType.Action);
-        await this.getLogger().debug(`Fetched action module: ${asyncActionName}`);
+        await this.getLogger().debug(engineEventContext, `Fetched action module: ${asyncActionName}`);
         const configAccessor = await TypeAssertNotNull(
             this.providersContext.configuration,
         ).getConfigurationAccessorInterface(
@@ -1204,7 +1273,7 @@ export class GallifreyRulesEngine {
             (measurementName: string) =>
                 AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
         );
-        await this.getLogger().debug(`Fetched async action module instance: ${asyncActionName}`);
+        await this.getLogger().debug(engineEventContext, `Fetched async action module instance: ${asyncActionName}`);
 
         const engineAction = new EngineAction(
             configAccessor,
@@ -1222,7 +1291,7 @@ export class GallifreyRulesEngine {
             : true;
 
         if (queueAsAsync) {
-            await this.getLogger().info(`Preparing to queue Async action: ${asyncActionName}`);
+            await this.getLogger().info(engineEventContext, `Preparing to queue Async action: ${asyncActionName}`);
             const queuerInstance = await this.instancesFactory.getActionQueuerInterfaceProvider(
                 AssertNotNull(this.engineContext),
                 await AssertNotNull(this.providersContext.configuration).getConfigurationAccessorInterface(
@@ -1248,7 +1317,7 @@ export class GallifreyRulesEngine {
                 this.metrics?.queuedAction(event, asyncActionName, duration, true);
                 return undefined;
             } catch (e) {
-                await this.getLogger().error(`Error at queueAction: ${fe(e)}`);
+                await this.getLogger().error(engineEventContext, `Error at queueAction: ${fe(e)}`);
                 const duration = timer.end();
                 this.metrics?.queuedAction(event, asyncActionName, duration, false);
                 engineEventContext.getJournalLogger().endQueueAsyncAction(asyncActionName, duration, e as Error);
@@ -1256,6 +1325,7 @@ export class GallifreyRulesEngine {
             }
         } else {
             await this.getLogger().info(
+                engineEventContext,
                 `Async action decided to not queue and instead execute immediately: ${asyncActionName}`,
             );
             const timer = new PerformanceTimer();
@@ -1268,7 +1338,7 @@ export class GallifreyRulesEngine {
                 engineEventContext.getJournalLogger().endDoAction(asyncActionName, response, duration);
                 return response;
             } catch (e) {
-                await this.getLogger().error(`Error at action trigger: ${fe(e)}`);
+                await this.getLogger().error(engineEventContext, `Error at action trigger: ${fe(e)}`);
                 const duration = timer.end();
                 this.metrics?.timeAction(event, asyncActionInstance.getModuleName(), duration, false);
                 engineEventContext.getJournalLogger().endDoAction(asyncActionName, undefined, duration, e as Error);
