@@ -44,9 +44,9 @@ export class EngineEventContext implements EngineEventContextInterface {
         this.journalLogger = journalLogger;
     }
 
-    async addToEventStore(key: string, value: any) {
+    async addToEventStore(context: EngineEventContextInterface, key: string, value: any) {
         if (this.isInEventStore(key)) {
-            await this.logger.warn(`Key already exists in eventStore: ${key}`);
+            await this.logger.warn(context, `Key already exists in eventStore: ${key}`);
         }
         this.eventStore[key] = value;
     }

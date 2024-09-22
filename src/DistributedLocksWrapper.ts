@@ -5,6 +5,7 @@ import { GallifreyEventTypeInternal } from './lib/GallifreyEventTypeInternal';
 import Config from './lib/Config';
 import { LoggerInterface } from './interfaces/Providers';
 import { fe } from './lib/Utils';
+import { EngineEventContext } from './lib/EngineEventContext';
 
 export default class DistributedLocksWrapper {
     private readonly waitTimeInMs: number;
@@ -20,6 +21,7 @@ export default class DistributedLocksWrapper {
     }
 
     async acquireLock(
+        engineEventContext: EngineEventContext,
         event: GallifreyEventTypeInternal<any>,
         atomicEvent: boolean,
         atomicEntity: boolean,
@@ -38,12 +40,12 @@ export default class DistributedLocksWrapper {
 
         const timer = new PerformanceTimer().resume();
         try {
-            await this.logger.info(`Starting acquireLock: ${lockId}`);
+            await this.logger.info(engineEventContext, `Starting acquireLock: ${lockId}`);
             const { release, acquired } = await this.inner.acquireLock(lockId, this.waitTimeInMs);
             if (acquired) {
-                await this.logger.info(`Acquired Lock successfully: ${lockId}`);
+                await this.logger.info(engineEventContext, `Acquired Lock successfully: ${lockId}`);
             } else {
-                await this.logger.error(`Failed to acquire Lock: ${lockId}`);
+                await this.logger.error(engineEventContext, `Failed to acquire Lock: ${lockId}`);
             }
             const duration = timer.end();
             this.metrics.timeAcquireLock(event, duration, true);
@@ -65,7 +67,7 @@ export default class DistributedLocksWrapper {
         } catch (e) {
             const duration = timer.end();
             this.metrics.timeAcquireLock(event, duration, false);
-            await this.logger.debug(`Failed to acquire lock exception: ${lockId}: ${fe(e)}`);
+            await this.logger.debug(engineEventContext, `Failed to acquire lock exception: ${lockId}: ${fe(e)}`);
             throw e;
         }
     }
