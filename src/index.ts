@@ -19,4 +19,3 @@ export {
     TestingJournalLoggerProviderMethods,
 } from './testing-modules/TestingJournalLoggerProvider';
 export { GallifreyRulesEngineConsumerInterface } from './consumers/GallifreyRulesEngineConsumerInterface';
-export { generateCodeForDataObjectsAndActionsHelpers } from './scripts/generate-data-objects-actions-helpers';
