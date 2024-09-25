@@ -186,6 +186,7 @@ export class GallifreyRulesEngine {
             asyncActionEvent.eventName,
             asyncActionEvent.eventId,
             source,
+            asyncActionEvent.payload,
         );
 
         try {
@@ -228,6 +229,7 @@ export class GallifreyRulesEngine {
             scheduledEvent.event.eventName,
             scheduledEvent.event.eventId,
             scheduledEvent.event.source,
+            scheduledEvent.event.payload,
         );
 
         await this.getLogger().info(
@@ -276,8 +278,8 @@ export class GallifreyRulesEngine {
             ...event,
             namespace: this.getNamespace(),
         } as GallifreyEventTypeInternal<EventPayloadType>;
-        const { entityName, eventName, eventId, eventLag, source } = internalEvent;
-        const engineEventContext = await this.createEngineEventContext(entityName, eventName, eventId, source);
+        const { entityName, eventName, eventId, eventLag, source, payload } = internalEvent;
+        const engineEventContext = await this.createEngineEventContext(entityName, eventName, eventId, source, payload);
         await this.getLogger().info(
             engineEventContext,
             `handleEvent [START: ${eventId}]: ${JSON.stringify({
@@ -1353,7 +1355,13 @@ export class GallifreyRulesEngine {
         console.log(colors.yellow(textSync('Gallifrey Rules', { horizontalLayout: 'full' })), EOL);
     }
 
-    protected async createEngineEventContext(entityName: string, eventName: string, eventId: string, source: string) {
+    protected async createEngineEventContext(
+        entityName: string,
+        eventName: string,
+        eventId: string,
+        source: string,
+        payload: any,
+    ) {
         const engineEventContext = new EngineEventContext(
             AssertNotNull(this.getNamespace()),
             entityName,
@@ -1362,6 +1370,7 @@ export class GallifreyRulesEngine {
             source,
             this.getEventLevelConfig(entityName, eventName),
             this.getLogger(),
+            payload,
         );
         const configAccessor = await this.providersContext?.configuration?.getConfigurationAccessorInterface(
             engineEventContext,

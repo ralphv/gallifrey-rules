@@ -1,11 +1,11 @@
-import EngineEventContextInterface from '../engine-interfaces/EngineEventContextInterface';
 import { ScheduledEventType } from '../engine-events/ScheduledEventType';
 import { AssertNotNull } from './Utils';
 import Config from './Config';
 import SafeJournalLoggerWrapper from '../SafeJournalLoggerWrapper';
 import { LoggerInterface } from '../interfaces/Providers';
+import EngineFullEventContextInterface from '../engine-interfaces/EngineFullEventContextInterface';
 
-export class EngineEventContext implements EngineEventContextInterface {
+export class EngineEventContext implements EngineFullEventContextInterface {
     private eventStore: { [key: string]: any } = {};
     private scheduledEvent: ScheduledEventType | undefined;
     private journalLogger: SafeJournalLoggerWrapper | undefined;
@@ -18,6 +18,7 @@ export class EngineEventContext implements EngineEventContextInterface {
         private readonly source: string,
         private readonly eventLevelConfig: Config,
         private readonly logger: LoggerInterface,
+        private readonly payload: any,
     ) {}
 
     getEntityName(): string {
@@ -44,7 +45,7 @@ export class EngineEventContext implements EngineEventContextInterface {
         this.journalLogger = journalLogger;
     }
 
-    async addToEventStore(context: EngineEventContextInterface, key: string, value: any) {
+    async addToEventStore(context: EngineFullEventContextInterface, key: string, value: any) {
         if (this.isInEventStore(key)) {
             await this.logger.warn(context, `Key already exists in eventStore: ${key}`);
         }
@@ -76,5 +77,9 @@ export class EngineEventContext implements EngineEventContextInterface {
 
     getEventLevelConfig(): Config {
         return this.eventLevelConfig;
+    }
+
+    getPayload(): string {
+        return this.payload;
     }
 }
