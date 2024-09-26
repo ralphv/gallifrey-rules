@@ -57,6 +57,7 @@ import { loadAll } from 'js-yaml';
 import { WithModuleNameType } from './base-interfaces/ModuleInterface';
 import LoggerInterface from './interfaces/Providers/LoggerInterface';
 import ConsoleLoggerProvider from './modules/ConsoleLoggerProvider';
+import { isMainThread } from 'worker_threads';
 
 export class GallifreyRulesEngine {
     private readonly schemaLoader: SchemaLoader;
@@ -69,7 +70,9 @@ export class GallifreyRulesEngine {
     private readonly asyncActions: AsyncActionConfigType[] = [];
 
     static {
-        GallifreyRulesEngine.banner();
+        if (isMainThread) {
+            GallifreyRulesEngine.banner();
+        }
     }
 
     constructor() {
