@@ -26,8 +26,15 @@ export class GallifreyRulesEngineForTesting extends GallifreyRulesEngine {
         eventName: string,
         eventId: string,
         source: string,
+        payload: any,
     ): Promise<EngineEventContext> {
-        this.lastEngineCreateContext = await super.createEngineEventContext(entityName, eventName, eventId, source);
+        this.lastEngineCreateContext = await super.createEngineEventContext(
+            entityName,
+            eventName,
+            eventId,
+            source,
+            payload,
+        );
         return this.lastEngineCreateContext;
     }
 
@@ -102,6 +109,7 @@ export class GallifreyRulesEngineForTesting extends GallifreyRulesEngine {
             internalEvent.eventName,
             event.eventId,
             event.source,
+            event.payload,
         );
         return await this.doAction<ActionPayloadType, ActionResponseType>(
             internalEvent,
@@ -135,6 +143,7 @@ export class GallifreyRulesEngineForTesting extends GallifreyRulesEngine {
             internalEvent.eventName,
             event.eventId,
             event.source,
+            event.payload,
         );
         return await this.pullDataObject<DataObjectRequestType, DataObjectResponseType>(
             internalEvent,
