@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.14](https://github.com/ralphv/gallifrey-rules/compare/v0.1.8...v0.1.9) (2024-09-43)
+
+### Features
+
+* Making error logs clearer by adding a description for event
+
 ## [0.1.9](https://github.com/ralphv/gallifrey-rules/compare/v0.1.8...v0.1.9) (2024-08-13)
 
 ### Features

@@ -54,7 +54,7 @@ import { EOL } from 'os';
 import colors from 'colors';
 import { ascii } from './ascii';
 import { loadAll } from 'js-yaml';
-import { WithModuleNameType } from './base-interfaces/ModuleInterface';
+import ModuleInterface, { WithModuleNameType } from './base-interfaces/ModuleInterface';
 import LoggerInterface from './interfaces/Providers/LoggerInterface';
 import ConsoleLoggerProvider from './modules/ConsoleLoggerProvider';
 import { isMainThread } from 'worker_threads';
@@ -705,7 +705,10 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger().endDoAction(actionName, response, duration);
             return response;
         } catch (e) {
-            await this.getLogger().error(engineEventContext, `Error at action trigger: ${fe(e)}`);
+            await this.getLogger().error(
+                engineEventContext,
+                `Error at action trigger: ${this.describeEvent(event, actionInstance)} ${fe(e)}`,
+            );
             const duration = timer.end();
             this.metrics?.timeAction(event, actionInstance.getModuleName(), duration, triggeredAsAsync);
             engineEventContext.getJournalLogger().endDoAction(actionName, undefined, duration, e as Error);
@@ -782,7 +785,10 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger().endPullDataObject(dataObjectName, response, duration);
             return response;
         } catch (e) {
-            await this.getLogger().error(engineEventContext, `Error at data object get: ${fe(e)}`);
+            await this.getLogger().error(
+                engineEventContext,
+                `Error at data object get: ${this.describeEvent(event, dataObjectInstance)} ${fe(e)}`,
+            );
             const duration = timer.end();
             this.metrics?.timeDataObject(event, dataObjectInstance.getModuleName(), duration);
             engineEventContext.getJournalLogger().endPullDataObject(dataObjectName, undefined, duration, e as Error);
@@ -810,7 +816,10 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger().endRunRule(ruleInstance.getModuleName(), ruleTimer);
             this.metrics?.timeRule(event, ruleInstance.getModuleName(), ruleTimer);
         } catch (e) {
-            await this.getLogger().error(engineEventContext, `Error at rule trigger: ${fe(e)}`);
+            await this.getLogger().error(
+                engineEventContext,
+                `Error at rule trigger: ${this.describeEvent(event, ruleInstance)} ${fe(e)}`,
+            );
             const ruleTimer = engineRule.getTimer().end();
             this.metrics?.timeRule(event, ruleInstance.getModuleName(), ruleTimer);
             engineEventContext.getJournalLogger().endRunRule(ruleInstance.getModuleName(), ruleTimer, e as Error);
@@ -1047,7 +1056,10 @@ export class GallifreyRulesEngine {
             }
             return canContinue;
         } catch (e) {
-            await this.getLogger().error(engineEventContext, `Error at filter canContinue: ${fe(e)}`);
+            await this.getLogger().error(
+                engineEventContext,
+                `Error at filter canContinue: ${this.describeEvent(event, filterInstance)} ${fe(e)}`,
+            );
             const filterTimer = engineFilter.getTimer().end();
             this.metrics?.timeFilter(event, filterInstance.getModuleName(), filterTimer);
             engineEventContext.getJournalLogger().endFilter(filterInstance.getModuleName(), filterTimer, e as Error);
@@ -1322,7 +1334,10 @@ export class GallifreyRulesEngine {
                 this.metrics?.queuedAction(event, asyncActionName, duration, true);
                 return undefined;
             } catch (e) {
-                await this.getLogger().error(engineEventContext, `Error at queueAction: ${fe(e)}`);
+                await this.getLogger().error(
+                    engineEventContext,
+                    `Error at queueAction: ${this.describeEvent(event, undefined)} ${fe(e)}`,
+                );
                 const duration = timer.end();
                 this.metrics?.queuedAction(event, asyncActionName, duration, false);
                 engineEventContext.getJournalLogger().endQueueAsyncAction(asyncActionName, duration, e as Error);
@@ -1343,7 +1358,10 @@ export class GallifreyRulesEngine {
                 engineEventContext.getJournalLogger().endDoAction(asyncActionName, response, duration);
                 return response;
             } catch (e) {
-                await this.getLogger().error(engineEventContext, `Error at action trigger: ${fe(e)}`);
+                await this.getLogger().error(
+                    engineEventContext,
+                    `Error at action trigger: ${this.describeEvent(event, asyncActionInstance)} ${fe(e)}`,
+                );
                 const duration = timer.end();
                 this.metrics?.timeAction(event, asyncActionInstance.getModuleName(), duration, false);
                 engineEventContext.getJournalLogger().endDoAction(asyncActionName, undefined, duration, e as Error);
@@ -1414,6 +1432,16 @@ export class GallifreyRulesEngine {
                 return AssertNotNull(this.providersContext.scheduledEvents).queryScheduledEvents(query);
             },
         };
+    }
+
+    private describeEvent(
+        event: GallifreyEventTypeInternal<any>,
+        moduleInstance: WithModuleNameType<ModuleInterface> | undefined,
+    ): string {
+        if (!moduleInstance) {
+            return `namespace: ${event.namespace}, entity: ${event.entityName}, event: ${event.eventName}, id: ${event.eventId}, source: ${event.source}`;
+        }
+        return `namespace: ${event.namespace}, entity: ${event.entityName}, event: ${event.eventName}, id: ${event.eventId}, source: ${event.source}, module: ${moduleInstance.getModuleName()}`;
     }
 }
 
