@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.14](https://github.com/ralphv/gallifrey-rules/compare/v0.1.8...v0.1.9) (2024-09-43)
+## [0.2.15](https://github.com/ralphv/gallifrey-rules/compare/v0.1.8...v0.1.9) (2024-09-43)
 
 ### Features
 
