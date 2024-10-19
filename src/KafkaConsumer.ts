@@ -282,6 +282,10 @@ export class KafkaConsumer {
         this.emitter.once(EMITTER_STOP, () => void fn());
     }
 
+    public addOnStopAlways(fn: () => Promise<void>) {
+        this.emitter.on(EMITTER_STOP, () => void fn());
+    }
+
     public async stopConsumerAndWait() {
         if (this.consumer) {
             try {

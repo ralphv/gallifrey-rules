@@ -1176,7 +1176,7 @@ export class GallifreyRulesEngine {
         this.startedConsumers.push(kafkaConsumer);
         // stopping? let's stop all consumers
         let exitTimeout: undefined | NodeJS.Timeout;
-        kafkaConsumer.addOnStopOnce(async () => {
+        kafkaConsumer.addOnStopAlways(async () => {
             await this.getLogger().warn(
                 undefined,
                 `Consumer: ${consumer.name} received on stop, signaling process to stop.`,
