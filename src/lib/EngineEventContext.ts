@@ -51,7 +51,7 @@ export class EngineEventContext implements EngineFullEventContextInterface {
 
     async addToEventStore(context: EngineFullEventContextInterface, key: string, value: any) {
         if (this.isInEventStore(key)) {
-            await this.logger.warn(context, `Key already exists in eventStore: ${key}`);
+            this.logger.warn(context, `Key already exists in eventStore: ${key}`);
         }
         this.eventStore[key] = value;
     }

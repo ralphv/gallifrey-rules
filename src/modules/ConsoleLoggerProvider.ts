@@ -5,19 +5,19 @@ import EngineFullEventContextInterface from '../engine-interfaces/EngineFullEven
 
 @GallifreyProvider(ProviderType.Logger)
 export default class ConsoleLoggerProvider implements LoggerInterface {
-    async debug(context: EngineFullEventContextInterface, message: string, payload?: any): Promise<void> {
+    debug(context: EngineFullEventContextInterface, message: string, payload?: any): void {
         logger.debug(message, payload);
     }
 
-    async error(context: EngineFullEventContextInterface, message: string, payload?: any): Promise<void> {
+    error(context: EngineFullEventContextInterface, message: string, payload?: any): void {
         logger.error(message, payload);
     }
 
-    async info(context: EngineFullEventContextInterface, message: string, payload?: any): Promise<void> {
+    info(context: EngineFullEventContextInterface, message: string, payload?: any): void {
         logger.info(message, payload);
     }
 
-    async warn(context: EngineFullEventContextInterface, message: string, payload?: any): Promise<void> {
+    warn(context: EngineFullEventContextInterface, message: string, payload?: any): void {
         logger.warn(message, payload);
     }
 }

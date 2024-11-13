@@ -12,7 +12,7 @@ export default class SendEmailAction implements AsyncActionInterface<SendEmailAc
     @SpyCalls
     async trigger(engine: EngineActionInterface<SendEmailActionPayloadType>): Promise<void> {
         // For simplicity, we log sending email intention
-        await engine.info(
+        engine.info(
             `Sending email to [${engine.getPayload().emailAddress}] with email contents: ${engine.getPayload().email}`,
         );
     }

@@ -37,35 +37,35 @@ export default class EngineBase implements EngineLogInterface, EngineEventInterf
         return AssertNotNull(this.engineEventContext);
     }
 
-    async debug(message: string, ...args: any[]): Promise<void> {
+    debug(message: string, ...args: any[]): void {
         if (!this.logger) {
             this.l.debug(message, ...args);
         } else {
-            await this.logger.debug(this.engineEventContext, message, ...args);
+            this.logger.debug(this.engineEventContext, message, ...args);
         }
     }
 
-    async error(message: string, ...args: any[]): Promise<void> {
+    error(message: string, ...args: any[]): void {
         if (!this.logger) {
             this.l.error(message, ...args);
         } else {
-            await this.logger.error(this.engineEventContext, message, ...args);
+            this.logger.error(this.engineEventContext, message, ...args);
         }
     }
 
-    async info(message: string, ...args: any[]): Promise<void> {
+    info(message: string, ...args: any[]): void {
         if (!this.logger) {
             this.l.info(message, ...args);
         } else {
-            await this.logger.info(this.engineEventContext, message, ...args);
+            this.logger.info(this.engineEventContext, message, ...args);
         }
     }
 
-    async warn(message: string, ...args: any[]): Promise<void> {
+    warn(message: string, ...args: any[]): void {
         if (!this.logger) {
             this.l.warn(message, ...args);
         } else {
-            await this.logger.warn(this.engineEventContext, message, ...args);
+            this.logger.warn(this.engineEventContext, message, ...args);
         }
     }
 

@@ -40,12 +40,12 @@ export default class DistributedLocksWrapper {
 
         const timer = new PerformanceTimer().resume();
         try {
-            await this.logger.info(engineEventContext, `Starting acquireLock: ${lockId}`);
+            this.logger.info(engineEventContext, `Starting acquireLock: ${lockId}`);
             const { release, acquired } = await this.inner.acquireLock(lockId, this.waitTimeInMs);
             if (acquired) {
-                await this.logger.info(engineEventContext, `Acquired Lock successfully: ${lockId}`);
+                this.logger.info(engineEventContext, `Acquired Lock successfully: ${lockId}`);
             } else {
-                await this.logger.error(engineEventContext, `Failed to acquire Lock: ${lockId}`);
+                this.logger.error(engineEventContext, `Failed to acquire Lock: ${lockId}`);
             }
             const duration = timer.end();
             this.metrics.timeAcquireLock(event, duration, true);
@@ -67,7 +67,7 @@ export default class DistributedLocksWrapper {
         } catch (e) {
             const duration = timer.end();
             this.metrics.timeAcquireLock(event, duration, false);
-            await this.logger.debug(engineEventContext, `Failed to acquire lock exception: ${lockId}: ${fe(e)}`);
+            this.logger.debug(engineEventContext, `Failed to acquire lock exception: ${lockId}: ${fe(e)}`);
             throw e;
         }
     }
