@@ -682,6 +682,7 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger(),
             (measurementName: string) =>
                 AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
+            engineEventContext.getLogger(),
         );
         await this.getLogger().debug(engineEventContext, `Fetched action module instance: ${actionName}`);
 
@@ -761,6 +762,7 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger(),
             (measurementName: string) =>
                 AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
+            engineEventContext.getLogger(),
         );
         await this.getLogger().debug(engineEventContext, `Fetched data object module instance: ${dataObjectName}`);
 
@@ -948,6 +950,7 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger(),
             (measurementName: string) =>
                 AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
+            engineEventContext.getLogger(),
         );
         await this.getLogger().debug(engineEventContext, `Fetched filtersInstances: ${filtersInstances.length}`);
         return await this.runFilters(event, engineEventContext, filtersInstances);
@@ -993,6 +996,7 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger(),
             (measurementName: string) =>
                 AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
+            engineEventContext.getLogger(),
         );
         await this.getLogger().debug(engineEventContext, `Fetched rulesInstances: ${rulesInstances.length}`);
         //*/ isRuleEnabled?
@@ -1289,6 +1293,7 @@ export class GallifreyRulesEngine {
             engineEventContext.getJournalLogger(),
             (measurementName: string) =>
                 AssertNotNull(this.providersContext.metrics).getPoint(`plugins.${measurementName}`),
+            engineEventContext.getLogger(),
         );
         await this.getLogger().debug(engineEventContext, `Fetched async action module instance: ${asyncActionName}`);
 

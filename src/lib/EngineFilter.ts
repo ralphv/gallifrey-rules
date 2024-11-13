@@ -26,6 +26,7 @@ export default class EngineFilter extends EngineBase implements EngineFilterInte
             loggerName,
             journalLogger,
             getMetricsPointDelegate,
+            engineEventContext.getLogger(),
         );
         this.timer = new PerformanceTimer();
     }

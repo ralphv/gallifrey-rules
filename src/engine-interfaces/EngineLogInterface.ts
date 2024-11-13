@@ -1,10 +1,10 @@
 import MetricsPointInterface from '../interfaces/Providers/MetricsPointInterface';
 
 export default interface EngineLogInterface {
-    debug(message: string, ...args: any[]): void;
-    info(message: string, ...args: any[]): void;
-    warn(message: string, ...args: any[]): void;
-    error(message: string, ...args: any[]): void;
+    debug(message: string, ...args: any[]): Promise<void>;
+    info(message: string, ...args: any[]): Promise<void>;
+    warn(message: string, ...args: any[]): Promise<void>;
+    error(message: string, ...args: any[]): Promise<void>;
 
     /**
      * Adds a custom log to the journal logger

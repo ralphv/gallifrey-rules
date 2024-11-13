@@ -39,6 +39,7 @@ export default class EngineRule extends EngineBase implements EngineRuleInterfac
             loggerName,
             journalLogger,
             getMetricsPointDelegate,
+            engineEventContext.getLogger(),
         );
         this.timer = new PerformanceTimer();
     }

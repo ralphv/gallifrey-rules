@@ -10,6 +10,7 @@ import MetricsPointInterface from '../interfaces/Providers/MetricsPointInterface
 import GetMetricsPointDelegate from '../delegates-interfaces/GetMetricsPointDelegate';
 import EngineEventInterface from '../engine-interfaces/EngineEventInterface';
 import { EngineEventContext } from './EngineEventContext';
+import { LoggerInterface } from '../interfaces/Providers';
 
 export default class EngineBase implements EngineLogInterface, EngineEventInterface {
     private l: Logger;
@@ -20,6 +21,7 @@ export default class EngineBase implements EngineLogInterface, EngineEventInterf
         loggerName: string,
         private readonly journalLogger: JournalLoggerInterface | undefined,
         private readonly getMetricsPointDelegate: GetMetricsPointDelegate | undefined,
+        private readonly logger: LoggerInterface | undefined,
     ) {
         this.l = log4js.getLogger(loggerName);
         this.l.level = engineEventContext
@@ -35,20 +37,36 @@ export default class EngineBase implements EngineLogInterface, EngineEventInterf
         return AssertNotNull(this.engineEventContext);
     }
 
-    debug(message: string, ...args: any[]): void {
-        this.l.debug(message, ...args);
+    async debug(message: string, ...args: any[]): Promise<void> {
+        if (!this.logger) {
+            this.l.debug(message, ...args);
+        } else {
+            await this.logger.debug(this.engineEventContext, message, ...args);
+        }
     }
 
-    error(message: string, ...args: any[]): void {
-        this.l.error(message, ...args);
+    async error(message: string, ...args: any[]): Promise<void> {
+        if (!this.logger) {
+            this.l.error(message, ...args);
+        } else {
+            await this.logger.error(this.engineEventContext, message, ...args);
+        }
     }
 
-    info(message: string, ...args: any[]): void {
-        this.l.info(message, ...args);
+    async info(message: string, ...args: any[]): Promise<void> {
+        if (!this.logger) {
+            this.l.info(message, ...args);
+        } else {
+            await this.logger.info(this.engineEventContext, message, ...args);
+        }
     }
 
-    warn(message: string, ...args: any[]): void {
-        this.l.warn(message, ...args);
+    async warn(message: string, ...args: any[]): Promise<void> {
+        if (!this.logger) {
+            this.l.warn(message, ...args);
+        } else {
+            await this.logger.warn(this.engineEventContext, message, ...args);
+        }
     }
 
     getContext(): EngineContextInterface {

@@ -27,6 +27,7 @@ export default class EngineReactToFailure extends EngineBase implements EngineRe
             loggerName,
             journalLogger,
             getMetricsPointDelegate,
+            engineEventContext.getLogger(),
         );
     }
 

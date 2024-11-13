@@ -12,10 +12,10 @@ export default class MessageAction implements ActionInterface<any, any> {
     }
 
     async initialize?(engine: EngineInterface): Promise<void> {
-        engine.info(`info`);
-        engine.warn(`warn`);
-        engine.error(`error`);
-        engine.debug(`debug`);
+        await engine.info(`info`);
+        await engine.warn(`warn`);
+        await engine.error(`error`);
+        await engine.debug(`debug`);
         engine.getContext().getNamespace();
         await engine
             .getMetricsPoint(`sample`)
