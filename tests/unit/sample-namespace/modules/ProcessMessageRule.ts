@@ -18,7 +18,7 @@ export default class ProcessMessageRule implements RuleInterface<IncomingMessage
     }
 
     async initialize?(engine: EngineInterface): Promise<void> {
-        await engine.info(`info`);
+        engine.info(`info`);
         await engine
             .getMetricsPoint(`sample`)
             .floatField('a', 10.1)

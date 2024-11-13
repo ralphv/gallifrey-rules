@@ -8,7 +8,7 @@ export default class MessageDataObject implements DataObjectInterface<any, strin
     }
 
     async initialize?(engine: EngineInterface): Promise<void> {
-        await engine.info(`info`);
+        engine.info(`info`);
         await engine
             .getMetricsPoint(`sample`)
             .floatField('a', 10.1)

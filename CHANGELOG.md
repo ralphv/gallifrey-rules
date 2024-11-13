@@ -1,6 +1,12 @@
 # Changelog
 
-## [0.2.17](https://github.com/ralphv/gallifrey-rules/compare/v0.1.8...v0.1.9) (2024-11-12)
+## [0.2.18](https://github.com/ralphv/gallifrey-rules/compare/v0.1.8...v0.1.9) (2024-11-12)
+
+### Features
+
+* Modifying `LoggerInterface` to remove async methods.
+
+## [0.2.17](https://github.com/ralphv/gallifrey-rules/compare/v0.1.8...v0.1.9) (2024-11-12) (RETRACTED)
 
 ### BREAKING CHANGES
 
