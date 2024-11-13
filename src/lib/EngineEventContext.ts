@@ -41,6 +41,10 @@ export class EngineEventContext implements EngineFullEventContextInterface {
         return AssertNotNull(this.journalLogger);
     }
 
+    public getLogger(): LoggerInterface {
+        return this.logger;
+    }
+
     public setJournalLogger(journalLogger: SafeJournalLoggerWrapper) {
         this.journalLogger = journalLogger;
     }

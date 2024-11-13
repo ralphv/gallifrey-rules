@@ -26,6 +26,7 @@ export default class EngineAction<ActionPayloadType extends BaseActionPayload>
             loggerName,
             journalLogger,
             getMetricsPointDelegate,
+            engineEventContext.getLogger(),
         );
     }
 

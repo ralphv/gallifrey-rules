@@ -27,6 +27,7 @@ export default class EngineDataObject<DataObjectRequestType extends BaseDataObje
             loggerName,
             journalLogger,
             getMetricsPointDelegate,
+            engineEventContext.getLogger(),
         );
     }
 

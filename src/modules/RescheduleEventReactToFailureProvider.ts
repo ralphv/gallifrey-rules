@@ -19,7 +19,7 @@ export default class RescheduleEventReactToFailureProvider implements ReactToFai
         const countSoFar = engine.getScheduledEventContext()?.scheduledCount ?? 0;
 
         if (countSoFar >= maxRescheduleCount) {
-            engine.warn(
+            await engine.warn(
                 `Max reschedule count reached, react to failure will not reschedule this event, it will be ignored`,
             );
             return;

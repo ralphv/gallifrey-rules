@@ -40,6 +40,7 @@ export default class InstancesFactory {
                 `provider - ${instance.getModuleName()}`,
                 undefined,
                 undefined,
+                undefined,
             );
             await instance.initialize(engineBase);
         }
@@ -149,6 +150,7 @@ export default class InstancesFactory {
         modules: ModuleData[],
         journalLogger: JournalLoggerInterface | undefined,
         getMetricsPointDelegate: GetMetricsPointDelegate | undefined,
+        logger: LoggerInterface | undefined,
     ): Promise<WithModuleNameType<T>[]> {
         const instances = modules.map((module) => {
             return WithModuleName(new module.classRef() as T);
@@ -163,6 +165,7 @@ export default class InstancesFactory {
                     `initialize - ${instance.getModuleName()}`,
                     journalLogger,
                     getMetricsPointDelegate,
+                    logger,
                 );
                 return instance.initialize ? instance.initialize(engineBase) : Promise.resolve();
             }),
