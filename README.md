@@ -20,6 +20,10 @@
 I offer free one to one sessions via Google Meet to kick-start adoption or to answer questions about the library. 
 Please reach out at `mail[at]gallifrey-rules.dev`
 
+### What is Gallifrey-Rules?
+
+[Read the introduction here.](https://gallifrey-rules.dev/docs/intro)
+
 ### Features at a glance
 
 * **Structured Event-Driven Architecture (EDA)**: Enforces a disciplined approach to event-driven development, ensuring consistency and best practices across your projects.
