@@ -5,7 +5,7 @@ import { logger } from '../lib/logger';
 import Config from '../lib/Config';
 import { CompleteScheduledEventRequest, TriggeredByEvent } from '../interfaces/Providers/ScheduledEventsInterface';
 
-@GallifreyProvider(ProviderType.JournalLogger)
+@GallifreyProvider(ProviderType.JournalLogger, true)
 export default class ConsoleJournalLoggerProvider implements JournalLoggerInterface {
     private readonly addExtraToJournalLogs: boolean;
     private errorFlagged = false;
